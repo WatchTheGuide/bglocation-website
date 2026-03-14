@@ -84,7 +84,7 @@ export function Footer() {
         <Separator className="my-8" />
 
         <p className="text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} GuideTrackee. All rights reserved.
+          &copy; {new Date().getFullYear()} Szymon Walczak. All rights reserved.
           Licensed under{" "}
           <Link href="/license" className="underline hover:text-foreground">
             Elastic License v2
