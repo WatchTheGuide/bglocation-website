@@ -15,8 +15,8 @@ import { Separator } from "@/components/ui/separator";
 const PLANS = [
   {
     name: "Indie",
-    price: 99,
-    earlyBirdPrice: 79,
+    price: 199,
+    earlyBirdPrice: 149,
     period: "/year",
     description: "For solo developers and small side projects.",
     bundleIds: "1 bundle ID",
@@ -33,8 +33,8 @@ const PLANS = [
   },
   {
     name: "Team",
-    price: 199,
-    earlyBirdPrice: 149,
+    price: 299,
+    earlyBirdPrice: 229,
     period: "/year",
     description: "For teams shipping multiple apps.",
     bundleIds: "5 bundle IDs",
@@ -80,8 +80,8 @@ export function PricingCards() {
           </Badge>
           <p className="text-sm text-muted-foreground">
             Launch pricing available for a limited time.
-            Lock in <strong>$79/year</strong> (Indie) or{" "}
-            <strong>$149/year</strong> (Team) — valid for the first 3 months
+            Lock in <strong>$149/year</strong> (Indie) or{" "}
+            <strong>$229/year</strong> (Team) — valid for the first 3 months
             after launch.
           </p>
         </div>

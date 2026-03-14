@@ -5,7 +5,7 @@ import { PricingFaq } from "@/components/pricing/pricing-faq";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple pricing for capacitor-bglocation. Evaluate with trial mode, upgrade when ready. From $99/year.",
+    "Simple pricing for capacitor-bglocation. Evaluate with trial mode, upgrade when ready. From $199/year.",
 };
 
 export default function PricingPage() {

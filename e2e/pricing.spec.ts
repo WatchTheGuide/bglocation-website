@@ -23,8 +23,8 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display discounted prices', async ({ page }) => {
-      await expect(page.getByText(/\$79\/year/i)).toBeVisible();
       await expect(page.getByText(/\$149\/year/i)).toBeVisible();
+      await expect(page.getByText(/\$229\/year/i)).toBeVisible();
     });
   });
 
@@ -36,13 +36,13 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display Indie plan details', async ({ page }) => {
-      await expect(page.getByText('$99')).toBeVisible();
+      await expect(page.getByText('$199')).toBeVisible();
       await expect(page.getByText('1 bundle ID')).toBeVisible();
       await expect(page.getByText('For solo developers and small side projects.')).toBeVisible();
     });
 
     test('should display Team plan details', async ({ page }) => {
-      await expect(page.getByText('$199')).toBeVisible();
+      await expect(page.getByText('$299')).toBeVisible();
       await expect(page.getByText('5 bundle IDs')).toBeVisible();
       await expect(page.getByText('For teams shipping multiple apps.')).toBeVisible();
     });
@@ -69,8 +69,8 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display early adopter prices on paid plans', async ({ page }) => {
-      await expect(page.getByText('$79/yr early adopter price')).toBeVisible();
       await expect(page.getByText('$149/yr early adopter price')).toBeVisible();
+      await expect(page.getByText('$229/yr early adopter price')).toBeVisible();
     });
 
     test('should display feature lists with checkmarks', async ({ page }) => {

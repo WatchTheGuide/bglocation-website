@@ -17,7 +17,7 @@ test.describe('Landing Page', () => {
     });
 
     test('should display CTA buttons', async ({ page }) => {
-      await expect(page.getByRole('link', { name: /Get License.*\$99\/year/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /Get License.*\$199\/year/i })).toBeVisible();
       await expect(page.getByRole('link', { name: /Read the Docs/i })).toBeVisible();
     });
 
@@ -115,9 +115,8 @@ test.describe('Landing Page', () => {
     });
 
     test('should display pricing rows', async ({ page }) => {
-      await expect(page.getByText('$99/yr')).toBeVisible();
-      await expect(page.getByText('$299/yr')).toBeVisible();
       await expect(page.getByText('$199/yr')).toBeVisible();
+      await expect(page.getByText('$299/yr')).toBeVisible();
       await expect(page.getByText('$499/yr')).toBeVisible();
     });
 
