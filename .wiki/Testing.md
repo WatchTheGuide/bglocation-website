@@ -1,0 +1,109 @@
+# Testowanie E2E — bglocation-website
+
+## Framework
+
+- **Playwright** 1.58.2
+- Konfiguracja: `playwright.config.ts`
+
+## Struktura testów
+
+```
+e2e/
+├── fixtures/             # Fixtures Playwright (shared setup)
+├── landing.spec.ts       # Testy landing page
+├── docs.spec.ts          # Testy docs page
+├── pricing.spec.ts       # Testy pricing page
+└── navigation.spec.ts   # Testy nawigacji cross-page
+```
+
+## Komendy
+
+```bash
+npm run test:e2e       # Uruchom wszystkie testy E2E
+npm run test:e2e:ui    # Uruchom Playwright z UI
+```
+
+## Wzorzec testów
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.describe('Feature Name', () => {
+  test('should [expected behavior]', async ({ page }) => {
+    await page.goto('/');
+    
+    // Assertions
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('[data-testid="feature"]')).toHaveCount(6);
+  });
+});
+```
+
+## Projekty Playwright
+
+| Projekt | Viewport | Opis |
+|---------|----------|------|
+| `chromium` | desktop (domyślny) | Testy na desktopowej przeglądarce |
+| `mobile` | 375×667 | Testy na mobilnym viewporcie |
+
+Każdy test uruchamiany jest na obu viewportach (176 testów łącznie).
+
+## Co testujemy
+
+### Landing Page (`landing.spec.ts`)
+- Hero section — badge Capacitor 8, nagłówek h1, CTA buttons (Get License, Read the Docs), `npm install` snippet
+- Hero nawigacja — Get License → /pricing, Read the Docs → /docs
+- Trust bar — 5 statystyk (300+, 2, 5,000+, 14, <1%)
+- Comparison — nagłówki kolumn (Feature, capacitor-bglocation, @transistorsoft)
+- Code example — blok z przykładowym kodem
+- CTA section — heading, dwa CTA buttons
+- SEO — title, meta description
+
+### Docs Page (`docs.spec.ts`)
+- Header — nagłówek "Documentation", "Quick Install" z komendą npm
+- Doc section cards — 6 kart nawigacyjnych
+- Getting Started — 3 kroki (Install, Configure & Start, Stop Tracking)
+- Configuration — tabela opcji rdzeniowych (5 opcji), sekcja HTTP Posting
+- API Reference — tabela Methods (10), tabela Events (11), Location interface, sekcja Geofencing
+- Platform Guides — iOS guide (Info.plist, Background Modes), Android guide (Foreground Service, Two-Step Permission Flow)
+- Licensing — Trial Mode info, License Key konfiguracja
+- Examples — 3 wzorce (Fleet/Delivery, Fitness/Running, Geofencing POI)
+- SEO — title, meta description
+
+### Pricing Page (`pricing.spec.ts`)
+- Header — nagłówek, komunikat "no license key needed"
+- Pricing cards — 3 plany (Indie $199/yr, Team $299/yr, Enterprise Custom)
+- Early adopter prices — $149/yr, $229/yr
+- Feature lists — 5 wspólnych cech z checkmarks
+- License note — komunikat o ewaluacji
+- CTA buttons — Buy License (Indie, Team), Contact Us (Enterprise)
+- FAQ — nagłówek, 5+ pytań, rozwijane odpowiedzi
+- SEO — title, meta description
+
+### Navigation (`navigation.spec.ts`)
+- Header desktop — 3 linki nav (Features, Pricing, Docs), CTA "Get License"
+- Footer — 3 kolumny nagłówków (Product, Resources, Legal)
+- Mobile menu — hamburger toggle, linki w menu mobilnym, zamykanie po nawigacji
+- Cross-page navigation — home → pricing → docs → home (z obsługą mobile menu)
+
+## Ważne wzorce w testach
+
+### Base UI Button + Link
+
+Shadcn Button z `render={<Link>}` renderuje `<a role="button">`. W testach należy używać `getByRole('button')`, NIE `getByRole('link')`.
+
+### CardTitle
+
+Shadcn CardTitle renderuje `<div data-slot="card-title">`, NIE heading. W testach: `locator('[data-slot="card-title"]')`.
+
+### Strict mode
+
+Playwright w strict mode wymaga jednoznacznych selektorów. Dla tekstu pojawiającego się w wielu elementach:
+- `.first()` — pierwszy pasujący element
+- `{ exact: true }` — dokładne dopasowanie tekstu
+- `getByRole('heading', { name: '...' })` — dla nagłówków
+- Scoping do sekcji: `page.locator('#section-id').getByText('...')`
+
+### Mobile viewport
+
+Desktop nav (`hidden md:flex`) jest niewidoczna na mobile. Helper `openMenuIfMobile()` sprawdza widoczność hamburgera i otwiera menu przed nawigacją.

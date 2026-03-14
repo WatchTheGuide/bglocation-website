@@ -14,6 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { GettingStarted } from "@/components/docs/getting-started";
+import { Configuration } from "@/components/docs/configuration";
+import { ApiReference } from "@/components/docs/api-reference";
+import { PlatformGuides } from "@/components/docs/platform-guides";
+import { Licensing } from "@/components/docs/licensing";
+import { Examples } from "@/components/docs/examples";
 
 export const metadata: Metadata = {
   title: "Documentation",
@@ -26,41 +33,41 @@ const DOC_SECTIONS = [
     title: "Getting Started",
     description: "Installation, configuration, and your first location track.",
     icon: Download,
-    href: "/docs",
+    href: "#getting-started",
   },
   {
     title: "Configuration",
     description:
       "All plugin options: distance filter, accuracy, intervals, HTTP posting.",
     icon: Settings,
-    href: "/docs",
+    href: "#configuration",
   },
   {
     title: "API Reference",
     description: "Complete TypeScript API: methods, events, and type definitions.",
     icon: Code,
-    href: "/docs",
+    href: "#api-reference",
   },
   {
     title: "Platform Guides",
     description:
       "iOS and Android specifics: permissions, background modes, battery optimization.",
     icon: MapPin,
-    href: "/docs",
+    href: "#platform-guides",
   },
   {
     title: "Licensing",
     description:
       "How license keys work, trial mode, offline validation, and key management.",
     icon: Shield,
-    href: "/docs",
+    href: "#licensing",
   },
   {
     title: "Examples",
     description:
-      "Real-world examples: fleet tracking, fitness apps, delivery apps.",
+      "Real-world examples: fleet tracking, fitness apps, geofencing.",
     icon: BookOpen,
-    href: "/docs",
+    href: "#examples",
   },
 ] as const;
 
@@ -89,7 +96,7 @@ export default function DocsPage() {
           </code>
         </div>
 
-        {/* Doc Sections Grid */}
+        {/* Doc Sections Grid — Jump Links */}
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {DOC_SECTIONS.map((section) => (
             <Link key={section.title} href={section.href}>
@@ -104,24 +111,19 @@ export default function DocsPage() {
           ))}
         </div>
 
-        {/* Coming Soon Note */}
-        <div className="mt-16 rounded-lg border border-dashed p-8 text-center">
-          <h3 className="text-lg font-semibold">
-            Full documentation coming soon
-          </h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Comprehensive guides and API reference are being prepared. In the
-            meantime, check the{" "}
-            <a
-              href="https://www.npmjs.com/package/capacitor-bglocation"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-primary underline underline-offset-4"
-            >
-              README on npm
-            </a>{" "}
-            for usage instructions.
-          </p>
+        {/* Documentation Sections */}
+        <div className="mt-24 space-y-16">
+          <GettingStarted />
+          <Separator />
+          <Configuration />
+          <Separator />
+          <ApiReference />
+          <Separator />
+          <PlatformGuides />
+          <Separator />
+          <Licensing />
+          <Separator />
+          <Examples />
         </div>
       </div>
     </section>
