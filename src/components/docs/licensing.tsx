@@ -86,7 +86,8 @@ export default config;`}
             <span className="mt-0.5 text-primary">•</span>
             <span>
               <strong>RSA-2048 cryptographic validation</strong> — the key is a
-              signed JWT containing your bundle ID and expiration date.
+              signed payload containing your bundle ID and optional update
+              access period.
             </span>
           </li>
           <li className="flex items-start gap-2">
@@ -107,8 +108,9 @@ export default config;`}
           <li className="flex items-start gap-2">
             <span className="mt-0.5 text-primary">•</span>
             <span>
-              <strong>Annual expiration</strong> — keys expire after 365 days.
-              Renewal generates a new key automatically.
+              <strong>Perpetual license</strong> — your key never expires.
+              Purchase includes 1 year of plugin updates. After that, the
+              plugin continues working on the last installed version.
             </span>
           </li>
         </ul>
@@ -128,8 +130,8 @@ export default config;`}
 {`const result = await BackgroundLocation.configure({ ... });
 
 // result.licenseMode: 'full' | 'trial'
-// result.licenseExpiresAt: '2027-03-14T...' (full mode only)
-// result.licenseError: 'EXPIRED' (trial mode only)`}
+// result.licenseUpdatesUntil: '2027-03-14T...' (full mode, optional)
+// result.licenseError: 'No license key provided' (trial mode only)`}
         </pre>
       </div>
     </section>
