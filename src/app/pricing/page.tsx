@@ -5,7 +5,7 @@ import { PricingFaq } from "@/components/pricing/pricing-faq";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple pricing for capacitor-bglocation. Start with a free trial, upgrade when ready. From $99/year.",
+    "Simple pricing for capacitor-bglocation. Evaluate with trial mode, upgrade when ready. From $99/year.",
 };
 
 export default function PricingPage() {
@@ -17,9 +17,9 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Install for free, evaluate with the trial.{" "}
-            <strong>No credit card needed</strong> to start.
-            Upgrade when you&apos;re ready for production.
+            Install and evaluate with trial mode — 30 min sessions, all features included.{" "}
+            <strong>No license key needed</strong> to start.
+            Buy a license when you&apos;re ready for production.
           </p>
         </div>
       </section>

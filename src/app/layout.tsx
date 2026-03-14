@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "capacitor-bglocation — Background Location for Capacitor",
     description:
-      "Continuous background GPS tracking for iOS & Android. Native HTTP, offline buffer, trial mode included.",
+      "Continuous background GPS tracking for iOS & Android. Native HTTP, offline buffer, evaluate free with trial mode.",
     url: "https://bglocation.dev",
     siteName: "capacitor-bglocation",
     locale: "en_US",

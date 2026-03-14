@@ -7,14 +7,14 @@ import {
 
 const FAQ_ITEMS = [
   {
-    question: "How does the 14-day trial work?",
+    question: "How does trial mode work?",
     answer:
-      "Install the plugin and start building immediately — no license key needed. The trial includes all features. When the trial expires the plugin stops tracking, but your app continues to function. Upgrade to a paid license to resume.",
+      "Install the plugin and start building immediately — no license key needed. Trial mode includes all features but limits tracking to 30 minutes per session with a 1-hour cooldown between sessions. Debug mode is forced on. When the session expires, tracking stops automatically and an onTrialExpired event is emitted. After the cooldown, you can start another 30-minute session. Buy a license to remove all restrictions.",
   },
   {
     question: "What is a bundle ID and how are licenses bound?",
     answer:
-      "A bundle ID is your app's unique identifier (e.g. com.yourcompany.app). Each license key is cryptographically bound to one or more bundle IDs (depending on your plan). The license is validated locally — no server call required, full offline support.",
+      "A bundle ID is your app's unique identifier (e.g. com.yourcompany.app). Each license key is cryptographically bound to exactly one bundle ID — the Indie plan includes 1 key and the Team plan includes 5. The license is validated entirely on-device using RSA-2048 — no server calls, no phone-home, full offline support.",
   },
   {
     question: "Can I use one license for both iOS and Android?",
@@ -44,7 +44,7 @@ const FAQ_ITEMS = [
   {
     question: "Is there a refund policy?",
     answer:
-      "Yes. If the plugin doesn't work for your use case within 30 days of purchase, contact us for a full refund — no questions asked.",
+      "All sales are final. Since the plugin can be fully evaluated in trial mode — with all features available — before purchasing, we expect every purchase to be a deliberate decision. If you encounter a technical issue that prevents the plugin from working as documented, contact us and we'll do our best to help.",
   },
 ] as const;
 

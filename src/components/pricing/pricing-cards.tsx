@@ -26,9 +26,9 @@ const PLANS = [
       "npm registry access",
       "Source code access (ELv2)",
       "Email support",
-      "14-day free trial",
+      "Trial mode included",
     ],
-    cta: "Start Free Trial",
+    cta: "Buy License",
     highlighted: false,
   },
   {
@@ -44,9 +44,9 @@ const PLANS = [
       "Priority email support",
       "Early access to new features",
       "Team license management",
-      "14-day free trial",
+      "Trial mode included",
     ],
-    cta: "Start Free Trial",
+    cta: "Buy License",
     highlighted: true,
   },
   {
@@ -92,12 +92,12 @@ export function PricingCards() {
               key={plan.name}
               className={
                 plan.highlighted
-                  ? "relative flex flex-col border-primary shadow-lg"
+                  ? "relative flex flex-col overflow-visible border-primary shadow-lg"
                   : "relative flex flex-col"
               }
             >
               {plan.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
                   <Badge>Most Popular</Badge>
                 </div>
               )}
@@ -172,8 +172,9 @@ export function PricingCards() {
 
         {/* License Note */}
         <p className="mt-8 text-center text-sm text-muted-foreground">
-          All plans include a 14-day trial. Licenses are bound to your app
-          bundle ID — no phone-home, works fully offline.
+          No license key needed to evaluate — trial mode gives you 30 min
+          of tracking per session. Licenses are bound to your bundle ID,
+          validated offline.
         </p>
       </div>
     </section>
