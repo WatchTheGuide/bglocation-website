@@ -18,6 +18,7 @@ Bazowe komponenty Shadcn — nie modyfikować bezpośrednio, dodawać nowe przez
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
+| Announcement Banner | `announcement-banner.tsx` | Banner "Coming soon" — globalny (renderowany w layout) |
 | Hero | `hero.tsx` | Sekcja hero z tytułem, opisem, CTA, badge |
 | Features | `features.tsx` | Grid z feature cards |
 | Comparison | `comparison.tsx` | Tabela/kolumny porównania z konkurencją |
@@ -49,8 +50,14 @@ Sekcje dokumentacji pluginu — renderowane jako bloki na stronie `/docs`:
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Header | `header.tsx` | Nawigacja + CTA button |
+| Header | `header.tsx` | Nawigacja (Features, Pricing, Docs, About) + CTA button |
 | Footer | `footer.tsx` | Stopka z linkami |
+
+### About Components (`src/components/about/`)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| About Section | `about-section.tsx` | Profil twórcy: intro, background (3 karty), expertise (9 badges), certyfikaty, kontakt |
 
 ## Dodawanie nowych komponentów Shadcn
 

@@ -9,11 +9,12 @@
 
 ```
 e2e/
-├── fixtures/             # Fixtures Playwright (shared setup)
+├── fixtures/             # Fixtures Playwright (shared setup, ROUTES)
+├── about.spec.ts         # Testy strony About
 ├── landing.spec.ts       # Testy landing page
 ├── docs.spec.ts          # Testy docs page
 ├── pricing.spec.ts       # Testy pricing page
-└── navigation.spec.ts   # Testy nawigacji cross-page
+└── navigation.spec.ts   # Testy nawigacji, banner, cross-page
 ```
 
 ## Komendy
@@ -46,7 +47,7 @@ test.describe('Feature Name', () => {
 | `chromium` | desktop (domyślny) | Testy na desktopowej przeglądarce |
 | `mobile` | 375×667 | Testy na mobilnym viewporcie |
 
-Każdy test uruchamiany jest na obu viewportach (176 testów łącznie).
+Każdy test uruchamiany jest na obu viewportach (237 testów łącznie).
 
 ## Co testujemy
 
@@ -81,10 +82,20 @@ Każdy test uruchamiany jest na obu viewportach (176 testów łącznie).
 - SEO — title, meta description
 
 ### Navigation (`navigation.spec.ts`)
-- Header desktop — 3 linki nav (Features, Pricing, Docs), CTA "Get License"
-- Footer — 3 kolumny nagłówków (Product, Resources, Legal)
+- Announcement Banner — "Coming soon" widoczny na landing, docs, pricing; linki do `/docs` i `/pricing`
+- Header desktop — 4 linki nav (Features, Pricing, Docs, About), CTA "Get License"
+- Footer — 3 kolumny nagłówków (Product, Documentation, Legal), About link
 - Mobile menu — hamburger toggle, linki w menu mobilnym, zamykanie po nawigacji
 - Cross-page navigation — home → pricing → docs → home (z obsługą mobile menu)
+
+### About Page (`about.spec.ts`)
+- Header — nagłówek "About", podtytuł
+- Intro — imię, PMP, PhD, motywacja
+- Background — 3 karty (GuideTrackee, Frontend Framework Author, Academic)
+- Technical Expertise — 9 badgeów technologicznych
+- Certifications — PMP #2115680, Apollo GraphQL
+- Contact — Kraków, email, LinkedIn
+- SEO — title, meta description
 
 ## Ważne wzorce w testach
 

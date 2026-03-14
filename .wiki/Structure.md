@@ -20,12 +20,18 @@ bglocation-website/
 │   └── navigation.spec.ts   # Testy nawigacji cross-page
 ├── src/
 │   ├── app/                  # Next.js App Router
-│   │   ├── layout.tsx        # Root layout
+│   │   ├── layout.tsx        # Root layout (AnnouncementBanner + Header + Footer + lemon.js)
 │   │   ├── page.tsx          # Landing page (/)
 │   │   ├── globals.css       # Style globalne (Tailwind imports)
 │   │   ├── favicon.ico       # Favicon
 │   │   ├── robots.ts         # SEO — robots.txt
 │   │   ├── sitemap.ts        # SEO — sitemap.xml
+│   │   ├── about/
+│   │   │   └── page.tsx      # Strona o twórcy (/about)
+│   │   ├── api/
+│   │   │   └── webhooks/
+│   │   │       └── lemon-squeezy/
+│   │   │           └── route.ts  # Webhook handler LS (HMAC-SHA256)
 │   │   ├── docs/
 │   │   │   └── page.tsx      # Strona dokumentacji (/docs)
 │   │   └── pricing/
@@ -38,12 +44,15 @@ bglocation-website/
 │   │   │   ├── accordion.tsx
 │   │   │   └── separator.tsx
 │   │   ├── landing/          # Komponenty landing page
+│   │   │   ├── announcement-banner.tsx
 │   │   │   ├── hero.tsx
 │   │   │   ├── features.tsx
 │   │   │   ├── comparison.tsx
 │   │   │   ├── trust-bar.tsx
 │   │   │   ├── code-example.tsx
 │   │   │   └── cta-section.tsx
+│   │   ├── about/            # Komponent strony About
+│   │   │   └── about-section.tsx
 │   │   ├── docs/             # Sekcje dokumentacji
 │   │   │   ├── getting-started.tsx
 │   │   │   ├── configuration.tsx

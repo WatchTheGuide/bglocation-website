@@ -7,8 +7,8 @@ Strona marketingowa / dokumentacja / pricing dla pluginu `capacitor-bglocation`.
 | Dokument | Opis |
 |----------|------|
 | [Structure.md](Structure.md) | Pełna struktura projektu — katalogi, pliki, zależności |
-| [Pages.md](Pages.md) | Opis stron (Landing, Docs, Pricing) i ich komponentów |
-| [Components.md](Components.md) | Mapa komponentów — UI, landing, pricing, layout |
+| [Pages.md](Pages.md) | Opis stron (Landing, Docs, Pricing, About) i ich komponentów |
+| [Components.md](Components.md) | Mapa komponentów — UI, landing, about, pricing, layout |
 | [Testing.md](Testing.md) | Strategia testowania E2E (Playwright) |
 
 ## Stack technologiczny
