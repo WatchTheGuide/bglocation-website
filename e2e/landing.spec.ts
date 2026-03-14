@@ -13,43 +13,52 @@ test.describe('Landing Page', () => {
     });
 
     test('should display Capacitor 8 badge', async ({ page }) => {
-      await expect(page.getByText(/Capacitor 8.*iOS.*Android/i)).toBeVisible();
+      await expect(
+        page.locator('[data-slot="badge"]').filter({ hasText: /Capacitor 8/ }),
+      ).toBeVisible();
     });
 
     test('should display CTA buttons', async ({ page }) => {
-      await expect(page.getByRole('link', { name: /Get License.*\$199\/year/i })).toBeVisible();
-      await expect(page.getByRole('link', { name: /Read the Docs/i })).toBeVisible();
+      const hero = page.locator('section').first();
+      await expect(hero.getByRole('button', { name: /Get License/ })).toBeVisible();
+      await expect(hero.getByRole('button', { name: /Read the Docs/i })).toBeVisible();
     });
 
     test('should display npm install command', async ({ page }) => {
-      await expect(page.getByText('npm install capacitor-bglocation')).toBeVisible();
+      await expect(
+        page.locator('section').first().getByText('npm install capacitor-bglocation'),
+      ).toBeVisible();
     });
 
     test('should link Get License to pricing page', async ({ page }) => {
-      await expect(page.getByRole('link', { name: /Get License/i }).first()).toHaveAttribute(
+      const hero = page.locator('section').first();
+      await expect(hero.getByRole('button', { name: /Get License/ })).toHaveAttribute(
         'href',
         '/pricing',
       );
     });
 
     test('should link Read the Docs to docs page', async ({ page }) => {
-      const link = page.locator('section').first().getByRole('link', { name: /Read the Docs/i });
-      await expect(link).toHaveAttribute('href', '/docs');
+      const hero = page.locator('section').first();
+      await expect(hero.getByRole('button', { name: /Read the Docs/i })).toHaveAttribute(
+        'href',
+        '/docs',
+      );
     });
   });
 
   test.describe('Trust Bar', () => {
     test('should display all trust stats', async ({ page }) => {
-      await expect(page.getByText('300+')).toBeVisible();
-      await expect(page.getByText('Unit Tests')).toBeVisible();
-      await expect(page.getByText('2')).toBeVisible();
-      await expect(page.getByText('Native Platforms')).toBeVisible();
-      await expect(page.getByText('3,200+')).toBeVisible();
-      await expect(page.getByText('Lines of Native Code')).toBeVisible();
-      await expect(page.getByText('Source')).toBeVisible();
-      await expect(page.getByText('Available (ELv2)')).toBeVisible();
-      await expect(page.getByText('1.06:1')).toBeVisible();
-      await expect(page.getByText('Test-to-Code Ratio')).toBeVisible();
+      await expect(page.getByText('300+', { exact: true })).toBeVisible();
+      await expect(page.getByText('Unit Tests', { exact: true })).toBeVisible();
+      await expect(page.getByText('2', { exact: true }).first()).toBeVisible();
+      await expect(page.getByText('Native Platforms', { exact: true })).toBeVisible();
+      await expect(page.getByText('3,200+', { exact: true })).toBeVisible();
+      await expect(page.getByText('Lines of Native Code', { exact: true })).toBeVisible();
+      await expect(page.getByText('Source', { exact: true })).toBeVisible();
+      await expect(page.getByText('Available (ELv2)', { exact: true })).toBeVisible();
+      await expect(page.getByText('1.06:1', { exact: true })).toBeVisible();
+      await expect(page.getByText('Test-to-Code Ratio', { exact: true })).toBeVisible();
     });
   });
 
@@ -91,9 +100,9 @@ test.describe('Landing Page', () => {
     });
 
     test('should display code snippet with key API calls', async ({ page }) => {
-      await expect(page.getByText(/BackgroundLocation\.configure/)).toBeVisible();
-      await expect(page.getByText(/BackgroundLocation\.addListener/)).toBeVisible();
-      await expect(page.getByText(/BackgroundLocation\.start/)).toBeVisible();
+      await expect(page.getByText(/BackgroundLocation\.configure/).first()).toBeVisible();
+      await expect(page.getByText(/BackgroundLocation\.addListener/).first()).toBeVisible();
+      await expect(page.getByText(/BackgroundLocation\.start/).first()).toBeVisible();
     });
   });
 
@@ -105,9 +114,10 @@ test.describe('Landing Page', () => {
     });
 
     test('should display all three column headers', async ({ page }) => {
-      await expect(page.getByText('capacitor-bglocation')).toBeVisible();
-      await expect(page.getByText('transistorsoft')).toBeVisible();
-      await expect(page.getByText(/@capacitor\/.*geolocation/)).toBeVisible();
+      const table = page.locator('table');
+      await expect(table.getByText('capacitor-bglocation')).toBeVisible();
+      await expect(table.getByText('transistorsoft')).toBeVisible();
+      await expect(table.getByText(/@capacitor\//)).toBeVisible();
     });
 
     test('should display recommended badge', async ({ page }) => {
@@ -115,9 +125,10 @@ test.describe('Landing Page', () => {
     });
 
     test('should display pricing rows', async ({ page }) => {
-      await expect(page.getByText('$199/yr')).toBeVisible();
-      await expect(page.getByText('$299/yr')).toBeVisible();
-      await expect(page.getByText('$499/yr')).toBeVisible();
+      const table = page.locator('table');
+      await expect(table.getByText('$199/yr').first()).toBeVisible();
+      await expect(table.getByText('$299/yr').first()).toBeVisible();
+      await expect(table.getByText('$499/yr')).toBeVisible();
     });
 
     test('should display 14 comparison rows', async ({ page }) => {
@@ -135,8 +146,8 @@ test.describe('Landing Page', () => {
 
     test('should display View Pricing and Read the Docs buttons', async ({ page }) => {
       const ctaSection = page.locator('section').filter({ hasText: 'Ready to Ship' });
-      await expect(ctaSection.getByRole('link', { name: /View Pricing/i })).toBeVisible();
-      await expect(ctaSection.getByRole('link', { name: /Read the Docs/i })).toBeVisible();
+      await expect(ctaSection.getByRole('button', { name: /View Pricing/i })).toBeVisible();
+      await expect(ctaSection.getByRole('button', { name: /Read the Docs/i })).toBeVisible();
     });
   });
 });

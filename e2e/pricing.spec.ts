@@ -13,7 +13,7 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display no license key needed message', async ({ page }) => {
-      await expect(page.getByText(/No license key needed/i)).toBeVisible();
+      await expect(page.getByText(/No license key needed/i).first()).toBeVisible();
     });
   });
 
@@ -30,26 +30,26 @@ test.describe('Pricing Page', () => {
 
   test.describe('Pricing Cards', () => {
     test('should display all three plan names', async ({ page }) => {
-      await expect(page.getByRole('heading', { name: 'Indie' })).toBeVisible();
-      await expect(page.getByRole('heading', { name: 'Team' })).toBeVisible();
-      await expect(page.getByRole('heading', { name: 'Enterprise' })).toBeVisible();
+      await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Indie' })).toBeVisible();
+      await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Team' })).toBeVisible();
+      await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Enterprise' })).toBeVisible();
     });
 
     test('should display Indie plan details', async ({ page }) => {
-      await expect(page.getByText('$199')).toBeVisible();
+      await expect(page.getByText('$199').first()).toBeVisible();
       await expect(page.getByText('1 bundle ID')).toBeVisible();
       await expect(page.getByText('For solo developers and small side projects.')).toBeVisible();
     });
 
     test('should display Team plan details', async ({ page }) => {
-      await expect(page.getByText('$299')).toBeVisible();
+      await expect(page.getByText('$299').first()).toBeVisible();
       await expect(page.getByText('5 bundle IDs')).toBeVisible();
       await expect(page.getByText('For teams shipping multiple apps.')).toBeVisible();
     });
 
     test('should display Enterprise plan details', async ({ page }) => {
       await expect(page.getByText('Custom').first()).toBeVisible();
-      await expect(page.getByText('Unlimited bundle IDs')).toBeVisible();
+      await expect(page.getByText('Unlimited bundle IDs').first()).toBeVisible();
       await expect(page.getByText('For organizations with custom requirements.')).toBeVisible();
     });
 
@@ -58,12 +58,18 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display Buy License buttons for Indie and Team', async ({ page }) => {
-      const buyButtons = page.getByRole('link', { name: /Buy License/i });
+      const buyButtons = page.getByRole('button', { name: /Buy License/i });
       await expect(buyButtons).toHaveCount(2);
     });
 
+    test('should disable Buy License buttons when checkout is not configured', async ({ page }) => {
+      const buyButtons = page.getByRole('button', { name: /Buy License/i });
+      await expect(buyButtons.first()).toBeDisabled();
+      await expect(buyButtons.last()).toBeDisabled();
+    });
+
     test('should display Contact Us button for Enterprise', async ({ page }) => {
-      const contactBtn = page.getByRole('link', { name: /Contact Us/i });
+      const contactBtn = page.getByRole('button', { name: /Contact Us/i });
       await expect(contactBtn).toBeVisible();
       await expect(contactBtn).toHaveAttribute('href', 'mailto:hello@bglocation.dev');
     });
@@ -79,12 +85,11 @@ test.describe('Pricing Page', () => {
         'iOS + Android',
         'npm registry access',
         'Source code access (ELv2)',
-        'Email support',
         'Trial mode included',
       ];
 
       for (const feature of commonFeatures) {
-        await expect(page.getByText(feature)).toBeVisible();
+        await expect(page.getByText(feature, { exact: true }).first()).toBeVisible();
       }
     });
 

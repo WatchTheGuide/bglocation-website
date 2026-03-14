@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "@fontsource/ibm-plex-sans/400.css";
 import "@fontsource/ibm-plex-sans/500.css";
 import "@fontsource/ibm-plex-sans/600.css";
@@ -8,6 +9,7 @@ import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/ibm-plex-mono/600.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { AnnouncementBanner } from "@/components/landing/announcement-banner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -53,9 +55,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <AnnouncementBanner />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <Script
+          src="https://app.lemonsqueezy.com/js/lemon.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
