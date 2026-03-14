@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+
+function checkoutUrl(envUrl: string | undefined): string | null {
+  if (!envUrl) return null;
+  const separator = envUrl.includes("?") ? "&" : "?";
+  return `${envUrl}${separator}embed=1`;
+}
+
+const INDIE_CHECKOUT_URL = checkoutUrl(
+  process.env.NEXT_PUBLIC_LS_CHECKOUT_URL_INDIE,
+);
+const TEAM_CHECKOUT_URL = checkoutUrl(
+  process.env.NEXT_PUBLIC_LS_CHECKOUT_URL_TEAM,
+);
 
 const PLANS = [
   {
@@ -30,6 +42,7 @@ const PLANS = [
     ],
     cta: "Buy License",
     highlighted: false,
+    checkoutUrl: INDIE_CHECKOUT_URL,
   },
   {
     name: "Team",
@@ -48,6 +61,7 @@ const PLANS = [
     ],
     cta: "Buy License",
     highlighted: true,
+    checkoutUrl: TEAM_CHECKOUT_URL,
   },
   {
     name: "Enterprise",
@@ -66,6 +80,7 @@ const PLANS = [
     ],
     cta: "Contact Us",
     highlighted: false,
+    checkoutUrl: null,
   },
 ] as const;
 
@@ -144,13 +159,27 @@ export function PricingCards() {
               </CardContent>
 
               <CardFooter>
-                {plan.price !== null ? (
+                {plan.checkoutUrl ? (
                   <Button
-                    render={<Link href="#" />}
+                    render={
+                      <a
+                        href={plan.checkoutUrl}
+                        className="lemonsqueezy-button"
+                      />
+                    }
                     nativeButton={false}
                     className="w-full"
                     variant={plan.highlighted ? "default" : "outline"}
                     size="lg"
+                  >
+                    {plan.cta}
+                  </Button>
+                ) : plan.price !== null ? (
+                  <Button
+                    className="w-full"
+                    variant={plan.highlighted ? "default" : "outline"}
+                    size="lg"
+                    disabled
                   >
                     {plan.cta}
                   </Button>
