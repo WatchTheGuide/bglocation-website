@@ -14,7 +14,7 @@ const FAQ_ITEMS = [
   {
     question: "What is a bundle ID and how are licenses bound?",
     answer:
-      "A bundle ID is your app's unique identifier (e.g. com.yourcompany.app). Each license key is cryptographically bound to exactly one bundle ID — the Indie plan includes 1 key and the Team plan includes 5. The license is validated entirely on-device using RSA-2048 — no server calls, no phone-home, full offline support.",
+      "A bundle ID is your app's unique identifier (e.g. com.yourcompany.app). Each license key is cryptographically bound to exactly one bundle ID — the Indie plan includes 1 key, Team includes 5, and Factory includes 20. The license is validated entirely on-device using RSA-2048 — no server calls, no phone-home, full offline support.",
   },
   {
     question: "Can I use one license for both iOS and Android?",
@@ -24,7 +24,12 @@ const FAQ_ITEMS = [
   {
     question: "What happens if I need more bundle IDs later?",
     answer:
-      "You can upgrade your plan at any time. Moving from Indie (1 bundle ID) to Team (5 bundle IDs) is a simple plan change — no code modifications required.",
+      "You can upgrade your plan at any time. Moving from Indie (1 bundle ID) to Team (5) or Factory (20) is a simple plan change — no code modifications required.",
+  },
+  {
+    question: "What happens after the first year?",
+    answer:
+      "Your license is perpetual — the plugin continues to work without any restrictions, forever. After 1 year, you lose access to new plugin updates. To get another year of updates and support, you can purchase a renewal at a discounted rate.",
   },
   {
     question: 'What does "Source Available" mean?',

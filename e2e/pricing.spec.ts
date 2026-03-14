@@ -23,28 +23,37 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display discounted prices', async ({ page }) => {
-      await expect(page.getByText(/\$149\/year/i)).toBeVisible();
-      await expect(page.getByText(/\$229\/year/i)).toBeVisible();
+      const banner = page.locator('.rounded-lg').filter({ hasText: 'Early Adopter Offer' });
+      await expect(banner.getByText('$149')).toBeVisible();
+      await expect(banner.getByText('$229')).toBeVisible();
+      await expect(banner.getByText('$399')).toBeVisible();
     });
   });
 
   test.describe('Pricing Cards', () => {
-    test('should display all three plan names', async ({ page }) => {
+    test('should display all four plan names', async ({ page }) => {
       await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Indie' })).toBeVisible();
       await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Team' })).toBeVisible();
+      await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Factory' })).toBeVisible();
       await expect(page.locator('[data-slot="card-title"]').filter({ hasText: 'Enterprise' })).toBeVisible();
     });
 
     test('should display Indie plan details', async ({ page }) => {
       await expect(page.getByText('$199').first()).toBeVisible();
       await expect(page.getByText('1 bundle ID')).toBeVisible();
-      await expect(page.getByText('For solo developers and small side projects.')).toBeVisible();
+      await expect(page.getByText('For solo developers and side projects.')).toBeVisible();
     });
 
     test('should display Team plan details', async ({ page }) => {
       await expect(page.getByText('$299').first()).toBeVisible();
       await expect(page.getByText('5 bundle IDs')).toBeVisible();
-      await expect(page.getByText('For teams shipping multiple apps.')).toBeVisible();
+      await expect(page.getByText('For small teams shipping multiple apps.')).toBeVisible();
+    });
+
+    test('should display Factory plan details', async ({ page }) => {
+      await expect(page.getByText('$499').first()).toBeVisible();
+      await expect(page.getByText('20 bundle IDs')).toBeVisible();
+      await expect(page.getByText('For companies with many applications.')).toBeVisible();
     });
 
     test('should display Enterprise plan details', async ({ page }) => {
@@ -57,14 +66,15 @@ test.describe('Pricing Page', () => {
       await expect(page.getByText('Most Popular')).toBeVisible();
     });
 
-    test('should display Buy License buttons for Indie and Team', async ({ page }) => {
+    test('should display Buy License buttons for Indie, Team and Factory', async ({ page }) => {
       const buyButtons = page.getByRole('button', { name: /Buy License/i });
-      await expect(buyButtons).toHaveCount(2);
+      await expect(buyButtons).toHaveCount(3);
     });
 
     test('should disable Buy License buttons when checkout is not configured', async ({ page }) => {
       const buyButtons = page.getByRole('button', { name: /Buy License/i });
       await expect(buyButtons.first()).toBeDisabled();
+      await expect(buyButtons.nth(1)).toBeDisabled();
       await expect(buyButtons.last()).toBeDisabled();
     });
 
@@ -75,17 +85,18 @@ test.describe('Pricing Page', () => {
     });
 
     test('should display early adopter prices on paid plans', async ({ page }) => {
-      await expect(page.getByText('$149/yr early adopter price')).toBeVisible();
-      await expect(page.getByText('$229/yr early adopter price')).toBeVisible();
+      await expect(page.getByText('$149 early adopter price')).toBeVisible();
+      await expect(page.getByText('$229 early adopter price')).toBeVisible();
+      await expect(page.getByText('$399 early adopter price')).toBeVisible();
     });
 
     test('should display feature lists with checkmarks', async ({ page }) => {
       const commonFeatures = [
         'All plugin features',
         'iOS + Android',
-        'npm registry access',
+        'Perpetual license',
+        '1 year of updates included',
         'Source code access (ELv2)',
-        'Trial mode included',
       ];
 
       for (const feature of commonFeatures) {
@@ -107,12 +118,13 @@ test.describe('Pricing Page', () => {
       ).toBeVisible();
     });
 
-    test('should display all 8 FAQ questions', async ({ page }) => {
+    test('should display all 9 FAQ questions', async ({ page }) => {
       const questions = [
         'How does trial mode work?',
         'What is a bundle ID and how are licenses bound?',
         'Can I use one license for both iOS and Android?',
         'What happens if I need more bundle IDs later?',
+        'What happens after the first year?',
         'What does "Source Available" mean?',
         'Do I need an internet connection for the license to work?',
         'What payment methods do you accept?',

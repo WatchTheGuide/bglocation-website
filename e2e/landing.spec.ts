@@ -126,14 +126,14 @@ test.describe('Landing Page', () => {
 
     test('should display pricing rows', async ({ page }) => {
       const table = page.locator('table');
-      await expect(table.getByText('$199/yr').first()).toBeVisible();
-      await expect(table.getByText('$299/yr').first()).toBeVisible();
-      await expect(table.getByText('$499/yr')).toBeVisible();
+      await expect(table.getByText('$199').first()).toBeVisible();
+      await expect(table.getByText('$299').first()).toBeVisible();
+      await expect(table.getByText('$399').first()).toBeVisible();
     });
 
-    test('should display 14 comparison rows', async ({ page }) => {
+    test('should display 15 comparison rows', async ({ page }) => {
       const rows = page.locator('table tbody tr');
-      await expect(rows).toHaveCount(14);
+      await expect(rows).toHaveCount(15);
     });
   });
 

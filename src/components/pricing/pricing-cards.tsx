@@ -23,22 +23,25 @@ const INDIE_CHECKOUT_URL = checkoutUrl(
 const TEAM_CHECKOUT_URL = checkoutUrl(
   process.env.NEXT_PUBLIC_LS_CHECKOUT_URL_TEAM,
 );
+const FACTORY_CHECKOUT_URL = checkoutUrl(
+  process.env.NEXT_PUBLIC_LS_CHECKOUT_URL_FACTORY,
+);
 
 const PLANS = [
   {
     name: "Indie",
     price: 199,
     earlyBirdPrice: 149,
-    period: "/year",
-    description: "For solo developers and small side projects.",
+    period: "",
+    description: "For solo developers and side projects.",
     bundleIds: "1 bundle ID",
     features: [
       "All plugin features",
       "iOS + Android",
-      "npm registry access",
+      "Perpetual license",
+      "1 year of updates included",
       "Source code access (ELv2)",
       "Email support",
-      "Trial mode included",
     ],
     cta: "Buy License",
     highlighted: false,
@@ -48,8 +51,8 @@ const PLANS = [
     name: "Team",
     price: 299,
     earlyBirdPrice: 229,
-    period: "/year",
-    description: "For teams shipping multiple apps.",
+    period: "",
+    description: "For small teams shipping multiple apps.",
     bundleIds: "5 bundle IDs",
     features: [
       "Everything in Indie",
@@ -57,11 +60,27 @@ const PLANS = [
       "Priority email support",
       "Early access to new features",
       "Team license management",
-      "Trial mode included",
     ],
     cta: "Buy License",
     highlighted: true,
     checkoutUrl: TEAM_CHECKOUT_URL,
+  },
+  {
+    name: "Factory",
+    price: 499,
+    earlyBirdPrice: 399,
+    period: "",
+    description: "For companies with many applications.",
+    bundleIds: "20 bundle IDs",
+    features: [
+      "Everything in Team",
+      "20 production bundle IDs",
+      "Priority email support",
+      "Dedicated onboarding",
+    ],
+    cta: "Buy License",
+    highlighted: false,
+    checkoutUrl: FACTORY_CHECKOUT_URL,
   },
   {
     name: "Enterprise",
@@ -71,7 +90,7 @@ const PLANS = [
     description: "For organizations with custom requirements.",
     bundleIds: "Unlimited bundle IDs",
     features: [
-      "Everything in Team",
+      "Everything in Factory",
       "Unlimited bundle IDs",
       "Dedicated support channel",
       "SLA agreement",
@@ -94,14 +113,14 @@ export function PricingCards() {
             Early Adopter Offer
           </Badge>
           <p className="text-sm text-muted-foreground">
-            Launch pricing available for a limited time.
-            Lock in <strong>$149/year</strong> (Indie) or{" "}
-            <strong>$229/year</strong> (Team) — valid for the first 3 months
+            Launch pricing available for a limited time. Lock in{" "}
+            <strong>$149</strong> (Indie), <strong>$229</strong> (Team)
+            or <strong>$399</strong> (Factory) — valid for the first 3 months
             after launch.
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {PLANS.map((plan) => (
             <Card
               key={plan.name}
@@ -136,7 +155,7 @@ export function PricingCards() {
 
                 <p className="mt-1 h-5 text-sm text-primary">
                   {plan.earlyBirdPrice
-                    ? `$${plan.earlyBirdPrice}/yr early adopter price`
+                    ? `$${plan.earlyBirdPrice} early adopter price`
                     : "\u00A0"}
                 </p>
 
@@ -202,7 +221,8 @@ export function PricingCards() {
         {/* License Note */}
         <p className="mt-8 text-center text-sm text-muted-foreground">
           No license key needed to evaluate — trial mode gives you 30 min
-          of tracking per session. Licenses are bound to your bundle ID,
+          of tracking per session. All plans include a perpetual license
+          with 1 year of updates. Licenses are bound to your bundle ID,
           validated offline.
         </p>
       </div>

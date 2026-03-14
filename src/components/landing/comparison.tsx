@@ -14,8 +14,9 @@ const ROWS = [
   { feature: "Source available", us: "ELv2", transistor: false, community: "MIT" },
   { feature: "Runs when app is killed", us: true, transistor: true, community: false },
   { feature: "Geofencing", us: true, transistor: true, community: false },
-  { feature: "Single-app license", us: "$199/yr", transistor: "$299/yr", community: "Free" },
-  { feature: "Company license", us: "$299/yr", transistor: "$499/yr", community: "Free" },
+  { feature: "Single-app license", us: "$199", transistor: "$399", community: "Free" },
+  { feature: "5-app license", us: "$299", transistor: "$599", community: "Free" },
+  { feature: "License type", us: "Perpetual", transistor: "Perpetual", community: "n/a" },
 ] as const;
 
 export function Comparison() {
