@@ -47,6 +47,124 @@ interface DashboardContentProps {
   licenses: License[];
 }
 
+interface GenerateKeySectionProps {
+  canGenerate: boolean;
+  onDone: () => void;
+}
+
+function GenerateKeySection({ canGenerate, onDone }: GenerateKeySectionProps) {
+  const [state, action, pending] = useActionState<GenerateKeyState, FormData>(
+    generateKeyAction,
+    null,
+  );
+  const [showForm, setShowForm] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  async function copyNewKey(key: string) {
+    await navigator.clipboard.writeText(key);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  if (!showForm && !state?.success) {
+    return (
+      <div className="mb-6">
+        <Button onClick={() => setShowForm(true)} disabled={!canGenerate}>
+          <Plus className="mr-1 h-4 w-4" />
+          Generate New Key
+        </Button>
+        {!canGenerate && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            You&apos;ve reached the maximum number of bundle IDs for your plan.
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Plus className="h-5 w-5" />
+          Generate License Key
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {state?.success ? (
+          <div className="space-y-4">
+            <Alert>
+              <Check className="h-4 w-4" />
+              <AlertTitle>Key generated for {state.bundleId}</AlertTitle>
+              <AlertDescription>
+                A backup has been sent to your email.
+              </AlertDescription>
+            </Alert>
+            <div className="rounded-lg bg-muted p-4">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <span className="text-sm font-medium">License Key</span>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={() => copyNewKey(state.licenseKey!)}
+                >
+                  {copied ? (
+                    <Check className="h-3 w-3" />
+                  ) : (
+                    <Copy className="h-3 w-3" />
+                  )}
+                </Button>
+              </div>
+              <code className="break-all font-mono text-xs">
+                {state.licenseKey}
+              </code>
+            </div>
+            <Button variant="outline" size="sm" onClick={onDone}>
+              Done
+            </Button>
+          </div>
+        ) : (
+          <form action={action} className="space-y-4">
+            {state?.error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{state.error}</AlertDescription>
+              </Alert>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="bundleId">Bundle ID</Label>
+              <Input
+                id="bundleId"
+                name="bundleId"
+                placeholder="com.example.myapp"
+                required
+                autoFocus
+                pattern="[a-zA-Z][a-zA-Z0-9]*(\.[a-zA-Z][a-zA-Z0-9]*)+"
+                title="Reverse-domain notation (e.g., com.example.app)"
+              />
+              <p className="text-xs text-muted-foreground">
+                Use reverse-domain notation, e.g. com.example.myapp
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button type="submit" disabled={pending}>
+                {pending ? 'Generating...' : 'Generate Key'}
+              </Button>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => setShowForm(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export function DashboardContent({
   email,
   plan,
@@ -54,12 +172,8 @@ export function DashboardContent({
   licenses,
 }: DashboardContentProps) {
   const router = useRouter();
-  const [state, action, pending] = useActionState<GenerateKeyState, FormData>(
-    generateKeyAction,
-    null,
-  );
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [showNewKey, setShowNewKey] = useState(false);
+  const [generateKey, setGenerateKey] = useState(0);
 
   const slotsUsed = licenses.length;
   const slotsText =
@@ -102,106 +216,14 @@ export function DashboardContent({
       </Card>
 
       {/* Generate new key */}
-      {showNewKey || state?.success ? (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5" />
-              Generate License Key
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {state?.success ? (
-              <div className="space-y-4">
-                <Alert>
-                  <Check className="h-4 w-4" />
-                  <AlertTitle>
-                    Key generated for {state.bundleId}
-                  </AlertTitle>
-                  <AlertDescription>
-                    A backup has been sent to your email.
-                  </AlertDescription>
-                </Alert>
-                <div className="rounded-lg bg-muted p-4">
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium">License Key</span>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() => copyKey('new', state.licenseKey!)}
-                    >
-                      {copiedId === 'new' ? (
-                        <Check className="h-3 w-3" />
-                      ) : (
-                        <Copy className="h-3 w-3" />
-                      )}
-                    </Button>
-                  </div>
-                  <code className="break-all font-mono text-xs">
-                    {state.licenseKey}
-                  </code>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => router.refresh()}
-                >
-                  Done
-                </Button>
-              </div>
-            ) : (
-              <form action={action} className="space-y-4">
-                {state?.error && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{state.error}</AlertDescription>
-                  </Alert>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="bundleId">Bundle ID</Label>
-                  <Input
-                    id="bundleId"
-                    name="bundleId"
-                    placeholder="com.example.myapp"
-                    required
-                    autoFocus
-                    pattern="[a-zA-Z][a-zA-Z0-9]*(\.[a-zA-Z][a-zA-Z0-9]*)+"
-                    title="Reverse-domain notation (e.g., com.example.app)"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Use reverse-domain notation, e.g. com.example.myapp
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <Button type="submit" disabled={pending}>
-                    {pending ? 'Generating...' : 'Generate Key'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    type="button"
-                    onClick={() => setShowNewKey(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            )}
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="mb-6">
-          <Button onClick={() => setShowNewKey(true)} disabled={!canGenerate}>
-            <Plus className="mr-1 h-4 w-4" />
-            Generate New Key
-          </Button>
-          {!canGenerate && (
-            <p className="mt-2 text-sm text-muted-foreground">
-              You&apos;ve reached the maximum number of bundle IDs for your
-              plan.
-            </p>
-          )}
-        </div>
-      )}
+      <GenerateKeySection
+        key={generateKey}
+        canGenerate={canGenerate}
+        onDone={() => {
+          setGenerateKey((k) => k + 1);
+          router.refresh();
+        }}
+      />
 
       {/* Licenses table */}
       <Card>

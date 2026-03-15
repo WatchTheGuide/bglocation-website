@@ -78,12 +78,22 @@ npm run dev
 
 ### 6. Zaloguj się do portalu
 
+**Szybka metoda (dev bypass):**
+
+Otwórz w przeglądarce:
+```
+http://localhost:3000/api/dev/login?email=test@bglocation.dev
+```
+
+Ten endpoint istnieje **tylko w trybie dev** — tworzy sesję i przekierowuje na `/portal`.
+
+**Metoda z magic link:**
+
 1. Otwórz `http://localhost:3000/portal/login`
 2. Wpisz `test@bglocation.dev` i kliknij "Send magic link"
-3. **Bez Resend API key**: skopiuj link magic login z logów terminala dev serwera:
-   ```
-   🔗 [Dev] Magic link for test@bglocation.dev:
-   http://localhost:3000/portal/verify?token=eyJhbG...
+3. **Bez Resend API key**: skopiuj link magic login z `/tmp/bgl-magic-link.txt`:
+   ```bash
+   cat /tmp/bgl-magic-link.txt
    ```
 4. Otwórz skopiowany link w przeglądarce
 5. Zostaniesz przekierowany na dashboard `/portal`

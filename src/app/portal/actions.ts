@@ -51,6 +51,9 @@ export async function sendMagicLinkAction(
 
   if (process.env.NODE_ENV !== 'production') {
     console.log(`\n🔗 [Dev] Magic link for ${customer.email}:\n${loginUrl}\n`);
+    // Also write to file — Server Action console.log may not appear in terminal
+    const fs = await import('fs');
+    fs.writeFileSync('/tmp/bgl-magic-link.txt', loginUrl);
   }
 
   await sendEmail({
