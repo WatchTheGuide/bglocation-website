@@ -8,6 +8,9 @@
 | `/about` | `src/app/about/page.tsx` | Strona o twórcy (profil, certyfikaty, kontakt) |
 | `/docs` | `src/app/docs/page.tsx` | Strona dokumentacji pluginu |
 | `/pricing` | `src/app/pricing/page.tsx` | Strona cenowa z planami subskrypcji |
+| `/portal/login` | `src/app/portal/login/page.tsx` | Formularz logowania magic link |
+| `/portal/verify` | `src/app/portal/verify/page.tsx` | Weryfikacja tokenu magic link |
+| `/portal` | `src/app/portal/page.tsx` | Dashboard — licencje i generowanie kluczy |
 | `/api/webhooks/lemon-squeezy` | `src/app/api/webhooks/lemon-squeezy/route.ts` | Webhook handler Lemon Squeezy (dynamic) |
 
 ## Layout

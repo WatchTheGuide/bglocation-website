@@ -1,9 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/db";
+import { sendEmail } from "@/lib/email";
+import { WelcomeEmail } from "@/emails/welcome";
+import type { Plan, OrderType } from "@prisma/client";
 
-type LemonSqueezyEvent =
-  | "order_created"
-  | "subscription_payment_success"
-  | "subscription_expired";
+type LemonSqueezyEvent = "order_created";
 
 interface WebhookPayload {
   meta: {
@@ -15,6 +16,66 @@ interface WebhookPayload {
     type: string;
     attributes: Record<string, unknown>;
   };
+}
+
+/**
+ * Maps Lemon Squeezy variant IDs to plans.
+ * Set LS_VARIANT_<PLAN> environment variables to configure.
+ */
+function resolveVariant(variantId: string): {
+  plan: Plan;
+  maxBundleIds: number;
+  orderType: OrderType;
+} | null {
+  const mapping: Record<string, { plan: Plan; maxBundleIds: number }> = {};
+
+  if (process.env.LS_VARIANT_INDIE)
+    mapping[process.env.LS_VARIANT_INDIE] = { plan: "indie", maxBundleIds: 1 };
+  if (process.env.LS_VARIANT_TEAM)
+    mapping[process.env.LS_VARIANT_TEAM] = { plan: "team", maxBundleIds: 5 };
+  if (process.env.LS_VARIANT_FACTORY)
+    mapping[process.env.LS_VARIANT_FACTORY] = {
+      plan: "factory",
+      maxBundleIds: 20,
+    };
+  if (process.env.LS_VARIANT_ENTERPRISE)
+    mapping[process.env.LS_VARIANT_ENTERPRISE] = {
+      plan: "enterprise",
+      maxBundleIds: 0,
+    };
+
+  // Renewal variants
+  const renewalMapping: Record<string, { plan: Plan; maxBundleIds: number }> =
+    {};
+  if (process.env.LS_VARIANT_RENEWAL_INDIE)
+    renewalMapping[process.env.LS_VARIANT_RENEWAL_INDIE] = {
+      plan: "indie",
+      maxBundleIds: 1,
+    };
+  if (process.env.LS_VARIANT_RENEWAL_TEAM)
+    renewalMapping[process.env.LS_VARIANT_RENEWAL_TEAM] = {
+      plan: "team",
+      maxBundleIds: 5,
+    };
+  if (process.env.LS_VARIANT_RENEWAL_FACTORY)
+    renewalMapping[process.env.LS_VARIANT_RENEWAL_FACTORY] = {
+      plan: "factory",
+      maxBundleIds: 20,
+    };
+  if (process.env.LS_VARIANT_RENEWAL_ENTERPRISE)
+    renewalMapping[process.env.LS_VARIANT_RENEWAL_ENTERPRISE] = {
+      plan: "enterprise",
+      maxBundleIds: 0,
+    };
+
+  if (mapping[variantId]) {
+    return { ...mapping[variantId], orderType: "purchase" };
+  }
+  if (renewalMapping[variantId]) {
+    return { ...renewalMapping[variantId], orderType: "renewal" };
+  }
+
+  return null;
 }
 
 async function verifySignature(
@@ -33,7 +94,11 @@ async function verifySignature(
     ["sign"],
   );
 
-  const signed = await crypto.subtle.sign("HMAC", key, encoder.encode(rawBody));
+  const signed = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode(rawBody),
+  );
   const expectedSignature = Array.from(new Uint8Array(signed))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
@@ -80,12 +145,6 @@ export async function POST(request: NextRequest) {
     case "order_created":
       await handleOrderCreated(payload);
       break;
-    case "subscription_payment_success":
-      await handleSubscriptionPaymentSuccess(payload);
-      break;
-    case "subscription_expired":
-      await handleSubscriptionExpired(payload);
-      break;
     default:
       console.log(`[LS Webhook] Unhandled event: ${eventName}`);
   }
@@ -95,30 +154,89 @@ export async function POST(request: NextRequest) {
 
 async function handleOrderCreated(payload: WebhookPayload) {
   const { attributes } = payload.data;
+  const email = attributes.user_email as string;
+  const lsCustomerId = String(attributes.customer_id);
+  const lsOrderId = payload.data.id;
+  const status = attributes.status as string;
+
   console.log("[LS Webhook] Order created:", {
-    orderId: payload.data.id,
-    email: attributes.user_email,
-    status: attributes.status,
+    orderId: lsOrderId,
+    email,
+    status,
   });
 
-  // TODO (US-3): Save customer to database and send welcome email with portal link
-}
+  if (status !== "paid") {
+    console.log(`[LS Webhook] Skipping order with status: ${status}`);
+    return;
+  }
 
-async function handleSubscriptionPaymentSuccess(payload: WebhookPayload) {
-  const { attributes } = payload.data;
-  console.log("[LS Webhook] Subscription payment success:", {
-    subscriptionId: payload.data.id,
-    email: attributes.user_email,
-    status: attributes.status,
+  // Resolve plan from variant
+  const firstItem = attributes.first_order_item as
+    | { variant_id?: number }
+    | undefined;
+  const variantId = String(firstItem?.variant_id ?? "");
+  const variant = resolveVariant(variantId);
+
+  if (!variant) {
+    console.error(
+      `[LS Webhook] Unknown variant ID: ${variantId} — configure LS_VARIANT_* env vars`,
+    );
+    return;
+  }
+
+  // Upsert customer (handles both new purchase & plan upgrade)
+  const customer = await prisma.customer.upsert({
+    where: { email: email.toLowerCase() },
+    update: {
+      lsCustomerId,
+      plan: variant.plan,
+      maxBundleIds: variant.maxBundleIds,
+    },
+    create: {
+      lsCustomerId,
+      email: email.toLowerCase(),
+      plan: variant.plan,
+      maxBundleIds: variant.maxBundleIds,
+    },
   });
 
-  // TODO (US-4): Generate new license key and email to customer
-}
-
-async function handleSubscriptionExpired(payload: WebhookPayload) {
-  console.log("[LS Webhook] Subscription expired:", {
-    subscriptionId: payload.data.id,
+  // Record the order
+  await prisma.order.create({
+    data: {
+      lsOrderId,
+      customerId: customer.id,
+      type: variant.orderType,
+    },
   });
 
-  // TODO (US-4): Mark customer as expired in database
+  // For renewals, extend updatesUntil on all active licenses
+  if (variant.orderType === "renewal") {
+    const now = new Date();
+    const newUpdatesUntil = new Date(now);
+    newUpdatesUntil.setFullYear(newUpdatesUntil.getFullYear() + 1);
+
+    await prisma.license.updateMany({
+      where: { customerId: customer.id, active: true },
+      data: { updatesUntil: newUpdatesUntil },
+    });
+
+    console.log(
+      `[LS Webhook] Renewed ${customer.email} — updatesUntil extended to ${newUpdatesUntil.toISOString()}`,
+    );
+    return;
+  }
+
+  // New purchase — send welcome email
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev";
+  const portalUrl = `${baseUrl}/portal/login`;
+
+  await sendEmail({
+    to: customer.email,
+    subject: "Welcome to BGLocation — your license is ready",
+    react: WelcomeEmail({ portalUrl, plan: variant.plan }),
+  });
+
+  console.log(
+    `[LS Webhook] New customer ${customer.email} (${variant.plan}) — welcome email sent`,
+  );
 }
