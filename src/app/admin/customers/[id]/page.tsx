@@ -53,7 +53,6 @@ export default async function CustomerDetailPage({
       licenses={customer.licenses.map((l) => ({
         id: l.id,
         bundleId: l.bundleId,
-        licenseKey: l.licenseKey,
         issuedAt: l.issuedAt.toISOString(),
         updatesUntil: l.updatesUntil.toISOString(),
         active: l.active,

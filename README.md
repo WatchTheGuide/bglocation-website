@@ -7,7 +7,7 @@ Marketing website, documentation, customer portal, and admin panel for [capacito
 | Layer | Technology |
 |-------|-----------|
 | Framework | Next.js 16 (App Router) |
-| UI | React 19, Tailwind 4, Shadcn UI, Base UI |
+| UI | React 19, Tailwind 4, Shadcn UI |
 | Database | PostgreSQL 16 (Docker Compose) + Prisma 7 |
 | Auth | JWT HS256 (jose) + magic link emails |
 | Email | Resend + React Email |

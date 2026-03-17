@@ -26,8 +26,6 @@ import {
   KeyRound,
   ShoppingCart,
   User,
-  Copy,
-  Check,
 } from 'lucide-react';
 
 interface CustomerInfo {
@@ -42,7 +40,6 @@ interface CustomerInfo {
 interface LicenseInfo {
   id: string;
   bundleId: string;
-  licenseKey: string;
   issuedAt: string;
   updatesUntil: string;
   active: boolean;
@@ -76,19 +73,12 @@ export function CustomerDetail({
 }: CustomerDetailProps) {
   const router = useRouter();
   const [togglingId, setTogglingId] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   async function handleToggle(licenseId: string, newActive: boolean) {
     setTogglingId(licenseId);
     await toggleLicenseActiveAction(licenseId, newActive);
     router.refresh();
     setTogglingId(null);
-  }
-
-  async function copyKey(id: string, key: string) {
-    await navigator.clipboard.writeText(key);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
   }
 
   const now = new Date();
@@ -160,14 +150,13 @@ export function CustomerDetail({
                 <TableHead>Issued</TableHead>
                 <TableHead>Updates Until</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Key</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {licenses.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
                     No licenses generated.
                   </TableCell>
                 </TableRow>
@@ -191,19 +180,6 @@ export function CustomerDetail({
                         ) : (
                           <Badge variant="secondary">Inactive</Badge>
                         )}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyKey(l.id, l.licenseKey)}
-                        >
-                          {copiedId === l.id ? (
-                            <Check className="h-3 w-3" />
-                          ) : (
-                            <Copy className="h-3 w-3" />
-                          )}
-                        </Button>
                       </TableCell>
                       <TableCell className="text-right">
                         <Button

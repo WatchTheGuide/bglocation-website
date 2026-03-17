@@ -257,11 +257,6 @@ test.describe('Admin Panel', () => {
       await expect(page.getByText('purchase').first()).toBeVisible();
     });
 
-    test('should have copy button for license key', async ({ page }) => {
-      const licenseRow = page.locator('tr', { hasText: 'com.test.app' });
-      await expect(licenseRow.getByRole('button').first()).toBeVisible();
-    });
-
     test('should have toggle button for license activation', async ({
       page,
     }) => {
