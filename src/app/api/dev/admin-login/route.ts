@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import {
-  createSessionToken,
-  SESSION_COOKIE,
-  SESSION_COOKIE_OPTIONS,
+  createAdminSessionToken,
+  ADMIN_SESSION_COOKIE,
+  ADMIN_SESSION_COOKIE_OPTIONS,
 } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
@@ -19,14 +19,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const customer = await prisma.customer.findUnique({ where: { email } });
-  if (!customer) {
-    return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
+  const admin = await prisma.adminUser.findUnique({ where: { email } });
+  if (!admin) {
+    return NextResponse.json({ error: 'Admin not found' }, { status: 404 });
   }
 
-  const token = await createSessionToken(customer.id, customer.email);
-  const response = NextResponse.redirect(new URL('/portal', request.url));
-  response.cookies.set(SESSION_COOKIE, token, SESSION_COOKIE_OPTIONS);
+  const token = await createAdminSessionToken(admin.id, admin.email);
+  const response = NextResponse.redirect(new URL('/admin', request.url));
+  response.cookies.set(ADMIN_SESSION_COOKIE, token, ADMIN_SESSION_COOKIE_OPTIONS);
 
   return response;
 }
