@@ -10,6 +10,7 @@ Strona marketingowa / dokumentacja / pricing dla pluginu `capacitor-bglocation`.
 | [Pages.md](Pages.md) | Opis stron (Landing, Docs, Pricing, About) i ich komponentów |
 | [Components.md](Components.md) | Mapa komponentów — UI, landing, about, pricing, layout |
 | [Testing.md](Testing.md) | Strategia testowania E2E (Playwright) |
+| [Portal.md](Portal.md) | License Portal — architektura, uruchomienie lokalne, dev login |
 
 ## Stack technologiczny
 
@@ -28,12 +29,14 @@ Strona marketingowa / dokumentacja / pricing dla pluginu `capacitor-bglocation`.
 ## Komendy
 
 ```bash
-npm run dev            # Next.js dev server (port 3000)
-npm run build          # Build produkcyjny
-npm run start          # Serwer produkcyjny
-npm run lint           # ESLint
-npm run test:e2e       # Playwright E2E
-npm run test:e2e:ui    # Playwright z UI
+npm run dev              # Next.js dev server (port 3000)
+npm run build            # Build produkcyjny
+npm run start            # Serwer produkcyjny
+npm run lint             # ESLint
+npm run test:e2e         # Playwright E2E
+npm run test:e2e:ui      # Playwright z UI
+npm run generate:keypair # Generuj parę kluczy RSA-2048
+npm run generate:license # Generuj klucz licencyjny z CLI
 ```
 
 ## Aliasy ścieżek

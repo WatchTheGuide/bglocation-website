@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Customer {
+  id            String   @id @default(uuid())
+  lsCustomerId  String   @unique @map("ls_customer_id")
+  email         String   @unique
+  plan          Plan
+  maxBundleIds  Int      @map("max_bundle_ids")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  orders   Order[]
+  licenses License[]
+
+  @@map("customers")
+}
+
+model Order {
+  id         String   @id @default(uuid())
+  lsOrderId  String   @unique @map("ls_order_id")
+  customerId String   @map("customer_id")
+  type       OrderType
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@map("orders")
+}
+
+model License {
+  id           String    @id @default(uuid())
+  customerId   String    @map("customer_id")
+  bundleId     String    @map("bundle_id")
+  licenseKey   String    @map("license_key") @db.Text
+  issuedAt     DateTime  @default(now()) @map("issued_at")
+  updatesUntil DateTime  @map("updates_until")
+  renewedAt    DateTime? @map("renewed_at")
+  active       Boolean   @default(true)
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  @@unique([customerId, bundleId])
+  @@map("licenses")
+}
+
+model AdminUser {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_users")
+}
+
+enum Plan {
+  indie
+  team
+  factory
+  enterprise
+}
+
+enum OrderType {
+  purchase
+  renewal
+}

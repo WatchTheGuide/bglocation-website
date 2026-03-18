@@ -111,7 +111,7 @@ test.describe('Navigation — Footer', () => {
     const footer = page.locator('footer');
     await expect(footer.getByText('Product', { exact: true })).toBeVisible();
     await expect(footer.getByText('Documentation', { exact: true })).toBeVisible();
-    await expect(footer.getByText('Legal', { exact: true })).toBeVisible();
+    await expect(footer.getByText('Company', { exact: true })).toBeVisible();
   });
 
   test('should display copyright notice', async ({ page }) => {
@@ -137,7 +137,6 @@ test.describe('Navigation — Footer', () => {
     await expect(footer.getByRole('link', { name: 'API Reference' })).toBeVisible();
     await expect(footer.getByRole('link', { name: 'About' })).toBeVisible();
     await expect(footer.getByRole('link', { name: /License.*ELv2/i })).toBeVisible();
-    await expect(footer.getByRole('link', { name: 'Privacy Policy' })).toBeVisible();
   });
 });
 

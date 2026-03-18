@@ -2,21 +2,19 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, Minus } from "lucide-react";
 
 const ROWS = [
-  { feature: "Background GPS tracking", us: true, transistor: true, community: "partial" },
-  { feature: "Native HTTP posting", us: true, transistor: true, community: false },
-  { feature: "Offline buffer (SQLite)", us: true, transistor: true, community: false },
-  { feature: "Heartbeat timer", us: true, transistor: true, community: false },
-  { feature: "Adaptive distance filter", us: true, transistor: false, community: false },
-  { feature: "Capacitor 8 native", us: true, transistor: false, community: true },
-  { feature: "No Cordova legacy code", us: true, transistor: false, community: true },
-  { feature: "Battery optimization detection", us: true, transistor: true, community: false },
-  { feature: "Offline license (no phone-home)", us: true, transistor: false, community: "n/a" },
-  { feature: "Source available", us: "ELv2", transistor: false, community: "MIT" },
-  { feature: "Runs when app is killed", us: true, transistor: true, community: false },
-  { feature: "Geofencing", us: true, transistor: true, community: false },
-  { feature: "Single-app license", us: "$199", transistor: "$399", community: "Free" },
-  { feature: "5-app license", us: "$299", transistor: "$599", community: "Free" },
-  { feature: "License type", us: "Perpetual", transistor: "Perpetual", community: "n/a" },
+  { feature: "Background GPS tracking", us: true, community: "partial" },
+  { feature: "Native HTTP posting", us: true, community: false },
+  { feature: "Offline buffer (SQLite)", us: true, community: false },
+  { feature: "Heartbeat timer", us: true, community: false },
+  { feature: "Adaptive distance filter", us: true, community: false },
+  { feature: "Capacitor 8 native", us: true, community: true },
+  { feature: "No Cordova legacy code", us: true, community: true },
+  { feature: "Battery optimization detection", us: true, community: false },
+  { feature: "Offline license (no phone-home)", us: true, community: "n/a" },
+  { feature: "Source available", us: "ELv2", community: "MIT" },
+  { feature: "Runs when app is killed", us: true, community: false },
+  { feature: "Geofencing", us: true, community: false },
+  { feature: "License type", us: "Perpetual", community: "n/a" },
 ] as const;
 
 export function Comparison() {
@@ -28,17 +26,16 @@ export function Comparison() {
             How We Compare
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Built for modern Capacitor apps, priced for indie developers.
+            See how we stack up against the built-in Capacitor geolocation plugin.
           </p>
         </div>
 
         <div className="mt-12 overflow-x-auto">
           <table className="w-full table-fixed text-sm">
             <colgroup>
-              <col className="w-[40%]" />
-              <col className="w-[20%]" />
-              <col className="w-[20%]" />
-              <col className="w-[20%]" />
+              <col className="w-[50%]" />
+              <col className="w-[25%]" />
+              <col className="w-[25%]" />
             </colgroup>
             <thead>
               <tr className="border-b">
@@ -52,9 +49,6 @@ export function Comparison() {
                   </Badge>
                 </th>
                 <th className="pb-3 text-center font-medium text-muted-foreground">
-                  transistorsoft
-                </th>
-                <th className="pb-3 text-center font-medium text-muted-foreground">
                   <span className="block">@capacitor/</span>
                   <span className="block">geolocation</span>
                 </th>
@@ -66,9 +60,6 @@ export function Comparison() {
                   <td className="py-3 text-muted-foreground">{row.feature}</td>
                   <td className="py-3 text-center">
                     <ComparisonCell value={row.us} />
-                  </td>
-                  <td className="py-3 text-center">
-                    <ComparisonCell value={row.transistor} muted />
                   </td>
                   <td className="py-3 text-center">
                     <ComparisonCell value={row.community} muted />
