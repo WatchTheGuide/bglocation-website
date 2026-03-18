@@ -113,10 +113,9 @@ test.describe('Landing Page', () => {
       ).toBeVisible();
     });
 
-    test('should display all three column headers', async ({ page }) => {
+    test('should display both column headers', async ({ page }) => {
       const table = page.locator('table');
       await expect(table.getByText('capacitor-bglocation')).toBeVisible();
-      await expect(table.getByText('transistorsoft')).toBeVisible();
       await expect(table.getByText(/@capacitor\//)).toBeVisible();
     });
 
@@ -124,16 +123,9 @@ test.describe('Landing Page', () => {
       await expect(page.getByText('recommended')).toBeVisible();
     });
 
-    test('should display pricing rows', async ({ page }) => {
-      const table = page.locator('table');
-      await expect(table.getByText('$199').first()).toBeVisible();
-      await expect(table.getByText('$299').first()).toBeVisible();
-      await expect(table.getByText('$399').first()).toBeVisible();
-    });
-
-    test('should display 15 comparison rows', async ({ page }) => {
+    test('should display 13 comparison rows', async ({ page }) => {
       const rows = page.locator('table tbody tr');
-      await expect(rows).toHaveCount(15);
+      await expect(rows).toHaveCount(13);
     });
   });
 
