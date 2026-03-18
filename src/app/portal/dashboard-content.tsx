@@ -2,11 +2,12 @@
 
 import { useActionState, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { generateKeyAction, logoutAction, type GenerateKeyState } from './actions';
+import { generateKeyAction, renewKeyAction, logoutAction, type GenerateKeyState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -30,6 +31,7 @@ import {
   Plus,
   Shield,
   AlertCircle,
+  RefreshCw,
 } from 'lucide-react';
 
 interface License {
@@ -174,6 +176,8 @@ export function DashboardContent({
   const router = useRouter();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [generateKey, setGenerateKey] = useState(0);
+  const [renewingId, setRenewingId] = useState<string | null>(null);
+  const [renewError, setRenewError] = useState<string | null>(null);
 
   const slotsUsed = licenses.length;
   const slotsText =
@@ -181,11 +185,24 @@ export function DashboardContent({
       ? `${slotsUsed} / unlimited`
       : `${slotsUsed} / ${maxBundleIds}`;
   const canGenerate = maxBundleIds === 0 || slotsUsed < maxBundleIds;
+  const now = new Date();
 
   async function copyKey(id: string, key: string) {
     await navigator.clipboard.writeText(key);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  }
+
+  async function handleRenew(licenseId: string) {
+    setRenewingId(licenseId);
+    setRenewError(null);
+    const result = await renewKeyAction(licenseId);
+    if (result?.error) {
+      setRenewError(result.error);
+    } else {
+      router.refresh();
+    }
+    setRenewingId(null);
   }
 
   return (
@@ -226,6 +243,12 @@ export function DashboardContent({
       />
 
       {/* Licenses table */}
+      {renewError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{renewError}</AlertDescription>
+        </Alert>
+      )}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -247,43 +270,67 @@ export function DashboardContent({
                   <TableHead>Issued</TableHead>
                   <TableHead>Updates Until</TableHead>
                   <TableHead className="w-25">Key</TableHead>
+                  <TableHead className="w-25"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {licenses.map((license) => (
-                  <TableRow key={license.id}>
-                    <TableCell className="font-mono text-xs">
-                      {license.bundleId}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(license.issuedAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(license.updatesUntil).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="xs"
-                        onClick={() =>
-                          copyKey(license.id, license.licenseKey)
-                        }
-                      >
-                        {copiedId === license.id ? (
-                          <>
-                            <Check className="mr-1 h-3 w-3" />
-                            Copied
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="mr-1 h-3 w-3" />
-                            Copy
-                          </>
+                {licenses.map((license) => {
+                  const updatesExpired = new Date(license.updatesUntil) < now;
+                  return (
+                    <TableRow key={license.id}>
+                      <TableCell className="font-mono text-xs">
+                        {license.bundleId}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(license.issuedAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <span className={updatesExpired ? 'text-destructive' : ''}>
+                          {new Date(license.updatesUntil).toLocaleDateString()}
+                        </span>
+                        {updatesExpired && (
+                          <Badge variant="destructive" className="ml-2">
+                            Expired
+                          </Badge>
                         )}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="xs"
+                          onClick={() =>
+                            copyKey(license.id, license.licenseKey)
+                          }
+                        >
+                          {copiedId === license.id ? (
+                            <>
+                              <Check className="mr-1 h-3 w-3" />
+                              Copied
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="mr-1 h-3 w-3" />
+                              Copy
+                            </>
+                          )}
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        {updatesExpired && (
+                          <Button
+                            variant="outline"
+                            size="xs"
+                            disabled={renewingId === license.id}
+                            onClick={() => handleRenew(license.id)}
+                          >
+                            <RefreshCw className={`mr-1 h-3 w-3 ${renewingId === license.id ? 'animate-spin' : ''}`} />
+                            {renewingId === license.id ? 'Renewing...' : 'Renew'}
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           )}

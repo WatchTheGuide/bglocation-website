@@ -49,6 +49,37 @@ test.describe('Feature Name', () => {
 
 Każdy test uruchamiany jest na obu viewportach (237 testów łącznie).
 
+---
+
+## Testy manualne
+
+Nie wszystkie scenariusze można pokryć automatycznie — integracja z Lemon Squeezy (webhook, checkout), wysyłka e-maili (Resend), i cross-browser rendering wymagają weryfikacji manualnej.
+
+### Plan testów manualnych
+
+Pełny plan: `.testing/WEBSITE-MANUAL-TEST-PLAN.md`
+
+- **90 scenariuszy** w 18 sekcjach
+- **Widoki**: Desktop (1440×900) + Mobile (375×667)
+- **Pokrycie**: 3 epiki (EPIC-019, EPIC-025, EPIC-026)
+- **Szacowany czas**: ~6-8h desktop + ~3-4h mobile
+
+### Proces wykonania
+
+1. Skopiuj `.testing/EXECUTION-TEMPLATE.md` do `.testing/runs/YYYY-MM-DD-website-{widok}.md`
+2. Wypełnij metadane sesji (przeglądarka, rozdzielczość, środowisko)
+3. Skopiuj checklistę ze środka planu testów (sekcja "Checklist wykonania")
+4. Realizuj scenariusze — zaznaczaj `[x]` przy pass
+5. Przy fail: dokumentuj bug w sekcji "Zgłoszone błędy" raportu
+6. Po sesji: wypełnij podsumowanie z metrykami pass/fail/skip
+
+### Kiedy uruchamiać
+
+- Przed deploy'em na produkcję
+- Po zmianach w portalu klienta lub admin panelu
+- Po zmianach w middleware/bezpieczeństwie
+- Po aktualizacji integracji Lemon Squeezy / Resend
+
 ## Co testujemy
 
 ### Landing Page (`landing.spec.ts`)

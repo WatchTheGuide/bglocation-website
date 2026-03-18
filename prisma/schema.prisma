@@ -34,13 +34,14 @@ model Order {
 }
 
 model License {
-  id           String   @id @default(uuid())
-  customerId   String   @map("customer_id")
-  bundleId     String   @map("bundle_id")
-  licenseKey   String   @map("license_key") @db.Text
-  issuedAt     DateTime @default(now()) @map("issued_at")
-  updatesUntil DateTime @map("updates_until")
-  active       Boolean  @default(true)
+  id           String    @id @default(uuid())
+  customerId   String    @map("customer_id")
+  bundleId     String    @map("bundle_id")
+  licenseKey   String    @map("license_key") @db.Text
+  issuedAt     DateTime  @default(now()) @map("issued_at")
+  updatesUntil DateTime  @map("updates_until")
+  renewedAt    DateTime? @map("renewed_at")
+  active       Boolean   @default(true)
 
   customer Customer @relation(fields: [customerId], references: [id])
 
