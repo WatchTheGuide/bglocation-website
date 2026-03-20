@@ -6,19 +6,54 @@ import { checkRateLimit } from "@/lib/chat/rate-limiter";
 const MAX_MESSAGES = 10;
 
 export async function POST(req: Request) {
-  const origin = req.headers.get("origin");
-  const allowedOrigins = [process.env.NEXT_PUBLIC_APP_URL];
-  if (!origin || !allowedOrigins.includes(origin)) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  if (!appUrl) {
+    return new Response("Server misconfiguration", { status: 500 });
+  }
+
+  let allowedOrigin: string;
+  try {
+    allowedOrigin = new URL(appUrl).origin;
+  } catch {
+    return new Response("Server misconfiguration", { status: 500 });
+  }
+
+  const originHeader = req.headers.get("origin");
+  let requestOrigin: string | null = null;
+  if (originHeader) {
+    try {
+      requestOrigin = new URL(originHeader).origin;
+    } catch {
+      requestOrigin = null;
+    }
+  }
+
+  if (!requestOrigin || requestOrigin !== allowedOrigin) {
     return new Response("Forbidden", { status: 403 });
   }
 
-  const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+  const forwardedFor = req.headers.get("x-forwarded-for");
+  const realIp = req.headers.get("x-real-ip");
+  let ip = "unknown";
+  if (forwardedFor && forwardedFor.length > 0) {
+    ip = forwardedFor.split(",")[0].trim();
+  } else if (realIp && realIp.length > 0) {
+    ip = realIp;
+  }
+
   if (!checkRateLimit(ip)) {
     return new Response("Too many requests", { status: 429 });
   }
 
-  const body = await req.json();
-  const messages: UIMessage[] = body.messages ?? [];
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return new Response("Invalid JSON", { status: 400 });
+  }
+
+  const messages: UIMessage[] =
+    (body as Record<string, unknown>).messages as UIMessage[] ?? [];
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response("Invalid request body", { status: 400 });
@@ -27,6 +62,10 @@ export async function POST(req: Request) {
   const userMessages = messages.filter((m) => m.role === "user");
   if (userMessages.length > MAX_MESSAGES) {
     return new Response("Conversation limit reached", { status: 400 });
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return new Response("Chat is not configured", { status: 503 });
   }
 
   const result = streamText({

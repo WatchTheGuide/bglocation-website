@@ -105,6 +105,13 @@ test.describe('Chat Widget', () => {
 
       // User message should appear
       await expect(page.getByText('What is this plugin?')).toBeVisible();
+
+      // Assistant response should appear
+      await expect(
+        page.getByText(
+          /Hello! capacitor-bglocation is a background location plugin\./i,
+        ),
+      ).toBeVisible();
     });
 
     test('should send a quick reply as a user message', async ({ page }) => {

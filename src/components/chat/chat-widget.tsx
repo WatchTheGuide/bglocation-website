@@ -69,7 +69,7 @@ export function ChatWidget() {
     function handleTab(e: KeyboardEvent) {
       if (e.key !== "Tab") return;
       const focusable = panel!.querySelectorAll<HTMLElement>(
-        'button, input, [tabindex]:not([tabindex="-1"])',
+        'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])',
       );
       if (focusable.length === 0) return;
 
@@ -129,6 +129,7 @@ export function ChatWidget() {
           ref={panelRef}
           role="dialog"
           aria-label="Chat with AI assistant"
+          aria-modal="true"
           className={cn(
             "fixed z-50 flex flex-col bg-card text-card-foreground shadow-2xl",
             "border border-border",
