@@ -229,8 +229,6 @@ test.describe('Chat Widget', () => {
 
     test('should focus input when panel opens', async ({ page }) => {
       await page.getByRole('button', { name: /Open chat/i }).click();
-      // Wait for the focus timeout
-      await page.waitForTimeout(200);
       const input = page.getByPlaceholder(/Ask a question/i);
       await expect(input).toBeFocused();
     });

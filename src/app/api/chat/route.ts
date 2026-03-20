@@ -51,14 +51,19 @@ export async function POST(req: Request) {
     return new Response("Invalid JSON", { status: 400 });
   }
 
-  const messages: UIMessage[] =
-    (body as Record<string, unknown>).messages as UIMessage[] ?? [];
+  if (!body || typeof body !== "object" || !("messages" in body)) {
+    return new Response("Invalid request body", { status: 400 });
+  }
+
+  const messages: UIMessage[] = (body as { messages: UIMessage[] }).messages ?? [];
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return new Response("Invalid request body", { status: 400 });
   }
 
-  const userMessages = messages.filter((m) => m.role === "user");
+  const userMessages = messages.filter(
+    (m): m is UIMessage => m != null && typeof m === "object" && "role" in m && m.role === "user",
+  );
   if (userMessages.length > MAX_MESSAGES) {
     return new Response("Conversation limit reached", { status: 400 });
   }
