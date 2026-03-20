@@ -57,16 +57,33 @@ export async function POST(req: Request) {
     return new Response("Invalid request body", { status: 400 });
   }
 
-  const messages: UIMessage[] = (body as { messages: UIMessage[] }).messages ?? [];
+  const rawMessages: unknown[] = (body as { messages: unknown[] }).messages ?? [];
 
-  if (!Array.isArray(messages) || messages.length === 0) {
+  if (!Array.isArray(rawMessages) || rawMessages.length === 0) {
     return new Response("Invalid request body", { status: 400 });
   }
 
-  const userMessages = messages.filter(
-    (m): m is UIMessage => m != null && typeof m === "object" && "role" in m && m.role === "user",
+  // Cap total messages (user + assistant) to prevent token abuse
+  const MAX_TOTAL_MESSAGES = MAX_MESSAGES * 2 + 1;
+  if (rawMessages.length > MAX_TOTAL_MESSAGES) {
+    return new Response("Conversation limit reached", { status: 400 });
+  }
+
+  // Validate each message has the expected shape
+  const messages = rawMessages.filter(
+    (m): m is UIMessage =>
+      m != null &&
+      typeof m === "object" &&
+      "role" in m &&
+      typeof (m as Record<string, unknown>).role === "string",
   );
-  if (userMessages.length > MAX_MESSAGES) {
+
+  if (messages.length === 0) {
+    return new Response("Invalid request body", { status: 400 });
+  }
+
+  const userMessageCount = messages.filter((m) => m.role === "user").length;
+  if (userMessageCount > MAX_MESSAGES) {
     return new Response("Conversation limit reached", { status: 400 });
   }
 
