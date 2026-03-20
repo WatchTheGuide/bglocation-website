@@ -2,8 +2,7 @@ import { openai } from "@ai-sdk/openai";
 import { streamText, type UIMessage, convertToModelMessages } from "ai";
 import { SYSTEM_PROMPT } from "@/lib/chat/system-prompt";
 import { checkRateLimit } from "@/lib/chat/rate-limiter";
-
-const MAX_MESSAGES = 10;
+import { MAX_MESSAGES } from "@/lib/chat/constants";
 
 export async function POST(req: Request) {
   const appUrl = process.env.NEXT_PUBLIC_BASE_URL;

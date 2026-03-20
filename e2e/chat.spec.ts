@@ -136,6 +136,45 @@ test.describe('Chat Widget', () => {
         page.getByRole('button', { name: /How does pricing work/i }),
       ).not.toBeVisible();
     });
+
+    test('should show limit reached after max messages', async ({ page }) => {
+      let requestCount = 0;
+      await page.route('**/api/chat', async (route) => {
+        requestCount++;
+        await route.fulfill({
+          status: 200,
+          contentType: 'text/plain; charset=utf-8',
+          body: `Response ${requestCount}`,
+        });
+      });
+
+      await page.getByRole('button', { name: /Open chat/i }).click();
+      const input = page.getByPlaceholder(/Ask a question/i);
+
+      // Send MAX_MESSAGES (10) user messages
+      for (let i = 1; i <= 10; i++) {
+        await input.fill(`Message ${i}`);
+        await page.getByRole('button', { name: /Send message/i }).click();
+        // Wait for message to appear before sending next
+        await expect(page.getByText(`Message ${i}`)).toBeVisible();
+      }
+
+      // Limit reached UI should show
+      await expect(
+        page.getByText(/reached the message limit/i),
+      ).toBeVisible();
+
+      // Input should be disabled with limit placeholder
+      await expect(input).toBeDisabled();
+      await expect(
+        page.getByPlaceholder(/Message limit reached/i),
+      ).toBeVisible();
+
+      // Send button should be disabled
+      await expect(
+        page.getByRole('button', { name: /Send message/i }),
+      ).toBeDisabled();
+    });
   });
 
   test.describe('Error States', () => {

@@ -2,13 +2,13 @@
 
 import { useChat } from "@ai-sdk/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { MessageCircle, Send, X } from "lucide-react";
 import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { QuickReplies } from "@/components/chat/quick-replies";
-
-const MAX_MESSAGES = 10;
+import { MAX_MESSAGES, SUPPORT_EMAIL } from "@/lib/chat/constants";
 const WELCOME_MESSAGE =
   "Hi! I can help with questions about capacitor-bglocation. Ask me about features, pricing, or integration.";
 
@@ -20,6 +20,7 @@ function getTextContent(parts: Array<{ type: string; text?: string }>): string {
 }
 
 export function ChatWidget() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -106,6 +107,8 @@ export function ChatWidget() {
     },
     [input, isLoading, limitReached, sendMessage],
   );
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <>
@@ -251,10 +254,10 @@ export function ChatWidget() {
                 <p>
                   Something went wrong. Try again or email us at{" "}
                   <a
-                    href="mailto:hello@bglocation.dev"
+                    href={`mailto:${SUPPORT_EMAIL}`}
                     className="font-medium text-primary underline underline-offset-2"
                   >
-                    hello@bglocation.dev
+                    {SUPPORT_EMAIL}
                   </a>
                   .
                 </p>
@@ -283,10 +286,10 @@ export function ChatWidget() {
                   You&apos;ve reached the message limit for this conversation.
                   For more help, email us at{" "}
                   <a
-                    href="mailto:hello@bglocation.dev"
+                    href={`mailto:${SUPPORT_EMAIL}`}
                     className="font-medium text-primary underline underline-offset-2"
                   >
-                    hello@bglocation.dev
+                    {SUPPORT_EMAIL}
                   </a>
                   .
                 </p>
