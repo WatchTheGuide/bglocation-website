@@ -10,6 +10,7 @@ import "@fontsource/ibm-plex-mono/600.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { AnnouncementBanner } from "@/components/landing/announcement-banner";
+import { ChatWidget } from "@/components/chat/chat-widget";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -59,6 +60,7 @@ export default function RootLayout({
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <ChatWidget />
         <Script
           src="https://app.lemonsqueezy.com/js/lemon.js"
           strategy="afterInteractive"
