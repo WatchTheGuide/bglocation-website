@@ -34,14 +34,14 @@ export async function POST(req: Request) {
 
   const forwardedFor = req.headers.get("x-forwarded-for");
   const realIp = req.headers.get("x-real-ip");
-  let ip = "unknown";
+  let ip: string | null = null;
   if (forwardedFor && forwardedFor.length > 0) {
     ip = forwardedFor.split(",")[0].trim();
   } else if (realIp && realIp.length > 0) {
     ip = realIp;
   }
 
-  if (!checkRateLimit(ip)) {
+  if (ip && !checkRateLimit(ip)) {
     return new Response("Too many requests", { status: 429 });
   }
 

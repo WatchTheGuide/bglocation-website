@@ -44,15 +44,16 @@ export function ChatWidget() {
 
   // Focus input when panel opens
   useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (!open) return;
+    const timeoutId = setTimeout(() => inputRef.current?.focus(), 100);
+    return () => clearTimeout(timeoutId);
   }, [open]);
 
   // Close on Escape
   useEffect(() => {
+    if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape" && open) {
+      if (e.key === "Escape") {
         setOpen(false);
       }
     }
