@@ -7,14 +7,16 @@ import { MAX_MESSAGES } from "@/lib/chat/constants";
 export async function POST(req: Request) {
   const appUrl = process.env.NEXT_PUBLIC_BASE_URL;
   if (!appUrl) {
-    return new Response("Server misconfiguration", { status: 500 });
+    console.error("Missing required environment variable NEXT_PUBLIC_BASE_URL");
+    return new Response("Server misconfiguration: missing NEXT_PUBLIC_BASE_URL", { status: 500 });
   }
 
   let allowedOrigin: string;
   try {
     allowedOrigin = new URL(appUrl).origin;
   } catch {
-    return new Response("Server misconfiguration", { status: 500 });
+    console.error("Invalid value for NEXT_PUBLIC_BASE_URL:", appUrl);
+    return new Response("Server misconfiguration: invalid NEXT_PUBLIC_BASE_URL", { status: 500 });
   }
 
   const originHeader = req.headers.get("origin");
