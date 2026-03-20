@@ -6,7 +6,7 @@ import { checkRateLimit } from "@/lib/chat/rate-limiter";
 const MAX_MESSAGES = 10;
 
 export async function POST(req: Request) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const appUrl = process.env.NEXT_PUBLIC_BASE_URL;
   if (!appUrl) {
     return new Response("Server misconfiguration", { status: 500 });
   }
