@@ -14,6 +14,7 @@ import { ChatWidget } from "@/components/chat/chat-widget";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  referrer: "same-origin",
   title: {
     default: "bglocation — Background Location Plugin",
     template: "%s | bglocation",

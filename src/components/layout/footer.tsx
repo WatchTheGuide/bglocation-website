@@ -140,6 +140,7 @@ export function Footer() {
               src="https://img.shields.io/npm/v/capacitor-bglocation?color=%23c2185b&label=npm"
               alt="npm version"
               className="h-5"
+              referrerPolicy="no-referrer"
             />
           </a>
         </div>
