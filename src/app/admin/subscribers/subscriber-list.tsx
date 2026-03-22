@@ -397,7 +397,7 @@ function DeleteButton({
     <Dialog>
       <DialogTrigger
         render={
-          <Button variant="ghost" size="icon-xs" disabled={isDeleting} />
+          <Button variant="ghost" size="icon-xs" disabled={isDeleting} aria-label={`Delete subscriber ${email}`} />
         }
       >
         <Trash2 className="h-3.5 w-3.5 text-destructive" />

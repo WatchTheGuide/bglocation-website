@@ -15,7 +15,7 @@ export default function AdminLoginPage() {
           Enter your admin email to receive a sign-in link.
         </p>
       </div>
-      <Suspense>
+      <Suspense fallback={null}>
         <AdminLoginForm />
       </Suspense>
     </div>

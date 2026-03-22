@@ -94,6 +94,7 @@ export function NewsletterCta() {
                 <button
                   key={p.value}
                   type="button"
+                  aria-pressed={platforms.includes(p.value)}
                   onClick={() => togglePlatform(p.value)}
                   className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
                     platforms.includes(p.value)
