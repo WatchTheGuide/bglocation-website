@@ -15,8 +15,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "capacitor-bglocation — Background Location Plugin for Capacitor",
-    template: "%s | capacitor-bglocation",
+    default: "bglocation — Background Location Plugin",
+    template: "%s | bglocation",
   },
   description:
     "Production-ready Capacitor 8 plugin for continuous background GPS tracking on iOS and Android. Native HTTP posting, offline buffer, heartbeat timer, and more.",
@@ -31,19 +31,19 @@ export const metadata: Metadata = {
     "android",
   ],
   openGraph: {
-    title: "capacitor-bglocation — Background Location for Capacitor",
+    title: "bglocation — Background Location Plugin",
     description:
       "Continuous background GPS tracking for iOS & Android. Native HTTP, offline buffer, evaluate free with trial mode.",
     url: "https://bglocation.dev",
-    siteName: "capacitor-bglocation",
+    siteName: "bglocation",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "capacitor-bglocation",
+    title: "bglocation",
     description:
-      "Production-ready Capacitor 8 plugin for continuous background GPS tracking.",
+      "Production-ready plugin for continuous background GPS tracking on mobile.",
   },
   metadataBase: new URL("https://bglocation.dev"),
 };

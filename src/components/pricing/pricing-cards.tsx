@@ -226,6 +226,12 @@ export function PricingCards() {
           validated offline.
         </p>
 
+        {/* Tax Note */}
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          All prices are exclusive of tax. VAT / sales tax will be calculated
+          at checkout based on your location.
+        </p>
+
         {/* Renewal Note */}
         <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-muted bg-muted/30 p-4 text-center">
           <p className="text-sm font-medium">Update Renewal (Optional)</p>
