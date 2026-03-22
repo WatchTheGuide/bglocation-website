@@ -97,11 +97,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Consent is required' }, { status: 400 });
   }
 
+  const consentText = consent.slice(0, 500);
+
   const validSource = typeof source === 'string' && VALID_SOURCES.includes(source) ? source : 'footer';
 
   let validPlatforms: string[] = [];
   if (Array.isArray(platforms)) {
-    validPlatforms = platforms.filter((p): p is string => typeof p === 'string' && VALID_PLATFORMS.includes(p));
+    const filtered = platforms.filter(
+      (p): p is string => typeof p === 'string' && VALID_PLATFORMS.includes(p),
+    );
+    validPlatforms = Array.from(new Set(filtered)).slice(0, VALID_PLATFORMS.length);
   }
 
   // Lazy cleanup of stale records
@@ -130,7 +135,7 @@ export async function POST(req: Request) {
         confirmToken,
         confirmTokenExpiresAt,
         unsubToken,
-        consentText: consent,
+        consentText,
         ipAddress: ip,
         source: validSource,
         platforms: validPlatforms,
@@ -168,7 +173,7 @@ export async function POST(req: Request) {
       status: 'pending',
       platforms: validPlatforms,
       source: validSource,
-      consentText: consent,
+      consentText,
       ipAddress: ip,
       confirmToken,
       confirmTokenExpiresAt,

@@ -57,30 +57,43 @@ export default async function SubscribersPage({
     confirmedAt: string | null;
   }[] = [];
   let totalCount = 0;
+  let totalPages = 1;
+  let clampedPage = page;
   let statusCounts = { total: 0, confirmed: 0, pending: 0, unsubscribed: 0 };
 
   try {
-    const [rows, count, confirmed, pending, unsubscribed] = await Promise.all([
-      prisma.subscriber.findMany({
-        where,
-        orderBy: { [orderByField]: sortOrder },
-        skip: (page - 1) * PAGE_SIZE,
-        take: PAGE_SIZE,
-        select: {
-          id: true,
-          email: true,
-          status: true,
-          platforms: true,
-          source: true,
-          createdAt: true,
-          confirmedAt: true,
-        },
-      }),
+    const [count, confirmed, pending, unsubscribed] = await Promise.all([
       prisma.subscriber.count({ where }),
       prisma.subscriber.count({ where: { AND: [where, { status: 'confirmed' }] } }),
       prisma.subscriber.count({ where: { AND: [where, { status: 'pending' }] } }),
       prisma.subscriber.count({ where: { AND: [where, { status: 'unsubscribed' }] } }),
     ]);
+
+    totalCount = count;
+    totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+    clampedPage = Math.min(page, totalPages);
+    statusCounts = {
+      total: confirmed + pending + unsubscribed,
+      confirmed,
+      pending,
+      unsubscribed,
+    };
+
+    const rows = await prisma.subscriber.findMany({
+      where,
+      orderBy: { [orderByField]: sortOrder },
+      skip: (clampedPage - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      select: {
+        id: true,
+        email: true,
+        status: true,
+        platforms: true,
+        source: true,
+        createdAt: true,
+        confirmedAt: true,
+      },
+    });
 
     subscribers = rows.map((s) => ({
       id: s.id,
@@ -91,25 +104,16 @@ export default async function SubscribersPage({
       createdAt: s.createdAt.toISOString(),
       confirmedAt: s.confirmedAt?.toISOString() ?? null,
     }));
-    totalCount = count;
-    statusCounts = {
-      total: confirmed + pending + unsubscribed,
-      confirmed,
-      pending,
-      unsubscribed,
-    };
   } catch (error) {
     console.error('Failed to load subscribers:', error);
   }
-
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <SubscriberList
       subscribers={subscribers}
       totalCount={totalCount}
       totalPages={totalPages}
-      currentPage={page}
+      currentPage={clampedPage}
       search={search}
       statusFilter={statusFilter}
       platformFilter={platformFilter}

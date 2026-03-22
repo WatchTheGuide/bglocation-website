@@ -9,7 +9,6 @@ let lastCleanup = 0;
 export async function cleanupStaleSubscribers(): Promise<void> {
   const ts = Date.now();
   if (ts - lastCleanup < CLEANUP_INTERVAL_MS) return;
-  lastCleanup = ts;
 
   const now = new Date();
 
@@ -27,4 +26,6 @@ export async function cleanupStaleSubscribers(): Promise<void> {
       ],
     },
   });
+
+  lastCleanup = Date.now();
 }
