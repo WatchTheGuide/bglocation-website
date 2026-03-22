@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { adminLogoutAction } from './actions';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Users, LogOut, Shield } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, Shield, Mail } from 'lucide-react';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/customers', label: 'Customers', icon: Users },
+  { href: '/admin/subscribers', label: 'Subscribers', icon: Mail },
 ];
 
 export function AdminShell({

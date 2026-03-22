@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { FooterNewsletterForm } from "@/components/newsletter/footer-form";
 
 const GITLAB_URL = "https://gitlab.com/szymonwalczak/capacitor-background-location";
 
@@ -106,6 +107,16 @@ export function Footer() {
               </li>
             </ul>
           </div>
+        </div>
+
+        <Separator className="my-8" />
+
+        <div className="mx-auto max-w-md">
+          <h3 className="mb-3 text-center text-sm font-semibold">Stay in the loop</h3>
+          <p className="mb-4 text-center text-xs text-muted-foreground">
+            Get notified about new platforms, features, and updates.
+          </p>
+          <FooterNewsletterForm />
         </div>
 
         <Separator className="my-8" />

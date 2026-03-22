@@ -18,6 +18,9 @@
 | `/api/newsletter/confirm` | `src/app/api/newsletter/confirm/route.ts` | Potwierdzenie subskrypcji (POST) — token + expiry check |
 | `/api/newsletter/unsubscribe` | `src/app/api/newsletter/unsubscribe/route.ts` | Wypisanie z newslettera (POST) — token bez expiry, RFC 8058 |
 | `/api/admin/subscribers/[id]` | `src/app/api/admin/subscribers/[id]/route.ts` | Usunięcie subskrybenta (DELETE) — GDPR Art. 17 |
+| `/newsletter/confirm` | `src/app/newsletter/confirm/page.tsx` | Potwierdzenie subskrypcji (Suspense wrapper + client content) |
+| `/newsletter/unsubscribe` | `src/app/newsletter/unsubscribe/page.tsx` | Wypisanie z newslettera (Suspense wrapper + client content) |
+| `/admin/subscribers` | `src/app/admin/subscribers/page.tsx` | Admin — lista subskrybentów z filtrami i usuwaniem |
 
 ## Layout
 
@@ -37,6 +40,7 @@ Sekcje (w kolejności od góry):
 | Features | `features.tsx` | Grid z kluczowymi możliwościami pluginu |
 | Code Example | `code-example.tsx` | Przykład kodu integracji |
 | Comparison | `comparison.tsx` | Porównanie z konkurencją (3 kolumny) |
+| Newsletter CTA | `newsletter-cta.tsx` | Sekcja "Get notified" — email + platforma + consent |
 | CTA Section | `cta-section.tsx` | Call-to-action z przyciskami |
 
 ## Docs Page (`/docs`)

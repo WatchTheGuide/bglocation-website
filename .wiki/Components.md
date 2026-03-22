@@ -25,6 +25,13 @@ Bazowe komponenty Shadcn — nie modyfikować bezpośrednio, dodawać nowe przez
 | Trust Bar | `trust-bar.tsx` | Pasek ze statystykami |
 | Code Example | `code-example.tsx` | Blok z przykładem kodu |
 | CTA Section | `cta-section.tsx` | Sekcja call-to-action |
+| Newsletter CTA | `newsletter-cta.tsx` | Sekcja "Get notified" na landing page — email + platforma + consent |
+
+### Newsletter Components (`src/components/newsletter/`)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Footer Form | `footer-form.tsx` | Formularz newsletter w footerze — email + consent + honeypot |
 
 ### Pricing Components (`src/components/pricing/`)
 
@@ -58,6 +65,12 @@ Sekcje dokumentacji pluginu — renderowane jako bloki na stronie `/docs`:
 | Komponent | Plik | Opis |
 |-----------|------|------|
 | About Section | `about-section.tsx` | Profil twórcy: intro, background (3 karty), expertise (9 badges), certyfikaty, kontakt |
+
+### Admin Components (`src/app/admin/`)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Subscriber List | `subscribers/subscriber-list.tsx` | Tabela subskrybentów z filtrami (status, platforma), wyszukiwaniem, paginacją i usuwaniem (GDPR Art. 17) |
 
 ## Dodawanie nowych komponentów Shadcn
 
