@@ -11,7 +11,13 @@
 | `/portal/login` | `src/app/portal/login/page.tsx` | Formularz logowania magic link |
 | `/portal/verify` | `src/app/portal/verify/page.tsx` | Weryfikacja tokenu magic link |
 | `/portal` | `src/app/portal/page.tsx` | Dashboard — licencje i generowanie kluczy |
+| `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności (GDPR Art. 13) |
+| `/terms` | `src/app/terms/page.tsx` | Regulamin usługi (perpetual license) |
 | `/api/webhooks/lemon-squeezy` | `src/app/api/webhooks/lemon-squeezy/route.ts` | Webhook handler Lemon Squeezy (dynamic) |
+| `/api/newsletter/subscribe` | `src/app/api/newsletter/subscribe/route.ts` | Zapis na newsletter (POST) — honeypot, rate limit, double opt-in |
+| `/api/newsletter/confirm` | `src/app/api/newsletter/confirm/route.ts` | Potwierdzenie subskrypcji (POST) — token + expiry check |
+| `/api/newsletter/unsubscribe` | `src/app/api/newsletter/unsubscribe/route.ts` | Wypisanie z newslettera (POST) — token bez expiry, RFC 8058 |
+| `/api/admin/subscribers/[id]` | `src/app/api/admin/subscribers/[id]/route.ts` | Usunięcie subskrybenta (DELETE) — GDPR Art. 17 |
 
 ## Layout
 
@@ -91,3 +97,37 @@ Strona profilu twórcy — wymagana przez platformy płatności (Stripe/LS) do s
 | **Indie** | Niższa cena | Solo developers |
 | **Team** | Średnia cena | Małe zespoły |
 | **Enterprise** | Kontakt | Duże organizacje |
+
+## Privacy Policy (`/privacy`)
+
+Polityka prywatności zgodna z GDPR Art. 13 — 9 sekcji:
+
+| Sekcja | Opis |
+|--------|------|
+| Data Controller | Szymon Walczak, Kraków |
+| What We Sell | Software product, perpetual licenses |
+| What Data We Collect | Purchase data (via LS), newsletter (consent + IP), portal (magic link), AI chat (via OpenAI) |
+| Data Retention | Pending 7d, unsubscribed 30d, active until unsub, customer per regulations |
+| Third-Party Processors | Lemon Squeezy, Resend, Vercel, OpenAI, Neon — tabela z lokalizacjami |
+| Your Rights | GDPR Art. 15-21, prawo do wycofania zgody |
+| Cookies | Tylko essential (session, admin session) |
+| Changes | Powiadomienie subskrybentów newslettera |
+| Contact | hello@bglocation.dev |
+
+## Terms of Service (`/terms`)
+
+Regulamin usługi — 13 sekcji dotyczących sprzedaży pluginu (software product, nie SaaS):
+
+| Sekcja | Opis |
+|--------|------|
+| Overview | Software product, nie SaaS |
+| License | ELv2, perpetual, tiers: Indie (1 app), Team (5), Factory (20), Enterprise (unlimited) |
+| Purchase | Lemon Squeezy MoR, ceny netto |
+| Refund Policy | Brak automatycznych refundów, case-by-case |
+| Trial Mode | 30 min + 1h cooldown |
+| IP | Własność intelektualna Szymon Walczak |
+| Your Data | Plugin nie przetwarza danych lokalizacyjnych end-userów |
+| Support | hello@bglocation.dev, best-effort |
+| Disclaimer | As is |
+| Liability | Max = kwota licencji |
+| Governing Law | Polska / Kraków |
