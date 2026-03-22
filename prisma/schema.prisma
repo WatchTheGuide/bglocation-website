@@ -70,3 +70,30 @@ enum OrderType {
   purchase
   renewal
 }
+
+model Subscriber {
+  id                    String             @id @default(uuid())
+  email                 String             @unique
+  status                SubscriptionStatus @default(pending)
+  platforms             String[]           @default([])
+  source                String             @default("footer")
+
+  consentText           String             @map("consent_text")
+  ipAddress             String?            @map("ip_address")
+
+  confirmToken          String?            @unique @map("confirm_token")
+  confirmTokenExpiresAt DateTime?          @map("confirm_token_expires_at")
+  unsubToken            String             @unique @map("unsub_token")
+
+  confirmedAt           DateTime?          @map("confirmed_at")
+  unsubscribedAt        DateTime?          @map("unsubscribed_at")
+  createdAt             DateTime           @default(now()) @map("created_at")
+
+  @@map("subscribers")
+}
+
+enum SubscriptionStatus {
+  pending
+  confirmed
+  unsubscribed
+}

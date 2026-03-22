@@ -12,10 +12,10 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <MapPin className="h-5 w-5 text-primary" />
-              <span>capacitor-bglocation</span>
+              <span>bglocation</span>
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
-              Production-ready background location tracking for Capacitor 8 apps.
+              Production-ready background location tracking for mobile apps.
             </p>
           </div>
 
@@ -94,20 +94,45 @@ export function Footer() {
                   License (ELv2)
                 </Link>
               </li>
+              <li>
+                <Link href="/privacy" className="hover:text-foreground">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-foreground">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
 
         <Separator className="my-8" />
 
-        <p className="text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Szymon Walczak. All rights reserved.
-          Licensed under{" "}
-          <Link href="/docs#licensing" className="underline hover:text-foreground">
-            Elastic License v2
-          </Link>
-          .
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-center text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} Szymon Walczak. All rights reserved.
+            Licensed under{" "}
+            <Link href="/docs#licensing" className="underline hover:text-foreground">
+              Elastic License v2
+            </Link>
+            .
+          </p>
+          <a
+            href="https://www.npmjs.com/package/capacitor-bglocation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://img.shields.io/npm/v/capacitor-bglocation?color=%23c2185b&label=npm"
+              alt="npm version"
+              className="h-5"
+              referrerPolicy="no-referrer"
+            />
+          </a>
+        </div>
       </div>
     </footer>
   );

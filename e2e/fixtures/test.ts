@@ -8,4 +8,7 @@ export const ROUTES = {
   pricing: '/pricing',
   docs: '/docs',
   about: '/about',
+  newsletterConfirm: '/newsletter/confirm',
+  newsletterUnsubscribe: '/newsletter/unsubscribe',
+  adminSubscribers: '/admin/subscribers',
 } as const;

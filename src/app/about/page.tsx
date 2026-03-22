@@ -4,7 +4,7 @@ import { AboutSection } from "@/components/about/about-section";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Meet Szymon Walczak — the creator of capacitor-bglocation. Senior Software Architect with 20+ years of experience in web and mobile development.",
+    "Meet Szymon Walczak — the creator of bglocation. Senior Software Architect with 20+ years of experience in web and mobile development.",
 };
 
 export default function AboutPage() {
@@ -16,7 +16,7 @@ export default function AboutPage() {
             About
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            The person behind capacitor-bglocation.
+            The person behind bglocation.
           </p>
         </div>
       </section>

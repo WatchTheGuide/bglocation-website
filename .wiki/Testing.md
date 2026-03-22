@@ -11,10 +11,14 @@
 e2e/
 ├── fixtures/             # Fixtures Playwright (shared setup, ROUTES)
 ├── about.spec.ts         # Testy strony About
-├── landing.spec.ts       # Testy landing page
+├── admin.spec.ts         # Testy admin panelu (auth, dashboard, customers)
+├── chat.spec.ts          # Testy AI chatbota
 ├── docs.spec.ts          # Testy docs page
-├── pricing.spec.ts       # Testy pricing page
-└── navigation.spec.ts   # Testy nawigacji, banner, cross-page
+├── landing.spec.ts       # Testy landing page
+├── navigation.spec.ts    # Testy nawigacji, banner, cross-page
+├── newsletter.spec.ts    # Testy newsletter (subscribe, confirm, unsubscribe, admin)
+├── portal.spec.ts        # Testy portalu klienta
+└── pricing.spec.ts       # Testy pricing page
 ```
 
 ## Komendy
@@ -47,7 +51,7 @@ test.describe('Feature Name', () => {
 | `chromium` | desktop (domyślny) | Testy na desktopowej przeglądarce |
 | `mobile` | 375×667 | Testy na mobilnym viewporcie |
 
-Każdy test uruchamiany jest na obu viewportach (237 testów łącznie).
+Każdy test uruchamiany jest na obu viewportach (415+ testów łącznie).
 
 ---
 

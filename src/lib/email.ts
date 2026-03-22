@@ -16,10 +16,12 @@ export async function sendEmail({
   to,
   subject,
   react,
+  headers,
 }: {
   to: string;
   subject: string;
   react: React.ReactElement;
+  headers?: Record<string, string>;
 }) {
   const resend = getResend();
   if (!resend) {
@@ -32,6 +34,7 @@ export async function sendEmail({
     to,
     subject,
     react,
+    headers,
   });
 
   if (error) {

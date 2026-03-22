@@ -33,7 +33,7 @@ const HIGHLIGHTS = [
     icon: Award,
     title: "Academic Background",
     description:
-      "PhD in Mathematics (University of Łódź). Former university professor and Deputy Director for Scientific Research. This rigorous analytical background informs the architecture of capacitor-bglocation.",
+      "PhD in Mathematics (University of Łódź). Former university professor and Deputy Director for Scientific Research. This rigorous analytical background informs the architecture of bglocation.",
   },
 ] as const;
 
@@ -57,10 +57,10 @@ export function AboutSection() {
           thinking.
         </p>
         <p className="leading-relaxed">
-          I created <strong>capacitor-bglocation</strong> because I needed a
-          reliable, production-ready background location plugin for Capacitor 8
+          I created <strong>bglocation</strong> because I needed a
+          reliable, production-ready background location SDK
           — and nothing on the market met my standards for quality, performance,
-          and developer experience. This plugin is built from real-world
+          and developer experience. This SDK is built from real-world
           experience shipping GPS-heavy mobile apps to production.
         </p>
       </div>

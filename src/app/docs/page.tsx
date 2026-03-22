@@ -25,7 +25,7 @@ import { Examples } from "@/components/docs/examples";
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Guides, API reference, and examples for capacitor-bglocation — the production-ready background location plugin for Capacitor.",
+    "Guides, API reference, and examples for bglocation — the production-ready background location SDK for mobile apps.",
 };
 
 const DOC_SECTIONS = [
