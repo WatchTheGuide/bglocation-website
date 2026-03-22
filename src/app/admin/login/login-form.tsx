@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { sendAdminMagicLinkAction, type AdminMagicLinkState } from '../actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +15,16 @@ import {
 } from '@/components/ui/card';
 import { Mail, CheckCircle } from 'lucide-react';
 
+const VERIFY_ERRORS: Record<string, string> = {
+  missing_token: 'Missing verification token.',
+  invalid_link: 'Invalid or expired link. Please request a new one.',
+};
+
 export function AdminLoginForm() {
+  const searchParams = useSearchParams();
+  const verifyError = searchParams.get('error');
+  const verifyErrorMessage = verifyError ? VERIFY_ERRORS[verifyError] : null;
+
   const [state, action, pending] = useActionState<AdminMagicLinkState, FormData>(
     sendAdminMagicLinkAction,
     null,
@@ -47,9 +57,9 @@ export function AdminLoginForm() {
       </CardHeader>
       <CardContent>
         <form action={action} className="space-y-4">
-          {state?.error && (
+          {(verifyErrorMessage ?? state?.error) && (
             <Alert variant="destructive">
-              <AlertDescription>{state.error}</AlertDescription>
+              <AlertDescription>{verifyErrorMessage ?? state?.error}</AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">
