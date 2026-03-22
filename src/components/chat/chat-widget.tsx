@@ -319,7 +319,7 @@ export function ChatWidget() {
               }
               disabled={limitReached || isLoading}
               className={cn(
-                "flex-1 rounded-md border bg-background px-3 py-2 text-sm",
+                "flex-1 rounded-md border bg-background px-3 py-2 text-base sm:text-sm",
                 "placeholder:text-muted-foreground",
                 "focus:outline-none focus:ring-2 focus:ring-ring",
                 "disabled:cursor-not-allowed disabled:opacity-50",
