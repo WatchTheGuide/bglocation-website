@@ -225,6 +225,18 @@ export function PricingCards() {
           with 1 year of updates. Licenses are bound to your bundle ID,
           validated offline.
         </p>
+
+        {/* Renewal Note */}
+        <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-muted bg-muted/30 p-4 text-center">
+          <p className="text-sm font-medium">Update Renewal (Optional)</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            After the first year, renew updates and email support for{" "}
+            <strong>$99</strong> (Indie), <strong>$149</strong> (Team) or{" "}
+            <strong>$249</strong> (Factory) per year.
+            Without renewal, your plugin continues to work — you just
+            won&apos;t receive new versions.
+          </p>
+        </div>
       </div>
     </section>
   );

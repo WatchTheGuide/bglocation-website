@@ -23,7 +23,7 @@ export function Hero() {
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button render={<Link href="/pricing" />} nativeButton={false} size="lg">
-            Get License — $199/year
+            Get License — from $149
           </Button>
           <Button render={<Link href="/docs" />} nativeButton={false} variant="outline" size="lg">
             Read the Docs

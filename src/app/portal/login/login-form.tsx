@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { sendMagicLinkAction, type MagicLinkState } from '../actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +15,15 @@ import {
 } from '@/components/ui/card';
 import { Mail, CheckCircle } from 'lucide-react';
 
+const VERIFY_ERRORS: Record<string, string> = {
+  missing_token: 'Missing verification token.',
+  invalid_link: 'Invalid or expired link. Please request a new one.',
+};
+
 export function LoginForm() {
+  const searchParams = useSearchParams();
+  const verifyError = searchParams.get('error');
+  const verifyErrorMessage = verifyError ? VERIFY_ERRORS[verifyError] : null;
   const [state, action, pending] = useActionState<MagicLinkState, FormData>(
     sendMagicLinkAction,
     null,
@@ -37,6 +46,8 @@ export function LoginForm() {
     );
   }
 
+  const errorMessage = verifyErrorMessage ?? state?.error;
+
   return (
     <Card>
       <CardHeader>
@@ -47,9 +58,9 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <form action={action} className="space-y-4">
-          {state?.error && (
+          {errorMessage && (
             <Alert variant="destructive">
-              <AlertDescription>{state.error}</AlertDescription>
+              <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">

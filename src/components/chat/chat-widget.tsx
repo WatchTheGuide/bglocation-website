@@ -142,8 +142,8 @@ export function ChatWidget() {
           className={cn(
             "fixed z-50 flex flex-col bg-card text-card-foreground shadow-2xl",
             "border border-border",
-            // Mobile: fullscreen
-            "inset-0",
+            // Mobile: fullscreen (dvh for Safari iOS)
+            "inset-0 h-dvh",
             // Desktop: floating panel
             "sm:inset-auto sm:bottom-6 sm:right-6 sm:h-135 sm:w-100",
             "sm:rounded-xl",

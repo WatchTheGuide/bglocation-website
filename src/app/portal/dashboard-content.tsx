@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { generateKeyAction, renewKeyAction, logoutAction, type GenerateKeyState } from './actions';
+import { generateKeyAction, logoutAction, type GenerateKeyState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,6 +32,7 @@ import {
   Shield,
   AlertCircle,
   RefreshCw,
+  ExternalLink,
 } from 'lucide-react';
 
 interface License {
@@ -46,6 +47,7 @@ interface DashboardContentProps {
   email: string;
   plan: string;
   maxBundleIds: number;
+  renewalCheckoutUrl: string | null;
   licenses: License[];
 }
 
@@ -171,13 +173,12 @@ export function DashboardContent({
   email,
   plan,
   maxBundleIds,
+  renewalCheckoutUrl,
   licenses,
 }: DashboardContentProps) {
   const router = useRouter();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [generateKey, setGenerateKey] = useState(0);
-  const [renewingId, setRenewingId] = useState<string | null>(null);
-  const [renewError, setRenewError] = useState<string | null>(null);
 
   const slotsUsed = licenses.length;
   const slotsText =
@@ -187,22 +188,24 @@ export function DashboardContent({
   const canGenerate = maxBundleIds === 0 || slotsUsed < maxBundleIds;
   const now = new Date();
 
+  const renewUrl = renewalCheckoutUrl
+    ? `${renewalCheckoutUrl}&checkout[custom][customer_email]=${encodeURIComponent(email)}`
+    : null;
+
+  // Plan-level renewal: based on earliest updatesUntil across all licenses
+  const earliestUpdatesUntil = licenses.length > 0
+    ? new Date(Math.min(...licenses.map((l) => new Date(l.updatesUntil).getTime())))
+    : null;
+  const planExpired = earliestUpdatesUntil ? earliestUpdatesUntil < now : false;
+  const daysUntilPlanExpiry = earliestUpdatesUntil
+    ? Math.ceil((earliestUpdatesUntil.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+  const showPlanRenew = planExpired || (daysUntilPlanExpiry !== null && daysUntilPlanExpiry <= 60);
+
   async function copyKey(id: string, key: string) {
     await navigator.clipboard.writeText(key);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
-  }
-
-  async function handleRenew(licenseId: string) {
-    setRenewingId(licenseId);
-    setRenewError(null);
-    const result = await renewKeyAction(licenseId);
-    if (result?.error) {
-      setRenewError(result.error);
-    } else {
-      router.refresh();
-    }
-    setRenewingId(null);
   }
 
   return (
@@ -224,11 +227,62 @@ export function DashboardContent({
       {/* Plan info */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            {plan.charAt(0).toUpperCase() + plan.slice(1)} Plan
-          </CardTitle>
-          <CardDescription>Bundle IDs: {slotsText}</CardDescription>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                {plan.charAt(0).toUpperCase() + plan.slice(1)} Plan
+              </CardTitle>
+              <CardDescription className="mt-1.5">
+                Bundle IDs: {slotsText}
+                {earliestUpdatesUntil && (
+                  <>
+                    {' · '}Updates until{' '}
+                    <span className={planExpired ? 'text-destructive' : ''}>
+                      {earliestUpdatesUntil.toLocaleDateString()}
+                    </span>
+                    {planExpired && (
+                      <Badge variant="destructive" className="ml-2">
+                        Expired
+                      </Badge>
+                    )}
+                    {!planExpired && daysUntilPlanExpiry !== null && daysUntilPlanExpiry <= 60 && (
+                      <Badge variant="secondary" className="ml-2">
+                        Expires soon
+                      </Badge>
+                    )}
+                  </>
+                )}
+              </CardDescription>
+            </div>
+            {showPlanRenew && renewUrl && (
+              <Button
+                render={
+                  <a
+                    href={renewUrl}
+                    className="lemonsqueezy-button"
+                  />
+                }
+                nativeButton={false}
+                variant="outline"
+                size="sm"
+              >
+                <RefreshCw className="mr-1 h-4 w-4" />
+                Renew Updates
+              </Button>
+            )}
+            {showPlanRenew && !renewUrl && (
+              <Button
+                render={<a href="mailto:hello@bglocation.dev" />}
+                nativeButton={false}
+                variant="outline"
+                size="sm"
+              >
+                <ExternalLink className="mr-1 h-4 w-4" />
+                Contact us
+              </Button>
+            )}
+          </div>
         </CardHeader>
       </Card>
 
@@ -243,12 +297,6 @@ export function DashboardContent({
       />
 
       {/* Licenses table */}
-      {renewError && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{renewError}</AlertDescription>
-        </Alert>
-      )}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -270,12 +318,12 @@ export function DashboardContent({
                   <TableHead>Issued</TableHead>
                   <TableHead>Updates Until</TableHead>
                   <TableHead className="w-25">Key</TableHead>
-                  <TableHead className="w-25"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {licenses.map((license) => {
-                  const updatesExpired = new Date(license.updatesUntil) < now;
+                  const updatesUntilDate = new Date(license.updatesUntil);
+                  const updatesExpired = updatesUntilDate < now;
                   return (
                     <TableRow key={license.id}>
                       <TableCell className="font-mono text-xs">
@@ -286,7 +334,7 @@ export function DashboardContent({
                       </TableCell>
                       <TableCell>
                         <span className={updatesExpired ? 'text-destructive' : ''}>
-                          {new Date(license.updatesUntil).toLocaleDateString()}
+                          {updatesUntilDate.toLocaleDateString()}
                         </span>
                         {updatesExpired && (
                           <Badge variant="destructive" className="ml-2">
@@ -314,19 +362,6 @@ export function DashboardContent({
                             </>
                           )}
                         </Button>
-                      </TableCell>
-                      <TableCell>
-                        {updatesExpired && (
-                          <Button
-                            variant="outline"
-                            size="xs"
-                            disabled={renewingId === license.id}
-                            onClick={() => handleRenew(license.id)}
-                          >
-                            <RefreshCw className={`mr-1 h-3 w-3 ${renewingId === license.id ? 'animate-spin' : ''}`} />
-                            {renewingId === license.id ? 'Renewing...' : 'Renew'}
-                          </Button>
-                        )}
                       </TableCell>
                     </TableRow>
                   );
