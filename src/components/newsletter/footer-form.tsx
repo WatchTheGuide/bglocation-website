@@ -77,6 +77,7 @@ export function FooterNewsletterForm() {
           type="submit"
           size="sm"
           disabled={status === 'loading' || !consent}
+          aria-label={status === 'loading' ? 'Subscribing…' : undefined}
         >
           {status === 'loading' ? (
             <Loader2 className="h-4 w-4 animate-spin" />

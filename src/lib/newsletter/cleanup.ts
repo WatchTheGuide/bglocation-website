@@ -28,7 +28,8 @@ export async function cleanupStaleSubscribers(): Promise<void> {
         ],
       },
     });
-  } catch {
+  } catch (error) {
+    console.error('cleanupStaleSubscribers failed:', error);
     lastCleanup = 0; // revert so next request retries
   }
 }

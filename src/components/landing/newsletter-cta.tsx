@@ -117,7 +117,7 @@ export function NewsletterCta() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1"
               />
-              <Button type="submit" disabled={status === 'loading' || !consent}>
+              <Button type="submit" disabled={status === 'loading' || !consent} aria-label={status === 'loading' ? 'Subscribing…' : undefined}>
                 {status === 'loading' ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
