@@ -94,6 +94,16 @@ export function Footer() {
                   License (ELv2)
                 </Link>
               </li>
+              <li>
+                <Link href="/privacy" className="hover:text-foreground">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-foreground">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
