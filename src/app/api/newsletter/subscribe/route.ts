@@ -28,22 +28,35 @@ function getBaseUrl(): string {
   return process.env.NEXT_PUBLIC_BASE_URL ?? 'https://bglocation.dev';
 }
 
-function checkOrigin(req: Request): boolean {
+function checkOrigin(req: Request): { ok: true } | { ok: false; status: number; message: string } {
   const appUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  if (!appUrl) return true; // skip check if not configured
-  try {
-    const allowedOrigin = new URL(appUrl).origin;
-    const originHeader = req.headers.get('origin');
-    if (!originHeader) return false;
-    return new URL(originHeader).origin === allowedOrigin;
-  } catch {
-    return false;
+  if (!appUrl) {
+    console.error('Missing required environment variable NEXT_PUBLIC_BASE_URL');
+    return { ok: false, status: 500, message: 'Server misconfiguration' };
   }
+  let allowedOrigin: string;
+  try {
+    allowedOrigin = new URL(appUrl).origin;
+  } catch {
+    console.error('Invalid value for NEXT_PUBLIC_BASE_URL:', appUrl);
+    return { ok: false, status: 500, message: 'Server misconfiguration' };
+  }
+  const originHeader = req.headers.get('origin');
+  if (!originHeader) return { ok: false, status: 403, message: 'Forbidden' };
+  try {
+    if (new URL(originHeader).origin !== allowedOrigin) {
+      return { ok: false, status: 403, message: 'Forbidden' };
+    }
+  } catch {
+    return { ok: false, status: 403, message: 'Forbidden' };
+  }
+  return { ok: true };
 }
 
 export async function POST(req: Request) {
-  if (!checkOrigin(req)) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const originCheck = checkOrigin(req);
+  if (!originCheck.ok) {
+    return NextResponse.json({ error: originCheck.message }, { status: originCheck.status });
   }
 
   const ip = getClientIp(req);

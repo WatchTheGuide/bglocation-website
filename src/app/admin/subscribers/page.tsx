@@ -77,9 +77,9 @@ export default async function SubscribersPage({
         },
       }),
       prisma.subscriber.count({ where }),
-      prisma.subscriber.count({ where: { status: 'confirmed' } }),
-      prisma.subscriber.count({ where: { status: 'pending' } }),
-      prisma.subscriber.count({ where: { status: 'unsubscribed' } }),
+      prisma.subscriber.count({ where: { AND: [where, { status: 'confirmed' }] } }),
+      prisma.subscriber.count({ where: { AND: [where, { status: 'pending' }] } }),
+      prisma.subscriber.count({ where: { AND: [where, { status: 'unsubscribed' }] } }),
     ]);
 
     subscribers = rows.map((s) => ({
