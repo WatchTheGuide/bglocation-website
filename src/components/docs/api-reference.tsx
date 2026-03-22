@@ -8,7 +8,7 @@ export function ApiReference() {
         Complete TypeScript API — methods, events, and interfaces exported
         from{" "}
         <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-          bglocation
+          capacitor-bglocation
         </code>
         .
       </p>

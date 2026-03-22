@@ -12,9 +12,15 @@ const VALID_PLATFORMS = ['capacitor', 'react-native', 'flutter', 'kmp'];
 
 function getClientIp(req: Request): string | null {
   const forwardedFor = req.headers.get('x-forwarded-for');
-  if (forwardedFor) return forwardedFor.split(',')[0].trim();
+  if (forwardedFor) {
+    const firstForwarded = forwardedFor.split(',')[0]?.trim() ?? '';
+    if (firstForwarded) return firstForwarded;
+  }
   const realIp = req.headers.get('x-real-ip');
-  if (realIp) return realIp;
+  if (realIp) {
+    const trimmedRealIp = realIp.trim();
+    if (trimmedRealIp) return trimmedRealIp;
+  }
   return null;
 }
 
