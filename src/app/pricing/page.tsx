@@ -5,7 +5,7 @@ import { PricingFaq } from "@/components/pricing/pricing-faq";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple pricing for capacitor-bglocation. Perpetual license — buy once, use forever. 1 year of updates included. From $149.",
+    "Simple pricing for bglocation. Perpetual license — buy once, use forever. 1 year of updates included. From $149.",
 };
 
 export default function PricingPage() {

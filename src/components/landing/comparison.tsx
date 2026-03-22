@@ -43,7 +43,7 @@ export function Comparison() {
                   Feature
                 </th>
                 <th className="pb-3 text-center font-medium">
-                  <span className="block">capacitor-bglocation</span>
+                  <span className="block">bglocation</span>
                   <Badge variant="secondary" className="mt-1">
                     recommended
                   </Badge>

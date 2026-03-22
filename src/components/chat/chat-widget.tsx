@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { QuickReplies } from "@/components/chat/quick-replies";
 import { MAX_MESSAGES, SUPPORT_EMAIL } from "@/lib/chat/constants";
 const WELCOME_MESSAGE =
-  "Hi! I can help with questions about capacitor-bglocation. Ask me about features, pricing, or integration.";
+  "Hi! I can help with questions about bglocation. Ask me about features, pricing, or integration.";
 
 function getTextContent(parts: Array<{ type: string; text?: string }>): string {
   return parts
