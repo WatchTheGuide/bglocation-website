@@ -1,6 +1,12 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import { UnsubscribeContent } from './unsubscribe-content';
 import { Loader2 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Unsubscribe — bglocation',
+  description: 'Unsubscribe from the bglocation newsletter.',
+};
 
 export default function UnsubscribePage() {
   return (

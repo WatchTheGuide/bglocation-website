@@ -144,7 +144,12 @@ export function SubscriberList({
       });
       if (res.ok) {
         router.refresh();
+      } else {
+        const data = await res.json().catch(() => null);
+        alert(data?.error ?? 'Failed to delete subscriber.');
       }
+    } catch {
+      alert('Network error. Please try again.');
     } finally {
       setDeletingId(null);
     }

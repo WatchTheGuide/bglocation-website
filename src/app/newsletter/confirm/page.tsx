@@ -1,6 +1,12 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import { ConfirmContent } from './confirm-content';
 import { Loader2 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Confirm Subscription — bglocation',
+  description: 'Confirm your bglocation newsletter subscription.',
+};
 
 export default function ConfirmPage() {
   return (

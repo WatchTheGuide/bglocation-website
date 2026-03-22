@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react';
@@ -115,9 +116,9 @@ export function ConfirmContent() {
           {status === 'expired' && (
             <p className="text-muted-foreground">
               This confirmation link has expired. Please subscribe again on{' '}
-              <a href="/" className="text-primary underline hover:text-primary/80">
+              <Link href="/" className="text-primary underline hover:text-primary/80">
                 bglocation.dev
-              </a>
+              </Link>
               .
             </p>
           )}
