@@ -22,7 +22,24 @@ function getBaseUrl(): string {
   return process.env.NEXT_PUBLIC_BASE_URL ?? 'https://bglocation.dev';
 }
 
+function checkOrigin(req: Request): boolean {
+  const appUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  if (!appUrl) return true; // skip check if not configured
+  try {
+    const allowedOrigin = new URL(appUrl).origin;
+    const originHeader = req.headers.get('origin');
+    if (!originHeader) return false;
+    return new URL(originHeader).origin === allowedOrigin;
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: Request) {
+  if (!checkOrigin(req)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   const ip = getClientIp(req);
 
   if (ip && !checkNewsletterRateLimit(ip)) {

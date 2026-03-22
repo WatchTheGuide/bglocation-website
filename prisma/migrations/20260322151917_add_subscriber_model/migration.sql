@@ -6,7 +6,7 @@ CREATE TABLE "subscribers" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "status" "SubscriptionStatus" NOT NULL DEFAULT 'pending',
-    "platforms" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "platforms" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
     "source" TEXT NOT NULL DEFAULT 'footer',
     "consent_text" TEXT NOT NULL,
     "ip_address" TEXT,

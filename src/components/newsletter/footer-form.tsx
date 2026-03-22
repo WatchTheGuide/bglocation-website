@@ -32,7 +32,7 @@ export function FooterNewsletterForm() {
           email,
           consent: CONSENT_TEXT,
           source: 'footer',
-          website: formData.get('website') ?? '',
+          website: String(formData.get('website') ?? ''),
         }),
       });
 

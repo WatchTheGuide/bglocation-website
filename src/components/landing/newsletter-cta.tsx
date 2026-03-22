@@ -47,7 +47,7 @@ export function NewsletterCta() {
           consent: CONSENT_TEXT,
           source: 'cta',
           platforms,
-          website: formData.get('website') ?? '',
+          website: String(formData.get('website') ?? ''),
         }),
       });
 
