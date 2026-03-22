@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { sendEmail } from '@/lib/email';
 import { ConfirmSubscriptionEmail } from '@/emails/confirm-subscription';
@@ -167,19 +168,30 @@ export async function POST(req: Request) {
   const confirmTokenExpiresAt = new Date(Date.now() + CONFIRM_TOKEN_TTL_MS);
   const unsubToken = crypto.randomUUID();
 
-  await prisma.subscriber.create({
-    data: {
-      email: normalizedEmail,
-      status: 'pending',
-      platforms: validPlatforms,
-      source: validSource,
-      consentText,
-      ipAddress: ip,
-      confirmToken,
-      confirmTokenExpiresAt,
-      unsubToken,
-    },
-  });
+  try {
+    await prisma.subscriber.create({
+      data: {
+        email: normalizedEmail,
+        status: 'pending',
+        platforms: validPlatforms,
+        source: validSource,
+        consentText,
+        ipAddress: ip,
+        confirmToken,
+        confirmTokenExpiresAt,
+        unsubToken,
+      },
+    });
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      // Race condition: concurrent request already created this subscriber
+      return NextResponse.json({ message: 'Check your email to confirm' });
+    }
+    throw error;
+  }
 
   const baseUrl = getBaseUrl();
   const confirmUrl = `${baseUrl}/newsletter/confirm?token=${confirmToken}`;
