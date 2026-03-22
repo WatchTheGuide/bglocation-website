@@ -29,7 +29,7 @@ const FAQ_ITEMS = [
   {
     question: "What happens after the first year?",
     answer:
-      "Your license is perpetual — the plugin continues to work without any restrictions, forever. After 1 year, you lose access to new plugin updates. To get another year of updates and support, you can purchase a renewal at a discounted rate.",
+      "Your license is perpetual — the plugin continues to work without any restrictions, forever. After 1 year, you lose access to new plugin updates and email support. To get another year of updates and support, purchase a renewal: $99 (Indie), $149 (Team), or $249 (Factory) per year. The renewal generates a new license key with an extended updates-until date. Without renewal, the plugin keeps working — you just won't receive new versions.",
   },
   {
     question: 'What does "Source Available" mean?',

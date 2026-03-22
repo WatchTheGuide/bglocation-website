@@ -27,11 +27,6 @@ export type GenerateKeyState = {
   updatesUntil?: string;
 } | null;
 
-export type RenewKeyState = {
-  success?: boolean;
-  error?: string;
-} | null;
-
 export async function sendMagicLinkAction(
   _prevState: MagicLinkState,
   formData: FormData,
@@ -155,65 +150,6 @@ export async function generateKeyAction(
     bundleId,
     updatesUntil: updatesUntil.toISOString(),
   };
-}
-
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-export async function renewKeyAction(
-  licenseId: string,
-): Promise<RenewKeyState> {
-  const session = await getSession();
-  if (!session) redirect('/portal/login');
-
-  if (!UUID_REGEX.test(licenseId)) {
-    return { error: 'Invalid license ID.' };
-  }
-
-  const license = await prisma.license.findUnique({
-    where: { id: licenseId },
-  });
-
-  if (!license || license.customerId !== session.customerId) {
-    return { error: 'License not found.' };
-  }
-
-  if (!license.active) {
-    return { error: 'Cannot renew an inactive license.' };
-  }
-
-  const { licenseKey, updatesUntil } = generateLicenseKey(license.bundleId);
-
-  await prisma.license.update({
-    where: { id: licenseId },
-    data: {
-      licenseKey,
-      updatesUntil,
-      renewedAt: new Date(),
-    },
-  });
-
-  const customer = await prisma.customer.findUnique({
-    where: { id: session.customerId },
-  });
-
-  if (customer) {
-    await sendEmail({
-      to: customer.email,
-      subject: `Renewed license key for ${license.bundleId}`,
-      react: LicenseKeyEmail({
-        bundleId: license.bundleId,
-        licenseKey,
-        updatesUntil: updatesUntil.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }),
-        plan: customer.plan,
-      }),
-    });
-  }
-
-  return { success: true };
 }
 
 export async function logoutAction() {

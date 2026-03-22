@@ -48,7 +48,7 @@ async function main() {
       bundleId: 'com.test.app',
       licenseKey: 'test-license-key-placeholder',
       issuedAt: new Date(),
-      updatesUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      updatesUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       active: true,
     },
   });

@@ -1,7 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
+import { generateLicenseKey } from "@/lib/license";
 import { WelcomeEmail } from "@/emails/welcome";
+import { LicenseKeyEmail } from "@/emails/license-key";
 import type { Plan, OrderType } from "@prisma/client";
 
 type LemonSqueezyEvent = "order_created";
@@ -209,19 +211,42 @@ async function handleOrderCreated(payload: WebhookPayload) {
     },
   });
 
-  // For renewals, extend updatesUntil on all active licenses
+  // For renewals, regenerate license keys with new exp date
   if (variant.orderType === "renewal") {
-    const now = new Date();
-    const newUpdatesUntil = new Date(now);
-    newUpdatesUntil.setFullYear(newUpdatesUntil.getFullYear() + 1);
-
-    await prisma.license.updateMany({
+    const activeLicenses = await prisma.license.findMany({
       where: { customerId: customer.id, active: true },
-      data: { updatesUntil: newUpdatesUntil },
     });
 
+    for (const license of activeLicenses) {
+      const { licenseKey, updatesUntil } = generateLicenseKey(license.bundleId);
+
+      await prisma.license.update({
+        where: { id: license.id },
+        data: {
+          licenseKey,
+          updatesUntil,
+          renewedAt: new Date(),
+        },
+      });
+
+      await sendEmail({
+        to: customer.email,
+        subject: `Renewed license key for ${license.bundleId}`,
+        react: LicenseKeyEmail({
+          bundleId: license.bundleId,
+          licenseKey,
+          updatesUntil: updatesUntil.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          plan: customer.plan,
+        }),
+      });
+    }
+
     console.log(
-      `[LS Webhook] Renewed ${customer.email} — updatesUntil extended to ${newUpdatesUntil.toISOString()}`,
+      `[LS Webhook] Renewed ${customer.email} — ${activeLicenses.length} license(s) regenerated`,
     );
     return;
   }
