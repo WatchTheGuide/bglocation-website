@@ -60,15 +60,23 @@ export default function TermsPage() {
               <h3 className="text-lg font-medium">
                 License tiers
               </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Each tier defines the maximum number of applications (bundle
+                IDs) you can use the plugin in. There are no limits on the
+                number of developers.
+              </p>
               <ul className="list-disc space-y-1 pl-6 text-muted-foreground">
                 <li>
-                  <strong>Indie</strong> — 1 app, 1 developer
+                  <strong>Indie</strong> — 1 app (bundle ID)
                 </li>
                 <li>
-                  <strong>Team</strong> — 1 app, up to 5 developers
+                  <strong>Team</strong> — up to 5 apps (bundle IDs)
                 </li>
                 <li>
-                  <strong>Enterprise</strong> — unlimited apps and developers
+                  <strong>Factory</strong> — up to 20 apps (bundle IDs)
+                </li>
+                <li>
+                  <strong>Enterprise</strong> — unlimited apps (bundle IDs)
                 </li>
               </ul>
             </div>
