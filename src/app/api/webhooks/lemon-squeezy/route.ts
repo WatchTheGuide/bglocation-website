@@ -156,10 +156,18 @@ export async function POST(request: NextRequest) {
 
 async function handleOrderCreated(payload: WebhookPayload) {
   const { attributes } = payload.data;
-  const email = attributes.user_email as string;
-  const lsCustomerId = String(attributes.customer_id);
+  const email = attributes.user_email as string | undefined;
+  const lsCustomerId = attributes.customer_id;
   const lsOrderId = payload.data.id;
   const status = attributes.status as string;
+
+  if (!email || !lsCustomerId) {
+    console.error("[LS Webhook] Missing required fields:", {
+      email: !!email,
+      customerId: !!lsCustomerId,
+    });
+    return;
+  }
 
   console.log("[LS Webhook] Order created:", {
     orderId: lsOrderId,
@@ -190,12 +198,12 @@ async function handleOrderCreated(payload: WebhookPayload) {
   const customer = await prisma.customer.upsert({
     where: { email: email.toLowerCase() },
     update: {
-      lsCustomerId,
+      lsCustomerId: String(lsCustomerId),
       plan: variant.plan,
       maxBundleIds: variant.maxBundleIds,
     },
     create: {
-      lsCustomerId,
+      lsCustomerId: String(lsCustomerId),
       email: email.toLowerCase(),
       plan: variant.plan,
       maxBundleIds: variant.maxBundleIds,

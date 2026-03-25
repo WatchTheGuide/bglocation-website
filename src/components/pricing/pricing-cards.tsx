@@ -1,6 +1,7 @@
-import { Check } from "lucide-react";
+import { Check, Clock, KeyRound, RefreshCw, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CheckoutDialog } from "@/components/pricing/checkout-dialog";
 import {
   Card,
   CardContent,
@@ -13,8 +14,7 @@ import { Separator } from "@/components/ui/separator";
 
 function checkoutUrl(envUrl: string | undefined): string | null {
   if (!envUrl) return null;
-  const separator = envUrl.includes("?") ? "&" : "?";
-  return `${envUrl}${separator}embed=1`;
+  return envUrl;
 }
 
 const INDIE_CHECKOUT_URL = checkoutUrl(
@@ -121,7 +121,11 @@ export function PricingCards() {
         </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {PLANS.map((plan) => (
+          {PLANS.map((plan) => {
+            const rawPrice = plan.earlyBirdPrice ?? plan.price;
+            const displayPrice = rawPrice != null ? `$${rawPrice}` : "Custom";
+
+            return (
             <Card
               key={plan.name}
               className={
@@ -179,20 +183,13 @@ export function PricingCards() {
 
               <CardFooter>
                 {plan.checkoutUrl ? (
-                  <Button
-                    render={
-                      <a
-                        href={plan.checkoutUrl}
-                        className="lemonsqueezy-button"
-                      />
-                    }
-                    nativeButton={false}
-                    className="w-full"
-                    variant={plan.highlighted ? "default" : "outline"}
-                    size="lg"
-                  >
-                    {plan.cta}
-                  </Button>
+                  <CheckoutDialog
+                    checkoutUrl={plan.checkoutUrl}
+                    planName={plan.name}
+                    price={displayPrice}
+                    buttonVariant={plan.highlighted ? "default" : "outline"}
+                    buttonLabel={plan.cta}
+                  />
                 ) : plan.price !== null ? (
                   <Button
                     className="w-full"
@@ -215,34 +212,68 @@ export function PricingCards() {
                 )}
               </CardFooter>
             </Card>
-          ))}
+          );
+          })}
         </div>
 
-        {/* License Note */}
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          No license key needed to evaluate — trial mode gives you 30 min
-          of tracking per session. All plans include a perpetual license
-          with 1 year of updates. Licenses are bound to your bundle ID,
-          validated offline.
-        </p>
+        {/* Info Grid */}
+        <div className="mx-auto mt-12 grid max-w-3xl gap-4 sm:grid-cols-2">
+          <div className="flex items-start gap-3 rounded-lg border p-4">
+            <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+            <div>
+              <p className="text-sm font-medium">Free Trial</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                No license key needed — 30 min sessions with all features included.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 rounded-lg border p-4">
+            <KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+            <div>
+              <p className="text-sm font-medium">Perpetual License</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Buy once, use forever. 1 year of updates included. Bound to your bundle ID, validated offline.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 rounded-lg border p-4">
+            <RefreshCw className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+            <div>
+              <p className="text-sm font-medium">Update Renewal (Optional)</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Renew after the first year for <strong>$99</strong> / <strong>$149</strong> / <strong>$249</strong>.
+                Without renewal, your plugin continues to work.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 rounded-lg border p-4">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+            <div>
+              <p className="text-sm font-medium">Secure Checkout</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Powered by{" "}
+                <a
+                  href="https://www.lemonsqueezy.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium underline underline-offset-2 hover:text-foreground"
+                >
+                  Lemon Squeezy
+                </a>
+                , our Merchant of Record. Your payment data is never stored on our servers.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Tax Note */}
-        <p className="mt-3 text-center text-xs text-muted-foreground">
+        <p className="mt-6 text-center text-xs text-muted-foreground">
           All prices are exclusive of tax. VAT / sales tax will be calculated
           at checkout based on your location.
         </p>
-
-        {/* Renewal Note */}
-        <div className="mx-auto mt-6 max-w-2xl rounded-lg border border-muted bg-muted/30 p-4 text-center">
-          <p className="text-sm font-medium">Update Renewal (Optional)</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            After the first year, renew updates and email support for{" "}
-            <strong>$99</strong> (Indie), <strong>$149</strong> (Team) or{" "}
-            <strong>$249</strong> (Factory) per year.
-            Without renewal, your plugin continues to work — you just
-            won&apos;t receive new versions.
-          </p>
-        </div>
       </div>
     </section>
   );
