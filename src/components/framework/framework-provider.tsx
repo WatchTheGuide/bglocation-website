@@ -3,6 +3,7 @@
 import {
   createContext,
   startTransition,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -84,6 +85,10 @@ export function FrameworkProvider({
     return DEFAULT_FRAMEWORK;
   });
   const framework = searchFramework ?? storedFramework;
+  const buildHrefWithFramework = useCallback(
+    (targetFramework: Framework) => withFrameworkHref(buildCurrentHref(pathname), targetFramework),
+    [pathname],
+  );
 
   useEffect(() => {
     window.localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework);
@@ -96,11 +101,11 @@ export function FrameworkProvider({
     }
 
     startTransition(() => {
-      router.replace(withFrameworkHref(buildCurrentHref(pathname), framework), {
+      router.replace(buildHrefWithFramework(framework), {
         scroll: false,
       });
     });
-  }, [framework, pathname, router]);
+  }, [buildHrefWithFramework, framework, router]);
 
   const value = useMemo<FrameworkContextValue>(
     () => ({
@@ -108,14 +113,14 @@ export function FrameworkProvider({
       setFramework: (nextFramework) => {
         setStoredFramework(nextFramework);
         startTransition(() => {
-          router.replace(withFrameworkHref(buildCurrentHref(pathname), nextFramework), {
+          router.replace(buildHrefWithFramework(nextFramework), {
             scroll: false,
           });
         });
       },
       frameworkHref: (href) => withFrameworkHref(href, framework),
     }),
-    [framework, pathname, router],
+    [buildHrefWithFramework, framework, router],
   );
 
   return <FrameworkContext.Provider value={value}>{children}</FrameworkContext.Provider>;
