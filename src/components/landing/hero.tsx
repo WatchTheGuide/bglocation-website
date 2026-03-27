@@ -30,7 +30,11 @@ export function Hero() {
           </Button>
         </div>
 
-        <div className="mt-8">
+        <p className="mt-6 text-sm text-muted-foreground">
+          Launching <strong>April 27, 2026</strong> — install &amp; try with trial mode today
+        </p>
+
+        <div className="mt-4">
           <code className="rounded-md bg-muted px-4 py-2 font-mono text-sm text-muted-foreground">
             npm install capacitor-bglocation
           </code>

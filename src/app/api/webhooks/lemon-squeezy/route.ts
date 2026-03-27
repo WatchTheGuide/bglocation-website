@@ -4,9 +4,80 @@ import { sendEmail } from "@/lib/email";
 import { generateLicenseKey } from "@/lib/license";
 import { WelcomeEmail } from "@/emails/welcome";
 import { LicenseKeyEmail } from "@/emails/license-key";
-import type { Plan, OrderType } from "@prisma/client";
+import { Prisma, type Plan, type OrderType } from "@prisma/client";
 
 type LemonSqueezyEvent = "order_created";
+const SERIALIZATION_RETRY_LIMIT = 3;
+
+const PLAN_RANK: Record<Plan, number> = {
+  indie: 1,
+  team: 2,
+  factory: 3,
+  enterprise: 4,
+};
+
+/** Return the higher-tier plan so downgrades never happen on repeat purchase. */
+function higherPlan(a: Plan, b: Plan): Plan {
+  return PLAN_RANK[a] >= PLAN_RANK[b] ? a : b;
+}
+
+async function upsertCustomerForOrder(params: {
+  email: string;
+  lsCustomerId: string;
+  variant: {
+    plan: Plan;
+    maxBundleIds: number;
+    orderType: OrderType;
+  };
+}) {
+  const normalizedEmail = params.email.toLowerCase();
+
+  for (let attempt = 0; attempt < SERIALIZATION_RETRY_LIMIT; attempt++) {
+    try {
+      return await prisma.$transaction(
+        async (transaction) => {
+          const existing = await transaction.customer.findUnique({
+            where: { email: normalizedEmail },
+          });
+
+          if (!existing) {
+            return transaction.customer.create({
+              data: {
+                lsCustomerId: params.lsCustomerId,
+                email: normalizedEmail,
+                plan: params.variant.plan,
+                maxBundleIds: params.variant.maxBundleIds,
+              },
+            });
+          }
+
+          return transaction.customer.update({
+            where: { id: existing.id },
+            data: {
+              lsCustomerId: params.lsCustomerId,
+              plan: higherPlan(existing.plan, params.variant.plan),
+              ...(params.variant.orderType === "purchase"
+                ? { maxBundleIds: { increment: params.variant.maxBundleIds } }
+                : {}),
+            },
+          });
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      );
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2034" &&
+        attempt < SERIALIZATION_RETRY_LIMIT - 1
+      ) {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  throw new Error("Failed to upsert customer after serialization retries");
+}
 
 interface WebhookPayload {
   meta: {
@@ -194,20 +265,10 @@ async function handleOrderCreated(payload: WebhookPayload) {
     return;
   }
 
-  // Upsert customer (handles both new purchase & plan upgrade)
-  const customer = await prisma.customer.upsert({
-    where: { email: email.toLowerCase() },
-    update: {
-      lsCustomerId: String(lsCustomerId),
-      plan: variant.plan,
-      maxBundleIds: variant.maxBundleIds,
-    },
-    create: {
-      lsCustomerId: String(lsCustomerId),
-      email: email.toLowerCase(),
-      plan: variant.plan,
-      maxBundleIds: variant.maxBundleIds,
-    },
+  const customer = await upsertCustomerForOrder({
+    email,
+    lsCustomerId: String(lsCustomerId),
+    variant,
   });
 
   // Record the order

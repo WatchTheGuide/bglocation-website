@@ -1,4 +1,5 @@
 import { Hero } from "@/components/landing/hero";
+import { LaunchCountdown } from "@/components/landing/launch-countdown";
 import { TrustBar } from "@/components/landing/trust-bar";
 import { Features } from "@/components/landing/features";
 import { CodeExample } from "@/components/landing/code-example";
@@ -10,6 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <LaunchCountdown />
       <TrustBar />
       <Features />
       <CodeExample />

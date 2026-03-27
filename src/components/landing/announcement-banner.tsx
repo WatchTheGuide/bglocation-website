@@ -7,22 +7,21 @@ export function AnnouncementBanner() {
       <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-2.5 text-center text-sm sm:px-6">
         <Rocket className="h-4 w-4 shrink-0 text-primary" />
         <p>
-          <strong className="text-primary">Coming soon</strong> — we&apos;re
-          finishing final tests before the public release.{" "}
+          <strong className="text-primary">License sales launch: April 27, 2026</strong>{" "}
+          —{" "}
           <Link
-            href="/docs"
+            href="#newsletter-cta"
             className="font-medium underline underline-offset-4 hover:text-primary"
           >
-            Explore the docs
+            Get notified
           </Link>{" "}
           or{" "}
           <Link
             href="/pricing"
             className="font-medium underline underline-offset-4 hover:text-primary"
           >
-            check pricing
-          </Link>{" "}
-          in the meantime.
+            view pricing
+          </Link>
         </p>
       </div>
     </div>
