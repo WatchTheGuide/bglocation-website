@@ -38,6 +38,7 @@ const PLANS = [
     features: [
       "All plugin features",
       "iOS + Android",
+      "Capacitor + React Native wrappers",
       "Perpetual license",
       "1 year of updates included",
       "Source code access (ELv2)",
@@ -117,6 +118,10 @@ export function PricingCards() {
             <strong>$149</strong> (Indie), <strong>$229</strong> (Team)
             or <strong>$399</strong> (Factory) — valid for the first 3 months
             after launch.
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            One license model covers both wrappers. If the same app ships through Capacitor today and React Native tomorrow,
+            you keep the same offline licensing rules and bundle ID accounting.
           </p>
         </div>
 
@@ -233,7 +238,7 @@ export function PricingCards() {
             <div>
               <p className="text-sm font-medium">Perpetual License</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Buy once, use forever. 1 year of updates included. Bound to your bundle ID, validated offline.
+                Buy once, use forever. 1 year of updates included. Bound to your bundle ID, validated offline, and valid across Capacitor and React Native wrappers.
               </p>
             </div>
           </div>

@@ -12,31 +12,31 @@ async function openMenuIfMobile(page: import('@playwright/test').Page) {
 }
 
 test.describe('Announcement Banner', () => {
-  test('should display coming soon message on landing page', async ({ page }) => {
+  test('should display launch message on landing page', async ({ page }) => {
     await page.goto(ROUTES.home);
-    await expect(page.getByText(/Coming soon/)).toBeVisible();
+    await expect(page.getByText(/License sales launch: April 27, 2026/)).toBeVisible();
   });
 
-  test('should display coming soon message on docs page', async ({ page }) => {
+  test('should display launch message on docs page', async ({ page }) => {
     await page.goto(ROUTES.docs);
-    await expect(page.getByText(/Coming soon/)).toBeVisible();
+    await expect(page.getByText(/License sales launch: April 27, 2026/)).toBeVisible();
   });
 
-  test('should display coming soon message on pricing page', async ({ page }) => {
+  test('should display launch message on pricing page', async ({ page }) => {
     await page.goto(ROUTES.pricing);
-    await expect(page.getByText(/Coming soon/)).toBeVisible();
+    await expect(page.getByText(/License sales launch: April 27, 2026/)).toBeVisible();
   });
 
-  test('should link to docs and pricing', async ({ page }) => {
+  test('should link to newsletter section and pricing', async ({ page }) => {
     await page.goto(ROUTES.home);
-    const banner = page.locator('div').filter({ hasText: /Coming soon/ }).first();
-    await expect(banner.getByRole('link', { name: /Explore the docs/i })).toHaveAttribute(
+    const banner = page.locator('div').filter({ hasText: /License sales launch/ }).first();
+    await expect(banner.getByRole('link', { name: /Get notified/i })).toHaveAttribute(
       'href',
-      '/docs',
+      /\/\?framework=capacitor#newsletter-cta/,
     );
-    await expect(banner.getByRole('link', { name: /check pricing/i })).toHaveAttribute(
+    await expect(banner.getByRole('link', { name: /view pricing/i })).toHaveAttribute(
       'href',
-      '/pricing',
+      /\/pricing\?framework=capacitor/,
     );
   });
 });
@@ -47,7 +47,7 @@ test.describe('Navigation — Header', () => {
   });
 
   test('should display logo with brand name', async ({ page }) => {
-    await expect(page.getByRole('link', { name: /capacitor-bglocation/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /bglocation/i }).first()).toBeVisible();
   });
 
   test('should display desktop nav links', async ({ page, }, testInfo) => {
@@ -64,6 +64,11 @@ test.describe('Navigation — Header', () => {
     await expect(
       page.locator('header').getByRole('button', { name: /Get License/i }).first(),
     ).toBeVisible();
+  });
+
+  test('should display framework switcher in header', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile', 'Desktop-only test');
+    await expect(page.locator('header').getByTestId('framework-switcher')).toBeVisible();
   });
 
   test('should navigate to pricing page', async ({ page }) => {
@@ -87,13 +92,22 @@ test.describe('Navigation — Header', () => {
   test('should navigate to features section via anchor', async ({ page }) => {
     await openMenuIfMobile(page);
     await page.locator('header').getByRole('link', { name: 'Features' }).click();
-    await expect(page).toHaveURL(/\/#features/);
+    await expect(page).toHaveURL(/framework=capacitor.*#features/);
   });
 
   test('should navigate home via logo click', async ({ page }) => {
     await page.goto(ROUTES.pricing);
-    await page.getByRole('link', { name: /capacitor-bglocation/i }).first().click();
-    await expect(page).toHaveURL('/');
+    await page.getByRole('link', { name: /bglocation/i }).first().click();
+    await expect(page).toHaveURL(/\/\?framework=capacitor/);
+  });
+
+  test('should preserve framework when navigating between pages', async ({ page }) => {
+    test.skip(page.viewportSize()?.width === 375, 'Uses desktop header switcher');
+    await page.getByRole('tab', { name: /React Native/i }).first().click();
+    await page.locator('header').getByRole('link', { name: 'Docs' }).click();
+
+    await expect(page).toHaveURL(/\/docs\?framework=react-native/);
+    await expect(page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first()).toBeVisible();
   });
 });
 
@@ -104,7 +118,7 @@ test.describe('Navigation — Footer', () => {
 
   test('should display footer brand', async ({ page }) => {
     const footer = page.locator('footer');
-    await expect(footer.getByRole('link', { name: /capacitor-bglocation/i })).toBeVisible();
+    await expect(footer.getByRole('link', { name: /bglocation/i })).toBeVisible();
   });
 
   test('should display footer column headings', async ({ page }) => {
@@ -124,7 +138,7 @@ test.describe('Navigation — Footer', () => {
   });
 
   test('should have npm link with external target', async ({ page }) => {
-    const npmLink = page.locator('footer').getByRole('link', { name: 'npm' });
+    const npmLink = page.locator('footer').getByRole('link', { name: 'npm', exact: true });
     await expect(npmLink).toHaveAttribute('href', /npmjs\.com/);
     await expect(npmLink).toHaveAttribute('target', '_blank');
   });
@@ -137,6 +151,17 @@ test.describe('Navigation — Footer', () => {
     await expect(footer.getByRole('link', { name: 'API Reference' })).toBeVisible();
     await expect(footer.getByRole('link', { name: 'About' })).toBeVisible();
     await expect(footer.getByRole('link', { name: /License.*ELv2/i })).toBeVisible();
+  });
+
+  test('should preserve framework when clicking footer links', async ({ page }) => {
+    test.skip(page.viewportSize()?.width === 375, 'Uses desktop switcher to set framework explicitly');
+    await page.getByRole('tab', { name: /React Native/i }).first().click();
+    await page.locator('footer').getByRole('link', { name: 'Getting Started' }).click();
+
+    await expect(page).toHaveURL(/\/docs\?framework=react-native/);
+    await expect(
+      page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first(),
+    ).toBeVisible();
   });
 });
 
@@ -206,7 +231,7 @@ test.describe('Cross-page Navigation', () => {
     await expect(page.getByRole('heading', { name: /Documentation/i }).first()).toBeVisible();
 
     // → Home via logo
-    await page.getByRole('link', { name: /capacitor-bglocation/i }).first().click();
-    await expect(page).toHaveURL('/');
+    await page.getByRole('link', { name: /bglocation/i }).first().click();
+    await expect(page).toHaveURL(/\/\?framework=capacitor/);
   });
 });

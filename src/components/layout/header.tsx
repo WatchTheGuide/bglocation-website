@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { MapPin, Menu, X } from "lucide-react";
+import { FrameworkSwitcher } from "@/components/framework/framework-switcher";
+import { useFramework } from "@/components/framework/framework-provider";
 import { Button } from "@/components/ui/button";
 
 const NAV_ITEMS = [
@@ -15,27 +17,29 @@ const NAV_ITEMS = [
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { frameworkHref } = useFramework();
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Link href={frameworkHref("/")} className="flex items-center gap-2 font-semibold">
           <MapPin className="h-5 w-5 text-primary" />
           <span>bglocation</span>
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 md:flex">
+          <FrameworkSwitcher compact />
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={frameworkHref(item.href)}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
-          <Button render={<Link href="/pricing" />} nativeButton={false} size="sm">
+          <Button render={<Link href={frameworkHref("/pricing")} />} nativeButton={false} size="sm">
             Get License
           </Button>
         </nav>
@@ -53,17 +57,25 @@ export function Header() {
       {/* Mobile nav */}
       {mobileOpen && (
         <nav className="border-t px-4 pb-4 pt-2 md:hidden">
+          <div className="py-2">
+            <FrameworkSwitcher compact className="w-full justify-center" />
+          </div>
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={frameworkHref(item.href)}
               className="block py-2 text-sm text-muted-foreground hover:text-foreground"
               onClick={() => setMobileOpen(false)}
             >
               {item.label}
             </Link>
           ))}
-          <Button render={<Link href="/pricing" />} nativeButton={false} size="sm" className="mt-2 w-full">
+          <Button
+            render={<Link href={frameworkHref("/pricing")} />}
+            nativeButton={false}
+            size="sm"
+            className="mt-2 w-full"
+          >
             Get License
           </Button>
         </nav>

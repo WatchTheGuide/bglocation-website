@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Rocket } from "lucide-react";
+import { useFramework } from "@/components/framework/framework-provider";
 
 export function AnnouncementBanner() {
+  const { frameworkHref } = useFramework();
+
   return (
     <div className="border-b bg-primary/5">
       <div className="mx-auto flex max-w-6xl items-center justify-center gap-2 px-4 py-2.5 text-center text-sm sm:px-6">
@@ -10,14 +15,14 @@ export function AnnouncementBanner() {
           <strong className="text-primary">License sales launch: April 27, 2026</strong>{" "}
           —{" "}
           <Link
-            href="#newsletter-cta"
+            href={frameworkHref("/#newsletter-cta")}
             className="font-medium underline underline-offset-4 hover:text-primary"
           >
             Get notified
           </Link>{" "}
           or{" "}
           <Link
-            href="/pricing"
+            href={frameworkHref("/pricing")}
             className="font-medium underline underline-offset-4 hover:text-primary"
           >
             view pricing

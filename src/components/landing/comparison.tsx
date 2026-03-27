@@ -1,7 +1,10 @@
-import { Badge } from "@/components/ui/badge";
-import { Check, X, Minus } from "lucide-react";
+"use client";
 
-const ROWS = [
+import { Check, Minus, X } from "lucide-react";
+import { useFramework } from "@/components/framework/framework-provider";
+import { Badge } from "@/components/ui/badge";
+
+const CAPACITOR_ROWS = [
   { feature: "Background GPS tracking", us: true, community: "partial" },
   { feature: "Native HTTP posting", us: true, community: false },
   { feature: "Offline buffer (SQLite)", us: true, community: false },
@@ -17,7 +20,27 @@ const ROWS = [
   { feature: "License type", us: "Perpetual", community: "n/a" },
 ] as const;
 
+const REACT_NATIVE_ROWS = [
+  { feature: "Background GPS tracking", us: true, community: "partial" },
+  { feature: "Native HTTP posting", us: true, community: false },
+  { feature: "Offline buffer (SQLite)", us: true, community: false },
+  { feature: "Heartbeat timer", us: true, community: false },
+  { feature: "Adaptive distance filter", us: true, community: false },
+  { feature: "TurboModule wrapper", us: true, community: false },
+  { feature: "Expo config plugin", us: true, community: false },
+  { feature: "Battery optimization detection", us: true, community: false },
+  { feature: "Offline license (no phone-home)", us: true, community: "n/a" },
+  { feature: "Source available", us: "ELv2", community: "MIT" },
+  { feature: "Runs when app is killed", us: true, community: false },
+  { feature: "Geofencing", us: true, community: false },
+  { feature: "License type", us: "Perpetual", community: "n/a" },
+] as const;
+
 export function Comparison() {
+  const { framework } = useFramework();
+  const comparisonLabel = framework === "capacitor" ? "@capacitor/geolocation" : "expo-location";
+  const rows = framework === "capacitor" ? CAPACITOR_ROWS : REACT_NATIVE_ROWS;
+
   return (
     <section className="py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
@@ -26,7 +49,7 @@ export function Comparison() {
             How We Compare
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            See how we stack up against the built-in Capacitor geolocation plugin.
+            Compare the active wrapper against the closest built-in baseline for the same ecosystem.
           </p>
         </div>
 
@@ -49,13 +72,12 @@ export function Comparison() {
                   </Badge>
                 </th>
                 <th className="pb-3 text-center font-medium text-muted-foreground">
-                  <span className="block">@capacitor/</span>
-                  <span className="block">geolocation</span>
+                  <span className="block">{comparisonLabel}</span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {ROWS.map((row) => (
+              {rows.map((row) => (
                 <tr key={row.feature} className="border-b">
                   <td className="py-3 text-muted-foreground">{row.feature}</td>
                   <td className="py-3 text-center">
@@ -71,8 +93,9 @@ export function Comparison() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          @capacitor/geolocation is the official Capacitor plugin — great for foreground location,
-          but limited background support (no persistent tracking when the app is suspended/killed).
+          {framework === "capacitor"
+            ? "@capacitor/geolocation is the official Capacitor plugin — solid for foreground location, but limited for persistent background tracking when the app is suspended or killed."
+            : "expo-location is convenient for standard location flows, but it does not provide the same native background tracking, offline delivery, and production-focused feature set."}
         </p>
       </div>
     </section>

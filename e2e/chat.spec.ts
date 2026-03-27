@@ -1,9 +1,25 @@
 import { test, expect, ROUTES } from './fixtures/test';
 
+function createUiMessageStream(text: string) {
+  const chunks = [
+    { type: 'start', messageId: 'assistant-1' },
+    { type: 'text-start', id: 'text-1' },
+    { type: 'text-delta', id: 'text-1', delta: text },
+    { type: 'text-end', id: 'text-1' },
+    { type: 'finish', finishReason: 'stop' },
+  ];
+
+  return `${chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`).join('')}data: [DONE]\n\n`;
+}
+
 test.describe('Chat Widget', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(ROUTES.home);
   });
+
+  function getChatDialog(page: Parameters<typeof test.beforeEach>[0]['page']) {
+    return page.getByRole('dialog', { name: /Chat with AI assistant/i });
+  }
 
   test.describe('Toggle', () => {
     test('should display floating chat button', async ({ page }) => {
@@ -50,7 +66,7 @@ test.describe('Chat Widget', () => {
     test('should display welcome message', async ({ page }) => {
       await page.getByRole('button', { name: /Open chat/i }).click();
       await expect(
-        page.getByText(/I can help with questions about capacitor-bglocation/i),
+        page.getByText(/I can help with bglocation for Capacitor or React Native/i),
       ).toBeVisible();
     });
 
@@ -88,18 +104,21 @@ test.describe('Chat Widget', () => {
 
   test.describe('Messaging', () => {
     test('should send a message and display response', async ({ page }) => {
-      // Mock the chat API endpoint
       await page.route('**/api/chat', async (route) => {
-        const body = 'Hello! capacitor-bglocation is a background location plugin.';
         await route.fulfill({
           status: 200,
-          contentType: 'text/plain; charset=utf-8',
-          body,
+          contentType: 'text/event-stream; charset=utf-8',
+          headers: {
+            'x-vercel-ai-ui-message-stream': 'v1',
+          },
+          body: createUiMessageStream(
+            'Hello! bglocation is a background location SDK for Capacitor and React Native.',
+          ),
         });
       });
 
       await page.getByRole('button', { name: /Open chat/i }).click();
-      const input = page.getByPlaceholder(/Ask a question/i);
+      const input = getChatDialog(page).getByRole('textbox');
       await input.fill('What is this plugin?');
       await page.getByRole('button', { name: /Send message/i }).click();
 
@@ -109,7 +128,7 @@ test.describe('Chat Widget', () => {
       // Assistant response should appear
       await expect(
         page.getByText(
-          /Hello! capacitor-bglocation is a background location plugin\./i,
+          /Hello! bglocation is a background location SDK for Capacitor and React Native\./i,
         ),
       ).toBeVisible();
     });
@@ -118,8 +137,11 @@ test.describe('Chat Widget', () => {
       await page.route('**/api/chat', async (route) => {
         await route.fulfill({
           status: 200,
-          contentType: 'text/plain; charset=utf-8',
-          body: 'The plugin includes many features.',
+          contentType: 'text/event-stream; charset=utf-8',
+          headers: {
+            'x-vercel-ai-ui-message-stream': 'v1',
+          },
+          body: createUiMessageStream('The plugin includes many features.'),
         });
       });
 
@@ -143,13 +165,16 @@ test.describe('Chat Widget', () => {
         requestCount++;
         await route.fulfill({
           status: 200,
-          contentType: 'text/plain; charset=utf-8',
-          body: `Response ${requestCount}`,
+          contentType: 'text/event-stream; charset=utf-8',
+          headers: {
+            'x-vercel-ai-ui-message-stream': 'v1',
+          },
+          body: createUiMessageStream(`Response ${requestCount}`),
         });
       });
 
       await page.getByRole('button', { name: /Open chat/i }).click();
-      const input = page.getByPlaceholder(/Ask a question/i);
+      const input = getChatDialog(page).getByRole('textbox');
 
       // Send MAX_MESSAGES (10) user messages
       for (let i = 1; i <= 10; i++) {
@@ -182,13 +207,13 @@ test.describe('Chat Widget', () => {
       await page.route('**/api/chat', async (route) => {
         await route.fulfill({
           status: 500,
-          contentType: 'application/json',
-          body: JSON.stringify({ error: 'Internal Server Error' }),
+          contentType: 'text/plain; charset=utf-8',
+          body: 'Internal Server Error',
         });
       });
 
       await page.getByRole('button', { name: /Open chat/i }).click();
-      const input = page.getByPlaceholder(/Ask a question/i);
+      const input = getChatDialog(page).getByRole('textbox');
       await input.fill('Hello');
       await page.getByRole('button', { name: /Send message/i }).click();
 
@@ -204,13 +229,13 @@ test.describe('Chat Widget', () => {
       await page.route('**/api/chat', async (route) => {
         await route.fulfill({
           status: 429,
-          contentType: 'application/json',
-          body: JSON.stringify({ error: 'Too Many Requests' }),
+          contentType: 'text/plain; charset=utf-8',
+          body: 'Too many requests',
         });
       });
 
       await page.getByRole('button', { name: /Open chat/i }).click();
-      const input = page.getByPlaceholder(/Ask a question/i);
+      const input = getChatDialog(page).getByRole('textbox');
       await input.fill('Hello');
       await page.getByRole('button', { name: /Send message/i }).click();
 

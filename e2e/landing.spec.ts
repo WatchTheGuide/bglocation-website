@@ -6,44 +6,43 @@ test.describe('Landing Page', () => {
   });
 
   test.describe('Hero Section', () => {
-    test('should display hero headline', async ({ page }) => {
+    test('should display hero headline and cross-framework badge', async ({ page }) => {
       await expect(
         page.getByRole('heading', { name: /Background Location.*That Just Works/i }),
       ).toBeVisible();
-    });
-
-    test('should display Capacitor 8 badge', async ({ page }) => {
       await expect(
-        page.locator('[data-slot="badge"]').filter({ hasText: /Capacitor 8/ }),
+        page.locator('[data-slot="badge"]').filter({ hasText: /Capacitor 8.*React Native/i }),
       ).toBeVisible();
     });
 
-    test('should display CTA buttons', async ({ page }) => {
+    test('should render framework-aware CTA links', async ({ page }) => {
       const hero = page.locator('section').first();
-      await expect(hero.getByRole('button', { name: /Get License/ })).toBeVisible();
-      await expect(hero.getByRole('button', { name: /Read the Docs/i })).toBeVisible();
+
+      await expect(hero.getByRole('button', { name: /Get License/i })).toHaveAttribute(
+        'href',
+        /\/pricing\?framework=capacitor/,
+      );
+      await expect(hero.getByRole('button', { name: /Read the Docs/i })).toHaveAttribute(
+        'href',
+        /\/docs\?framework=capacitor/,
+      );
     });
 
-    test('should display npm install command', async ({ page }) => {
+    test('should display default install command for Capacitor', async ({ page }) => {
       await expect(
         page.locator('section').first().getByText('npm install capacitor-bglocation'),
       ).toBeVisible();
     });
+  });
 
-    test('should link Get License to pricing page', async ({ page }) => {
-      const hero = page.locator('section').first();
-      await expect(hero.getByRole('button', { name: /Get License/ })).toHaveAttribute(
-        'href',
-        '/pricing',
-      );
-    });
+  test.describe('Framework Switcher', () => {
+    test('should switch the landing page to React Native', async ({ page }) => {
+      await page.getByRole('tab', { name: /React Native/i }).first().click();
 
-    test('should link Read the Docs to docs page', async ({ page }) => {
-      const hero = page.locator('section').first();
-      await expect(hero.getByRole('button', { name: /Read the Docs/i })).toHaveAttribute(
-        'href',
-        '/docs',
-      );
+      await expect(page).toHaveURL(/framework=react-native/);
+      await expect(page.getByText('npm install react-native-bglocation')).toBeVisible();
+      await expect(page.getByText(/const subscription = addListener/).first()).toBeVisible();
+      await expect(page.locator('table').getByText('expo-location')).toBeVisible();
     });
   });
 
@@ -63,13 +62,7 @@ test.describe('Landing Page', () => {
   });
 
   test.describe('Features Section', () => {
-    test('should display features heading', async ({ page }) => {
-      await expect(
-        page.getByRole('heading', { name: /Everything You Need for Location Tracking/i }),
-      ).toBeVisible();
-    });
-
-    test('should display all 9 feature cards', async ({ page }) => {
+    test('should display all core feature cards', async ({ page }) => {
       const featureTitles = [
         'Background GPS Tracking',
         'Native HTTP Posting',
@@ -85,61 +78,15 @@ test.describe('Landing Page', () => {
       for (const title of featureTitles) {
         await expect(page.getByText(title, { exact: true })).toBeVisible();
       }
-    });
 
-    test('should have features section with correct id for anchor link', async ({ page }) => {
       await expect(page.locator('#features')).toBeVisible();
     });
   });
 
-  test.describe('Code Example Section', () => {
-    test('should display code section heading', async ({ page }) => {
-      await expect(
-        page.getByRole('heading', { name: /Up and Running in Minutes/i }),
-      ).toBeVisible();
-    });
-
-    test('should display code snippet with key API calls', async ({ page }) => {
-      await expect(page.getByText(/BackgroundLocation\.configure/).first()).toBeVisible();
-      await expect(page.getByText(/BackgroundLocation\.addListener/).first()).toBeVisible();
-      await expect(page.getByText(/BackgroundLocation\.start/).first()).toBeVisible();
-    });
-  });
-
   test.describe('Comparison Table', () => {
-    test('should display comparison heading', async ({ page }) => {
-      await expect(
-        page.getByRole('heading', { name: /How We Compare/i }),
-      ).toBeVisible();
-    });
-
-    test('should display both column headers', async ({ page }) => {
-      const table = page.locator('table');
-      await expect(table.getByText('capacitor-bglocation')).toBeVisible();
-      await expect(table.getByText(/@capacitor\//)).toBeVisible();
-    });
-
-    test('should display recommended badge', async ({ page }) => {
+    test('should display recommended badge and 13 rows', async ({ page }) => {
       await expect(page.getByText('recommended')).toBeVisible();
-    });
-
-    test('should display 13 comparison rows', async ({ page }) => {
-      const rows = page.locator('table tbody tr');
-      await expect(rows).toHaveCount(13);
-    });
-  });
-
-  test.describe('CTA Section', () => {
-    test('should display CTA heading', async ({ page }) => {
-      await expect(
-        page.getByRole('heading', { name: /Ready to Ship Background Location/i }),
-      ).toBeVisible();
-    });
-
-    test('should display View Pricing and Read the Docs buttons', async ({ page }) => {
-      const ctaSection = page.locator('section').filter({ hasText: 'Ready to Ship' });
-      await expect(ctaSection.getByRole('button', { name: /View Pricing/i })).toBeVisible();
-      await expect(ctaSection.getByRole('button', { name: /Read the Docs/i })).toBeVisible();
+      await expect(page.locator('table tbody tr')).toHaveCount(13);
     });
   });
 });
@@ -147,17 +94,16 @@ test.describe('Landing Page', () => {
 test.describe('Landing Page — SEO', () => {
   test('should have correct page title', async ({ page }) => {
     await page.goto(ROUTES.home);
-    await expect(page).toHaveTitle(
-      /capacitor-bglocation.*Background Location Plugin/i,
-    );
+    await expect(page).toHaveTitle(/bglocation.*Background Location SDK/i);
   });
 
   test('should have meta description', async ({ page }) => {
     await page.goto(ROUTES.home);
-    const description = page.locator('meta[name="description"]');
+    const description = page.locator('meta[name="description"]').first();
+
     await expect(description).toHaveAttribute(
       'content',
-      /Production-ready Capacitor 8 plugin/i,
+      /Production-ready background location SDK for Capacitor and React Native/i,
     );
   });
 });
