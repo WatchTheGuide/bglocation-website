@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
 import { FRAMEWORK_QUERY_PARAM, resolveFrameworkQuery } from '@/lib/framework';
 
 function getSecret(): Uint8Array {
@@ -10,6 +9,7 @@ function getSecret(): Uint8Array {
 
 async function verifyToken(token: string, expectedType: string): Promise<boolean> {
   try {
+    const { jwtVerify } = await import('jose');
     const { payload } = await jwtVerify(token, getSecret());
     return payload.type === expectedType;
   } catch {
