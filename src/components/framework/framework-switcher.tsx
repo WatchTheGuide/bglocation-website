@@ -64,7 +64,7 @@ export function FrameworkSwitcher({
       <div
         data-testid="framework-switcher"
         data-framework-switcher-mode="segmented"
-        role="radiogroup"
+        role="group"
         aria-label="Current integration"
         className={cn(
           "inline-flex items-center gap-1 rounded-full border bg-background/80 p-1 shadow-sm backdrop-blur",
@@ -77,8 +77,6 @@ export function FrameworkSwitcher({
             <Link
               key={option.value}
               href={frameworkOptionHref(option.value)}
-              role="radio"
-              aria-checked={active}
               aria-label={`Switch to ${option.label}`}
               aria-current={active ? "page" : undefined}
               data-framework-option={option.value}

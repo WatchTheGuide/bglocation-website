@@ -11,7 +11,6 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   DEFAULT_FRAMEWORK,
   FRAMEWORK_QUERY_PARAM,
-  normalizeFrameworkQueryValue,
   resolveFrameworkQuery,
   type Framework,
   withFrameworkHref,
@@ -124,10 +123,9 @@ export function FrameworkProvider({
       return;
     }
 
-    const normalizedFramework = normalizeFrameworkQueryValue(rawFramework);
     const resolvedFramework = resolveFrameworkQuery(rawFramework) ?? DEFAULT_FRAMEWORK;
 
-    if (normalizedFramework === resolvedFramework) {
+    if (rawFramework === resolvedFramework) {
       return;
     }
 

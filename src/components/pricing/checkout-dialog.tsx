@@ -33,7 +33,7 @@ export function CheckoutDialog({
     function handleMessage(event: MessageEvent) {
       try {
         const url = new URL(event.origin);
-        if (!url.hostname.endsWith(".lemonsqueezy.com")) return;
+        if (url.hostname !== "lemonsqueezy.com" && !url.hostname.endsWith(".lemonsqueezy.com")) return;
       } catch {
         return;
       }

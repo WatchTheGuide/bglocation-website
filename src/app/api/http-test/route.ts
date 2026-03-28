@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { checkHttpTestRateLimit } from '@/lib/http-test/rate-limiter';
 
 type JsonRecord = Record<string, unknown>;
 
@@ -174,6 +175,21 @@ export async function POST(request: Request) {
   const contentType = request.headers.get('content-type') ?? 'unknown';
   const userAgent = request.headers.get('user-agent') ?? 'unknown';
   const clientIp = getClientIp(request);
+
+  const requiredSecret = process.env.HTTP_TEST_SECRET;
+  if (requiredSecret) {
+    const auth = request.headers.get('authorization') ?? '';
+    if (auth !== `Bearer ${requiredSecret}`) {
+      return jsonResponse({ received: false, error: 'Unauthorized' }, { status: 401 });
+    }
+  }
+
+  if (clientIp && !checkHttpTestRateLimit(clientIp)) {
+    return jsonResponse(
+      { received: false, error: 'Too many requests' },
+      { status: 429 },
+    );
+  }
 
   const contentLength = Number(request.headers.get('content-length') ?? '0');
   if (contentLength > MAX_BODY_BYTES) {
