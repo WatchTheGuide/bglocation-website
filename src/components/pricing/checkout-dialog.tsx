@@ -99,6 +99,8 @@ export function CheckoutDialog({
               onLoad={() => setLoading(false)}
               title={`${planName} Checkout`}
               allow="payment"
+              sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin"
+              referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
         </DialogContent>

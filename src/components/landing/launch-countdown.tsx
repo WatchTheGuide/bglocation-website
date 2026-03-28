@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useFramework } from '@/components/framework/framework-provider';
 
 const LAUNCH_DATE = new Date('2026-04-26T22:00:00Z'); // April 27, 2026 00:00 CEST
 
@@ -55,6 +56,7 @@ function Separator() {
 export function LaunchCountdown() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(calculateTimeLeft);
   const mounted = useMounted();
+  const { frameworkHref } = useFramework();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -79,10 +81,10 @@ export function LaunchCountdown() {
             Get your perpetual license and ship background location in production today.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button render={<Link href="/pricing" />} nativeButton={false} size="lg">
+            <Button render={<Link href={frameworkHref('/pricing')} />} nativeButton={false} size="lg">
               Get License — from $149
             </Button>
-            <Button render={<Link href="/docs" />} nativeButton={false} variant="outline" size="lg">
+            <Button render={<Link href={frameworkHref('/docs')} />} nativeButton={false} variant="outline" size="lg">
               Read the Docs
             </Button>
           </div>
@@ -122,10 +124,10 @@ export function LaunchCountdown() {
         </p>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button render={<Link href="#newsletter-cta" />} nativeButton={false} size="lg" variant="outline">
+          <Button render={<Link href={frameworkHref('/#newsletter-cta')} />} nativeButton={false} size="lg" variant="outline">
             Get Notified
           </Button>
-          <Button render={<Link href="/pricing" />} nativeButton={false} size="lg" variant="outline">
+          <Button render={<Link href={frameworkHref('/pricing')} />} nativeButton={false} size="lg" variant="outline">
             View Pricing
           </Button>
         </div>

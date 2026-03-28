@@ -166,13 +166,31 @@ export async function GET() {
   });
 }
 
+const MAX_BODY_BYTES = 64 * 1024; // 64 KB
+
 export async function POST(request: Request) {
   const requestId = crypto.randomUUID();
   const receivedAt = new Date().toISOString();
   const contentType = request.headers.get('content-type') ?? 'unknown';
   const userAgent = request.headers.get('user-agent') ?? 'unknown';
   const clientIp = getClientIp(request);
+
+  const contentLength = Number(request.headers.get('content-length') ?? '0');
+  if (contentLength > MAX_BODY_BYTES) {
+    return jsonResponse(
+      { received: false, error: `Body too large (limit ${MAX_BODY_BYTES} bytes)` },
+      { status: 413 },
+    );
+  }
+
   const rawBody = await request.text();
+
+  if (rawBody.length > MAX_BODY_BYTES) {
+    return jsonResponse(
+      { received: false, error: `Body too large (limit ${MAX_BODY_BYTES} bytes)` },
+      { status: 413 },
+    );
+  }
 
   let payload: unknown = rawBody;
   let parseError: string | null = null;

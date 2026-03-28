@@ -74,7 +74,7 @@ async function upsertCustomerForOrder(params: {
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2034" &&
+        (error.code === "P2034" || error.code === "P2002") &&
         attempt < SERIALIZATION_RETRY_LIMIT - 1
       ) {
         continue;
