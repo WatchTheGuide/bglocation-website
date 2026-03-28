@@ -177,14 +177,32 @@ export async function POST(request: Request) {
   const clientIp = getClientIp(request);
 
   const requiredSecret = process.env.HTTP_TEST_SECRET;
-  if (requiredSecret) {
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  // In production, require HTTP_TEST_SECRET to be set and valid to avoid
+  // exposing this debug endpoint as an unauthenticated logging sink.
+  if (isProduction) {
+    if (!requiredSecret) {
+      return jsonResponse(
+        { received: false, error: 'HTTP test endpoint disabled: missing HTTP_TEST_SECRET' },
+        { status: 503 },
+      );
+    }
+
+    const auth = request.headers.get('authorization') ?? '';
+    if (auth !== `Bearer ${requiredSecret}`) {
+      return jsonResponse({ received: false, error: 'Unauthorized' }, { status: 401 });
+    }
+  } else if (requiredSecret) {
+    // In non-production environments, enforce the secret only if configured.
     const auth = request.headers.get('authorization') ?? '';
     if (auth !== `Bearer ${requiredSecret}`) {
       return jsonResponse({ received: false, error: 'Unauthorized' }, { status: 401 });
     }
   }
 
-  if (clientIp && !checkHttpTestRateLimit(clientIp)) {
+  const rateLimitKey = clientIp ?? 'unknown';
+  if (!checkHttpTestRateLimit(rateLimitKey)) {
     return jsonResponse(
       { received: false, error: 'Too many requests' },
       { status: 429 },
