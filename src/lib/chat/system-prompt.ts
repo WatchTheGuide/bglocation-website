@@ -51,7 +51,7 @@ BackgroundLocation.addListener('onLocation', (location) => {
 await BackgroundLocation.start();
 
 3. React Native Configure & Start:
-import { addListener, configure, start } from 'react-native-bglocation';
+import { addListener, configure, start, stop, removeAllListeners } from 'react-native-bglocation';
 await configure({
   distanceFilter: 15,
   desiredAccuracy: 'high',
@@ -64,11 +64,14 @@ const subscription = addListener('onLocation', (location) => {
 });
 await start();
 
-4. Stop:
+4. Stop (Capacitor):
 await BackgroundLocation.stop();
 await BackgroundLocation.removeAllListeners();
 
-React Native stop: subscription.remove(); await stop(); removeAllListeners();
+5. Stop (React Native):
+subscription.remove();
+await stop();
+removeAllListeners();
 
 Permissions: On Android 10+, request foreground permission first, then background. On iOS, call requestPermissions() — the system handles the Always/When In Use flow.
 

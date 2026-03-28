@@ -108,4 +108,4 @@ Endpoint debugowy przyjmuje `GET`, `POST` i `OPTIONS`.
 - `GET` zwraca przykładowe payloady i opis przeznaczenia endpointu
 - `POST` loguje body requestu, typ payloadu, liczbę lokalizacji oraz status potwierdzenia odbioru
 - Obsługiwane są zarówno payloady z pojedynczym `location`, jak i z `locations[]`
-- CORS jest otwarty, żeby uprościć użycie przez ngrok i aplikacje testowe
+- CORS jest konfigurowalny: w produkcji domyślnie brak `Access-Control-Allow-Origin`, chyba że ustawiono `NEXT_PUBLIC_HTTP_TEST_ALLOWED_ORIGIN` (konkretny origin), a endpoint może opcjonalnie wymagać `HTTP_TEST_SECRET`
