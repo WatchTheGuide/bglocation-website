@@ -15,12 +15,23 @@ type PayloadSummary = {
     | 'array';
 };
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Device-Id, X-Requested-With, ngrok-skip-browser-warning',
-  'Cache-Control': 'no-store',
-} as const;
+const CORS_HEADERS = (() => {
+  const headers: Record<string, string> = {
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Device-Id, X-Requested-With, ngrok-skip-browser-warning',
+    'Cache-Control': 'no-store',
+  };
+
+  const allowedOrigin =
+    process.env.NEXT_PUBLIC_HTTP_TEST_ALLOWED_ORIGIN ??
+    (process.env.NODE_ENV === 'production' ? '' : '*');
+
+  if (allowedOrigin) {
+    headers['Access-Control-Allow-Origin'] = allowedOrigin;
+  }
+
+  return headers;
+})();
 
 function jsonResponse(body: unknown, init?: ResponseInit) {
   return NextResponse.json(body, {

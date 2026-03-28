@@ -57,7 +57,14 @@ async function upsertCustomerForOrder(params: {
               lsCustomerId: params.lsCustomerId,
               plan: higherPlan(existing.plan, params.variant.plan),
               ...(params.variant.orderType === "purchase"
-                ? { maxBundleIds: { increment: params.variant.maxBundleIds } }
+                ? params.variant.plan === existing.plan
+                  ? { maxBundleIds: { increment: params.variant.maxBundleIds } }
+                  : {
+                      maxBundleIds: Math.max(
+                        existing.maxBundleIds,
+                        params.variant.maxBundleIds,
+                      ),
+                    }
                 : {}),
             },
           });

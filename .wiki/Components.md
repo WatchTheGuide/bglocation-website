@@ -53,12 +53,13 @@ Sekcje strony `/docs`, współdzielące treść między frameworkami z wyborem t
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Getting Started | `getting-started.tsx` | Instalacja, konfiguracja i start trackingu |
-| Configuration | `configuration.tsx` | Opcje `configure()`, HTTP posting, adaptive distance filter |
-| API Reference | `api-reference.tsx` | Metody, eventy, `Location` interface i geofencing |
-| Platform Guides | `platform-guides.tsx` | Wymagania i setup iOS / Android |
-| Licensing | `licensing.tsx` | Trial mode, klucz licencyjny, zasady licencjonowania |
-| Examples | `examples.tsx` | Przykładowe scenariusze integracji |
+| Intro | `docs-intro.tsx` | Wprowadzenie do SDK i nawigacja po sekcjach |
+| Getting Started | `getting-started-section.tsx` | Instalacja, konfiguracja i start trackingu |
+| Configuration | `configuration-section.tsx` | Opcje `configure()`, HTTP posting, adaptive distance filter |
+| API Reference | `api-reference-section.tsx` | Metody, eventy, `Location` interface i geofencing |
+| Platform Guides | `platform-guides-section.tsx` | Wymagania i setup iOS / Android |
+| Licensing | `licensing-section.tsx` | Trial mode, klucz licencyjny, zasady licencjonowania |
+| Examples | `examples-section.tsx` | Przykładowe scenariusze integracji |
 
 ## Pricing Components (`src/components/pricing/`)
 

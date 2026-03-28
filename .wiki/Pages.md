@@ -81,12 +81,13 @@ Strona dokumentacji z anchor navigation i sekcjami opisującymi instalację, kon
 
 | Sekcja | Komponent | Opis |
 |--------|-----------|------|
-| Getting Started | `docs/getting-started.tsx` | Instalacja i pierwszy start |
-| Configuration | `docs/configuration.tsx` | `configure()`, HTTP posting, adaptive filter |
-| API Reference | `docs/api-reference.tsx` | Metody, eventy, `Location`, geofencing |
-| Platform Guides | `docs/platform-guides.tsx` | Konfiguracja iOS i Android |
-| Licensing | `docs/licensing.tsx` | Trial mode i klucz licencyjny |
-| Examples | `docs/examples.tsx` | Przykłady wdrożeń |
+| Intro | `docs/docs-intro.tsx` | Wprowadzenie do SDK i nawigacja po sekcjach |
+| Getting Started | `docs/getting-started-section.tsx` | Instalacja i pierwszy start |
+| Configuration | `docs/configuration-section.tsx` | `configure()`, HTTP posting, adaptive filter |
+| API Reference | `docs/api-reference-section.tsx` | Metody, eventy, `Location`, geofencing |
+| Platform Guides | `docs/platform-guides-section.tsx` | Konfiguracja iOS i Android |
+| Licensing | `docs/licensing-section.tsx` | Trial mode i klucz licencyjny |
+| Examples | `docs/examples-section.tsx` | Przykłady wdrożeń |
 
 ## Pricing Page (`/pricing`)
 
