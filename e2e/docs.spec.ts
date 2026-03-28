@@ -18,7 +18,7 @@ test.describe('Docs Page', () => {
   });
 
   test('should switch docs to React Native', async ({ page }) => {
-    await page.locator('main').getByRole('tab', { name: /React Native/i }).first().click();
+    await page.locator('main').getByRole('radio', { name: /React Native/i }).first().click();
 
     await expect(page).toHaveURL(/framework=react-native/);
     await expect(page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first()).toBeVisible();
@@ -51,7 +51,7 @@ test.describe('Docs Page', () => {
   });
 
   test('should display React Native getting started code after switch', async ({ page }) => {
-    await page.locator('main').getByRole('tab', { name: /React Native/i }).first().click();
+    await page.locator('main').getByRole('radio', { name: /React Native/i }).first().click();
 
     const section = page.locator('#getting-started');
     await expect(section.getByText(/const locationSubscription = addListener/)).toBeVisible();

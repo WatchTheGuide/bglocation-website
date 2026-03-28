@@ -240,11 +240,9 @@ async function handleOrderCreated(payload: WebhookPayload) {
   const status = attributes.status as string;
 
   if (!email || !lsCustomerId) {
-    console.error("[LS Webhook] Missing required fields:", {
-      email: !!email,
-      customerId: !!lsCustomerId,
-    });
-    return;
+    throw new Error(
+      `[LS Webhook] Missing required fields: email=${!!email}, customerId=${!!lsCustomerId}`,
+    );
   }
 
   console.log("[LS Webhook] Order created:", {

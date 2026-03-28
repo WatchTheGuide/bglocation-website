@@ -37,7 +37,7 @@ test.describe('Landing Page', () => {
 
   test.describe('Framework Switcher', () => {
     test('should switch the landing page to React Native', async ({ page }) => {
-      await page.getByRole('tab', { name: /React Native/i }).first().click();
+      await page.getByRole('radio', { name: /React Native/i }).first().click();
 
       await expect(page).toHaveURL(/framework=react-native/);
       await expect(page.getByText('npm install react-native-bglocation')).toBeVisible();
