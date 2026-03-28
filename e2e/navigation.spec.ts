@@ -11,6 +11,38 @@ async function openMenuIfMobile(page: import('@playwright/test').Page) {
   }
 }
 
+async function selectFramework(
+  page: import('@playwright/test').Page,
+  frameworkName: string,
+  scope: 'header' | 'page' = 'header',
+) {
+  const container = scope === 'header' ? page.locator('header') : page.locator('main');
+  const frameworkValue = frameworkName.toLowerCase().replace(/\s+/g, '-');
+  const switchers = container.getByTestId('framework-switcher');
+  const firstSwitcher = switchers.first();
+  let switcher = await firstSwitcher.isVisible().catch(() => false)
+    ? firstSwitcher
+    : switchers.last();
+
+  if (!(await switcher.isVisible().catch(() => false)) && scope === 'header') {
+    await openMenuIfMobile(page);
+    switcher = container.getByTestId('framework-switcher').last();
+  }
+
+  const segmentedOption = switcher.locator(`[data-framework-option="${frameworkValue}"]`).first();
+
+  if (await segmentedOption.isVisible().catch(() => false)) {
+    await segmentedOption.click();
+    await expect(page).toHaveURL(new RegExp(`framework=${frameworkValue}`));
+    return;
+  }
+
+  const trigger = switcher.getByTestId('framework-switcher-trigger');
+  await trigger.click();
+  await switcher.locator(`[data-framework-option="${frameworkValue}"]`).click();
+  await expect(page).toHaveURL(new RegExp(`framework=${frameworkValue}`));
+}
+
 test.describe('Announcement Banner', () => {
   test('should display launch message on landing page', async ({ page }) => {
     await page.goto(ROUTES.home);
@@ -44,6 +76,32 @@ test.describe('Announcement Banner', () => {
 test.describe('Navigation — Header', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(ROUTES.home);
+  });
+
+  test('should canonicalize a truncated framework query to the closest supported value', async ({ page }) => {
+    await page.goto('/docs?framework=react-nativ');
+
+    await expect(page).toHaveURL(/\/docs\?framework=react-native/);
+    await expect(
+      page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first(),
+    ).toBeVisible();
+  });
+
+  test('should canonicalize an unknown framework query to the default framework', async ({ page }) => {
+    await page.goto('/pricing?framework=unknown');
+
+    await expect(page).toHaveURL(/\/pricing\?framework=capacitor/);
+    await expect(page.getByRole('heading', { name: /Simple, Transparent Pricing/i })).toBeVisible();
+  });
+
+  test('should switch framework on the first click from a bare URL', async ({ page }) => {
+    await page.goto('/');
+    await selectFramework(page, 'react-native');
+
+    await expect(page).toHaveURL(/\/\?framework=react-native/);
+    await expect(
+      page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first(),
+    ).toBeVisible();
   });
 
   test('should display logo with brand name', async ({ page }) => {
@@ -103,7 +161,7 @@ test.describe('Navigation — Header', () => {
 
   test('should preserve framework when navigating between pages', async ({ page }) => {
     test.skip(page.viewportSize()?.width === 375, 'Uses desktop header switcher');
-    await page.getByRole('tab', { name: /React Native/i }).first().click();
+    await selectFramework(page, 'react-native');
     await page.locator('header').getByRole('link', { name: 'Docs' }).click();
 
     await expect(page).toHaveURL(/\/docs\?framework=react-native/);
@@ -155,7 +213,7 @@ test.describe('Navigation — Footer', () => {
 
   test('should preserve framework when clicking footer links', async ({ page }) => {
     test.skip(page.viewportSize()?.width === 375, 'Uses desktop switcher to set framework explicitly');
-    await page.getByRole('tab', { name: /React Native/i }).first().click();
+    await selectFramework(page, 'react-native');
     await page.locator('footer').getByRole('link', { name: 'Getting Started' }).click();
 
     await expect(page).toHaveURL(/\/docs\?framework=react-native/);

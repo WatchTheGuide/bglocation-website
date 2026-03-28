@@ -2,59 +2,106 @@
 
 import {
   createContext,
-  startTransition,
-  useCallback,
-  useContext,
   useEffect,
+  useContext,
   useMemo,
-  useState,
   useSyncExternalStore,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   DEFAULT_FRAMEWORK,
   FRAMEWORK_QUERY_PARAM,
-  FRAMEWORK_STORAGE_KEY,
-  isFramework,
+  normalizeFrameworkQueryValue,
+  resolveFrameworkQuery,
   type Framework,
   withFrameworkHref,
 } from "@/lib/framework";
 
+const FRAMEWORK_LOCATION_CHANGE_EVENT = "bglocation:location-change";
+let historyEventsPatched = false;
+
 type FrameworkContextValue = {
   framework: Framework;
-  setFramework: (framework: Framework) => void;
   frameworkHref: (href: string) => string;
+  frameworkOptionHref: (framework: Framework) => string;
 };
 
 const FrameworkContext = createContext<FrameworkContextValue | null>(null);
 
 function getFrameworkFromLocation(): Framework | null {
+  const rawFramework = getRawFrameworkFromLocation();
+  return resolveFrameworkQuery(rawFramework);
+}
+
+function getRawFrameworkFromLocation(): string | null {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const fromSearch = new URLSearchParams(window.location.search).get(FRAMEWORK_QUERY_PARAM);
-  return isFramework(fromSearch) ? fromSearch : null;
+  return new URLSearchParams(window.location.search).get(FRAMEWORK_QUERY_PARAM);
 }
 
-function subscribeToLocation(onStoreChange: () => void) {
+function getFrameworkSnapshot(): Framework {
+  return getFrameworkFromLocation() ?? DEFAULT_FRAMEWORK;
+}
+
+function buildCurrentHref(): string {
+  if (typeof window === "undefined") {
+    return "/";
+  }
+
+  return `${window.location.pathname}${window.location.search}${window.location.hash}`;
+}
+
+function emitFrameworkLocationChange() {
+  queueMicrotask(() => {
+    window.dispatchEvent(new Event(FRAMEWORK_LOCATION_CHANGE_EVENT));
+  });
+}
+
+function patchHistoryEvents() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (historyEventsPatched) {
+    return;
+  }
+
+  const originalPushState = window.history.pushState.bind(window.history);
+  const originalReplaceState = window.history.replaceState.bind(window.history);
+
+  window.history.pushState = function pushState(...args) {
+    const result = originalPushState(...args);
+    emitFrameworkLocationChange();
+    return result;
+  };
+
+  window.history.replaceState = function replaceState(...args) {
+    const result = originalReplaceState(...args);
+    emitFrameworkLocationChange();
+    return result;
+  };
+
+  historyEventsPatched = true;
+}
+
+function subscribeToFrameworkStore(onStoreChange: () => void) {
   if (typeof window === "undefined") {
     return () => {};
   }
 
+  patchHistoryEvents();
+
   window.addEventListener("popstate", onStoreChange);
   window.addEventListener("hashchange", onStoreChange);
+  window.addEventListener(FRAMEWORK_LOCATION_CHANGE_EVENT, onStoreChange);
 
   return () => {
     window.removeEventListener("popstate", onStoreChange);
     window.removeEventListener("hashchange", onStoreChange);
+    window.removeEventListener(FRAMEWORK_LOCATION_CHANGE_EVENT, onStoreChange);
   };
-}
-
-function buildCurrentHref(pathname: string): string {
-  const hash = typeof window === "undefined" ? "" : window.location.hash;
-  const search = typeof window === "undefined" ? "" : window.location.search;
-  return `${pathname}${search}${hash}`;
 }
 
 export function FrameworkProvider({
@@ -64,63 +111,38 @@ export function FrameworkProvider({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const searchFramework = useSyncExternalStore(
-    subscribeToLocation,
-    getFrameworkFromLocation,
-    () => null,
-  );
-  const [storedFramework, setStoredFramework] = useState<Framework>(() => {
-    const fromLocation = getFrameworkFromLocation();
-    if (fromLocation) {
-      return fromLocation;
-    }
-
-    if (typeof window !== "undefined") {
-      const fromStorage = window.localStorage.getItem(FRAMEWORK_STORAGE_KEY);
-      if (isFramework(fromStorage)) {
-        return fromStorage;
-      }
-    }
-
-    return DEFAULT_FRAMEWORK;
-  });
-  const framework = searchFramework ?? storedFramework;
-  const buildHrefWithFramework = useCallback(
-    (targetFramework: Framework) => withFrameworkHref(buildCurrentHref(pathname), targetFramework),
-    [pathname],
+  const framework = useSyncExternalStore(
+    subscribeToFrameworkStore,
+    getFrameworkSnapshot,
+    () => DEFAULT_FRAMEWORK,
   );
 
   useEffect(() => {
-    window.localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework);
-  }, [framework]);
+    const rawFramework = getRawFrameworkFromLocation();
 
-  useEffect(() => {
-    const fromLocation = getFrameworkFromLocation();
-    if (fromLocation) {
+    if (!rawFramework) {
       return;
     }
 
-    startTransition(() => {
-      router.replace(buildHrefWithFramework(framework), {
-        scroll: false,
-      });
+    const normalizedFramework = normalizeFrameworkQueryValue(rawFramework);
+    const resolvedFramework = resolveFrameworkQuery(rawFramework) ?? DEFAULT_FRAMEWORK;
+
+    if (normalizedFramework === resolvedFramework) {
+      return;
+    }
+
+    router.replace(withFrameworkHref(buildCurrentHref(), resolvedFramework), {
+      scroll: false,
     });
-  }, [buildHrefWithFramework, framework, router]);
+  }, [framework, pathname, router]);
 
   const value = useMemo<FrameworkContextValue>(
     () => ({
       framework,
-      setFramework: (nextFramework) => {
-        setStoredFramework(nextFramework);
-        startTransition(() => {
-          router.replace(buildHrefWithFramework(nextFramework), {
-            scroll: false,
-          });
-        });
-      },
       frameworkHref: (href) => withFrameworkHref(href, framework),
+      frameworkOptionHref: (nextFramework) => withFrameworkHref(pathname, nextFramework),
     }),
-    [buildHrefWithFramework, framework, router],
+    [framework, pathname],
   );
 
   return <FrameworkContext.Provider value={value}>{children}</FrameworkContext.Provider>;
