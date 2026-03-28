@@ -105,15 +105,17 @@ function subscribeToFrameworkStore(onStoreChange: () => void) {
 
 export function FrameworkProvider({
   children,
+  initialFramework,
 }: {
   children: React.ReactNode;
+  initialFramework?: Framework;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const framework = useSyncExternalStore(
     subscribeToFrameworkStore,
     getFrameworkSnapshot,
-    () => DEFAULT_FRAMEWORK,
+    () => initialFramework ?? DEFAULT_FRAMEWORK,
   );
 
   useEffect(() => {

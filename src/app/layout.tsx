@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "@fontsource/ibm-plex-sans/400.css";
 import "@fontsource/ibm-plex-sans/500.css";
 import "@fontsource/ibm-plex-sans/600.css";
@@ -11,6 +12,7 @@ import { Footer } from "@/components/layout/footer";
 import { AnnouncementBanner } from "@/components/landing/announcement-banner";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { FrameworkProvider } from "@/components/framework/framework-provider";
+import { isFramework } from "@/lib/framework";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -55,15 +57,19 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bglocation.dev"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerStore = await headers();
+  const frameworkHeader = headerStore.get("x-bgl-framework");
+  const initialFramework = isFramework(frameworkHeader) ? frameworkHeader : undefined;
+
   return (
     <html lang="en">
       <body className="antialiased">
-        <FrameworkProvider>
+        <FrameworkProvider initialFramework={initialFramework}>
           <AnnouncementBanner />
           <Header />
           <main className="min-h-screen">{children}</main>

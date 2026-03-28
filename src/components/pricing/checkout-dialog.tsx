@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,11 +26,14 @@ export function CheckoutDialog({
 }: CheckoutDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (!open) return;
 
     function handleMessage(event: MessageEvent) {
+      if (event.source !== iframeRef.current?.contentWindow) return;
+
       try {
         const url = new URL(event.origin);
         if (url.hostname !== "lemonsqueezy.com" && !url.hostname.endsWith(".lemonsqueezy.com")) return;
@@ -94,6 +97,7 @@ export function CheckoutDialog({
               </div>
             )}
             <iframe
+              ref={iframeRef}
               src={checkoutUrl}
               className="h-full w-full"
               onLoad={() => setLoading(false)}
