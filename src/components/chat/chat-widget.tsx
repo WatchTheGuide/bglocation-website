@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { QuickReplies } from "@/components/chat/quick-replies";
 import { MAX_MESSAGES, SUPPORT_EMAIL } from "@/lib/chat/constants";
 const WELCOME_MESSAGE =
-  "Hi! I can help with questions about bglocation. Ask me about features, pricing, or integration.";
+  "Hi! I can help with bglocation for Capacitor or React Native. Ask me about features, pricing, licensing, or integration.";
 
 function getTextContent(parts: Array<{ type: string; text?: string }>): string {
   return parts
@@ -36,7 +36,8 @@ export function ChatWidget() {
   const userMessageCount = messages.filter((m) => m.role === "user").length;
   const limitReached = userMessageCount >= MAX_MESSAGES;
   const hasMessages = messages.length > 0;
-  const is429 = error?.message?.includes("429");
+  const errorMessage = error?.message?.toLowerCase() ?? "";
+  const is429 = errorMessage.includes("429") || errorMessage.includes("too many requests");
 
   // Scroll to bottom on new messages
   useEffect(() => {

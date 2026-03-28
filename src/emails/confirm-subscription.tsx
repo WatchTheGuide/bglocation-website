@@ -33,8 +33,8 @@ export function ConfirmSubscriptionEmail({ confirmUrl, unsubUrl }: ConfirmSubscr
             </Link>
           </Section>
           <Text style={text}>
-            You&apos;ll receive updates about new platform support (React Native, Flutter, KMP),
-            plugin releases, and occasional promotions.
+            You&apos;ll receive updates about plugin releases, React Native launch news,
+            upcoming platform support (Flutter, KMP), and occasional promotions.
           </Text>
           <Text style={footer}>
             This link expires in 24 hours. If you didn&apos;t sign up, you can safely ignore this

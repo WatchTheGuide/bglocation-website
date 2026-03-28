@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useFramework } from "@/components/framework/framework-provider";
 import { Button } from "@/components/ui/button";
 
 export function CtaSection() {
+  const { frameworkHref } = useFramework();
+
   return (
     <section className="border-t bg-primary py-24 text-primary-foreground">
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
@@ -14,7 +19,7 @@ export function CtaSection() {
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button
-            render={<Link href="/pricing" />}
+            render={<Link href={frameworkHref("/pricing")} />}
             nativeButton={false}
             size="lg"
             variant="secondary"
@@ -22,7 +27,7 @@ export function CtaSection() {
             View Pricing
           </Button>
           <Button
-            render={<Link href="/docs" />}
+            render={<Link href={frameworkHref("/docs")} />}
             nativeButton={false}
             size="lg"
             variant="outline"

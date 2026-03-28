@@ -4,9 +4,87 @@ import { sendEmail } from "@/lib/email";
 import { generateLicenseKey } from "@/lib/license";
 import { WelcomeEmail } from "@/emails/welcome";
 import { LicenseKeyEmail } from "@/emails/license-key";
-import type { Plan, OrderType } from "@prisma/client";
+import { Prisma, type Plan, type OrderType } from "@prisma/client";
 
 type LemonSqueezyEvent = "order_created";
+const SERIALIZATION_RETRY_LIMIT = 3;
+
+const PLAN_RANK: Record<Plan, number> = {
+  indie: 1,
+  team: 2,
+  factory: 3,
+  enterprise: 4,
+};
+
+/** Return the higher-tier plan so downgrades never happen on repeat purchase. */
+function higherPlan(a: Plan, b: Plan): Plan {
+  return PLAN_RANK[a] >= PLAN_RANK[b] ? a : b;
+}
+
+async function upsertCustomerForOrder(params: {
+  email: string;
+  lsCustomerId: string;
+  variant: {
+    plan: Plan;
+    maxBundleIds: number;
+    orderType: OrderType;
+  };
+}) {
+  const normalizedEmail = params.email.toLowerCase();
+
+  for (let attempt = 0; attempt < SERIALIZATION_RETRY_LIMIT; attempt++) {
+    try {
+      return await prisma.$transaction(
+        async (transaction) => {
+          const existing = await transaction.customer.findUnique({
+            where: { email: normalizedEmail },
+          });
+
+          if (!existing) {
+            return transaction.customer.create({
+              data: {
+                lsCustomerId: params.lsCustomerId,
+                email: normalizedEmail,
+                plan: params.variant.plan,
+                maxBundleIds: params.variant.maxBundleIds,
+              },
+            });
+          }
+
+          return transaction.customer.update({
+            where: { id: existing.id },
+            data: {
+              lsCustomerId: params.lsCustomerId,
+              plan: higherPlan(existing.plan, params.variant.plan),
+              ...(params.variant.orderType === "purchase"
+                ? params.variant.plan === existing.plan
+                  ? { maxBundleIds: { increment: params.variant.maxBundleIds } }
+                  : {
+                      maxBundleIds: Math.max(
+                        existing.maxBundleIds,
+                        params.variant.maxBundleIds,
+                      ),
+                    }
+                : {}),
+            },
+          });
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      );
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        (error.code === "P2034" || error.code === "P2002") &&
+        attempt < SERIALIZATION_RETRY_LIMIT - 1
+      ) {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  throw new Error("Failed to upsert customer after serialization retries");
+}
 
 interface WebhookPayload {
   meta: {
@@ -156,10 +234,16 @@ export async function POST(request: NextRequest) {
 
 async function handleOrderCreated(payload: WebhookPayload) {
   const { attributes } = payload.data;
-  const email = attributes.user_email as string;
-  const lsCustomerId = String(attributes.customer_id);
+  const email = attributes.user_email as string | undefined;
+  const lsCustomerId = attributes.customer_id;
   const lsOrderId = payload.data.id;
   const status = attributes.status as string;
+
+  if (!email || !lsCustomerId) {
+    throw new Error(
+      `[LS Webhook] Missing required fields: email=${!!email}, customerId=${!!lsCustomerId}`,
+    );
+  }
 
   console.log("[LS Webhook] Order created:", {
     orderId: lsOrderId,
@@ -186,20 +270,10 @@ async function handleOrderCreated(payload: WebhookPayload) {
     return;
   }
 
-  // Upsert customer (handles both new purchase & plan upgrade)
-  const customer = await prisma.customer.upsert({
-    where: { email: email.toLowerCase() },
-    update: {
-      lsCustomerId,
-      plan: variant.plan,
-      maxBundleIds: variant.maxBundleIds,
-    },
-    create: {
-      lsCustomerId,
-      email: email.toLowerCase(),
-      plan: variant.plan,
-      maxBundleIds: variant.maxBundleIds,
-    },
+  const customer = await upsertCustomerForOrder({
+    email,
+    lsCustomerId: String(lsCustomerId),
+    variant,
   });
 
   // Record the order

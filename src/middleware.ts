@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+import { FRAMEWORK_QUERY_PARAM, resolveFrameworkQuery } from '@/lib/framework';
 
 function getSecret(): Uint8Array {
   const secret = process.env.AUTH_SECRET;
@@ -9,6 +9,7 @@ function getSecret(): Uint8Array {
 
 async function verifyToken(token: string, expectedType: string): Promise<boolean> {
   try {
+    const { jwtVerify } = await import('jose');
     const { payload } = await jwtVerify(token, getSecret());
     return payload.type === expectedType;
   } catch {
@@ -59,9 +60,26 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
+  // --- Public pages: forward resolved ?framework= via request header for SSR ---
+  const rawFramework = request.nextUrl.searchParams.get(FRAMEWORK_QUERY_PARAM);
+  const resolvedFramework = resolveFrameworkQuery(rawFramework);
+
+  if (resolvedFramework) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-bgl-framework', resolvedFramework);
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/portal/:path*', '/admin/:path*'],
+  matcher: [
+    '/',
+    '/docs/:path*',
+    '/pricing/:path*',
+    '/about/:path*',
+    '/portal/:path*',
+    '/admin/:path*',
+  ],
 };

@@ -19,12 +19,17 @@ const FAQ_ITEMS = [
   {
     question: "Can I use one license for both iOS and Android?",
     answer:
-      "Yes. A single bundle ID license covers both platforms as long as they share the same bundle identifier, which is the standard Capacitor setup.",
+      "Yes. A single bundle ID license covers both platforms as long as they share the same bundle identifier.",
+  },
+  {
+    question: "Does one license cover Capacitor and React Native?",
+    answer:
+      "Yes. The license is enforced by bundle ID, not by the JavaScript wrapper. If the same app identifier is used with the Capacitor and React Native wrappers, the same licensing rules apply.",
   },
   {
     question: "What happens if I need more bundle IDs later?",
     answer:
-      "You can upgrade your plan at any time. Moving from Indie (1 bundle ID) to Team (5) or Factory (20) is a simple plan change — no code modifications required.",
+      "You can add more capacity at any time. Moving from Indie to Team or Factory does not require code changes, and additional purchases increase the number of bundle ID slots available in the portal.",
   },
   {
     question: "What happens after the first year?",

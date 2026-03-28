@@ -1,21 +1,25 @@
+"use client";
+
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { useFramework } from "@/components/framework/framework-provider";
+import { SiteLogo } from "@/components/layout/site-logo";
 import { Separator } from "@/components/ui/separator";
 
 const GITLAB_URL = "https://gitlab.com/szymonwalczak/capacitor-background-location";
 
 export function Footer() {
+  const { frameworkHref } = useFramework();
+
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Link href="/" className="flex items-center gap-2 font-semibold">
-              <MapPin className="h-5 w-5 text-primary" />
-              <span>bglocation</span>
+            <Link href={frameworkHref("/")} className="inline-flex">
+              <SiteLogo iconClassName="h-7" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
-              Production-ready background location tracking for mobile apps.
+              Production-ready background location SDK for Capacitor and React Native apps.
             </p>
           </div>
 
@@ -23,17 +27,17 @@ export function Footer() {
             <h3 className="mb-3 text-sm font-semibold">Product</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/#features" className="hover:text-foreground">
+                <Link href={frameworkHref("/#features")} className="hover:text-foreground">
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="hover:text-foreground">
+                <Link href={frameworkHref("/pricing")} className="hover:text-foreground">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="/portal" className="hover:text-foreground">
+                <Link href={frameworkHref("/portal")} className="hover:text-foreground">
                   License Portal
                 </Link>
               </li>
@@ -64,17 +68,17 @@ export function Footer() {
             <h3 className="mb-3 text-sm font-semibold">Documentation</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/docs" className="hover:text-foreground">
+                <Link href={frameworkHref("/docs")} className="hover:text-foreground">
                   Getting Started
                 </Link>
               </li>
               <li>
-                <Link href="/docs#api-reference" className="hover:text-foreground">
+                <Link href={frameworkHref("/docs#api-reference")} className="hover:text-foreground">
                   API Reference
                 </Link>
               </li>
               <li>
-                <Link href="/docs#platform-guides" className="hover:text-foreground">
+                <Link href={frameworkHref("/docs#platform-guides")} className="hover:text-foreground">
                   Platform Guides
                 </Link>
               </li>
@@ -85,22 +89,22 @@ export function Footer() {
             <h3 className="mb-3 text-sm font-semibold">Company</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="/about" className="hover:text-foreground">
+                <Link href={frameworkHref("/about")} className="hover:text-foreground">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/docs#licensing" className="hover:text-foreground">
+                <Link href={frameworkHref("/docs#licensing")} className="hover:text-foreground">
                   License (ELv2)
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-foreground">
+                <Link href={frameworkHref("/privacy")} className="hover:text-foreground">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-foreground">
+                <Link href={frameworkHref("/terms")} className="hover:text-foreground">
                   Terms of Service
                 </Link>
               </li>
@@ -114,7 +118,7 @@ export function Footer() {
           <p className="text-center text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Szymon Walczak. All rights reserved.
             Licensed under{" "}
-            <Link href="/docs#licensing" className="underline hover:text-foreground">
+            <Link href={frameworkHref("/docs#licensing")} className="underline hover:text-foreground">
               Elastic License v2
             </Link>
             .

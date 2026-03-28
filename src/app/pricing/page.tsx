@@ -5,7 +5,7 @@ import { PricingFaq } from "@/components/pricing/pricing-faq";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple pricing for bglocation. Perpetual license — buy once, use forever. 1 year of updates included. From $149.",
+    "Simple pricing for bglocation. One perpetual license model for Capacitor and React Native, with 1 year of updates included. From $149.",
 };
 
 export default function PricingPage() {
@@ -17,7 +17,7 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Install and evaluate with trial mode — 30 min sessions, all features included.{" "}
+            Install and evaluate with trial mode — 30 min sessions, all features included across Capacitor and React Native wrappers.{" "}
             <strong>No license key needed</strong> to start.
             Buy a license when you&apos;re ready for production.
           </p>

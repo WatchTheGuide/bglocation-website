@@ -1,137 +1,111 @@
 # Strony — bglocation-website
 
-## Routing (App Router)
+Opis routingu App Router, sekcji publicznych oraz endpointów API wykorzystywanych przez website, portal, admin i aplikacje testowe.
+
+## Routing publiczny
 
 | Ścieżka | Plik | Opis |
-|----------|------|------|
-| `/` | `src/app/page.tsx` | Landing page — główna strona marketingowa |
-| `/about` | `src/app/about/page.tsx` | Strona o twórcy (profil, certyfikaty, kontakt) |
-| `/docs` | `src/app/docs/page.tsx` | Strona dokumentacji pluginu |
-| `/pricing` | `src/app/pricing/page.tsx` | Strona cenowa z planami subskrypcji |
+|---------|------|------|
+| `/` | `src/app/page.tsx` | Landing page produktu |
+| `/about` | `src/app/about/page.tsx` | Strona o twórcy i tle projektu |
+| `/docs` | `src/app/docs/page.tsx` | Publiczna dokumentacja SDK |
+| `/pricing` | `src/app/pricing/page.tsx` | Cennik i FAQ |
+| `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności |
+| `/terms` | `src/app/terms/page.tsx` | Regulamin licencyjny |
+| `/newsletter/confirm` | `src/app/newsletter/confirm/page.tsx` | Potwierdzenie subskrypcji newslettera |
+| `/newsletter/unsubscribe` | `src/app/newsletter/unsubscribe/page.tsx` | Wypisanie z newslettera |
+
+## Portal klienta i panel admina
+
+| Ścieżka | Plik | Opis |
+|---------|------|------|
+| `/portal` | `src/app/portal/page.tsx` | Dashboard klienta z licencjami i kluczami |
 | `/portal/login` | `src/app/portal/login/page.tsx` | Formularz logowania magic link |
-| `/portal/verify` | `src/app/portal/verify/page.tsx` | Weryfikacja tokenu magic link |
-| `/portal` | `src/app/portal/page.tsx` | Dashboard — licencje i generowanie kluczy |
-| `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności (GDPR Art. 13) |
-| `/terms` | `src/app/terms/page.tsx` | Regulamin usługi (perpetual license) |
-| `/api/webhooks/lemon-squeezy` | `src/app/api/webhooks/lemon-squeezy/route.ts` | Webhook handler Lemon Squeezy (dynamic) |
-| `/api/newsletter/subscribe` | `src/app/api/newsletter/subscribe/route.ts` | Zapis na newsletter (POST) — honeypot, rate limit, double opt-in |
-| `/api/newsletter/confirm` | `src/app/api/newsletter/confirm/route.ts` | Potwierdzenie subskrypcji (POST) — token + expiry check |
-| `/api/newsletter/unsubscribe` | `src/app/api/newsletter/unsubscribe/route.ts` | Wypisanie z newslettera (POST) — token bez expiry, RFC 8058 |
-| `/api/admin/subscribers/[id]` | `src/app/api/admin/subscribers/[id]/route.ts` | Usunięcie subskrybenta (DELETE) — GDPR Art. 17 |
-| `/newsletter/confirm` | `src/app/newsletter/confirm/page.tsx` | Potwierdzenie subskrypcji (Suspense wrapper + client content) |
-| `/newsletter/unsubscribe` | `src/app/newsletter/unsubscribe/page.tsx` | Wypisanie z newslettera (Suspense wrapper + client content) |
-| `/admin/subscribers` | `src/app/admin/subscribers/page.tsx` | Admin — lista subskrybentów z filtrami i usuwaniem |
+| `/portal/verify` | `src/app/portal/verify/route.ts` | Weryfikacja tokenu logowania klienta |
+| `/admin` | `src/app/admin/page.tsx` | Dashboard administracyjny |
+| `/admin/login` | `src/app/admin/login/page.tsx` | Formularz logowania admina |
+| `/admin/verify` | `src/app/admin/verify/route.ts` | Weryfikacja tokenu logowania admina |
+| `/admin/customers` | `src/app/admin/customers/page.tsx` | Lista klientów |
+| `/admin/customers/[id]` | `src/app/admin/customers/[id]/page.tsx` | Szczegóły klienta i licencji |
+| `/admin/subscribers` | `src/app/admin/subscribers/page.tsx` | Lista subskrybentów newslettera |
 
-## Layout
+## Endpointy API
 
-- `src/app/layout.tsx` — Root layout (AnnouncementBanner + header + footer + children + Lemon Squeezy script)
-- `src/components/layout/header.tsx` — Nagłówek z nawigacją (Features, Pricing, Docs, About) + CTA "Get License"
-- `src/components/layout/footer.tsx` — Stopka z linkami
+| Ścieżka | Plik | Opis |
+|---------|------|------|
+| `/api/chat` | `src/app/api/chat/route.ts` | Endpoint AI chat widgetu |
+| `/api/dev/login` | `src/app/api/dev/login/route.ts` | Dev-only login do portalu klienta |
+| `/api/dev/admin-login` | `src/app/api/dev/admin-login/route.ts` | Dev-only login do panelu admina |
+| `/api/http-test` | `src/app/api/http-test/route.ts` | Debug endpoint do testowania requestów HTTP z aplikacji testowych |
+| `/api/newsletter/subscribe` | `src/app/api/newsletter/subscribe/route.ts` | Zapis na newsletter |
+| `/api/newsletter/confirm` | `src/app/api/newsletter/confirm/route.ts` | Potwierdzenie subskrypcji |
+| `/api/newsletter/unsubscribe` | `src/app/api/newsletter/unsubscribe/route.ts` | Wypisanie z newslettera |
+| `/api/admin/subscribers/[id]` | `src/app/api/admin/subscribers/[id]/route.ts` | Usuwanie subskrybenta przez admina |
+| `/api/webhooks/lemon-squeezy` | `src/app/api/webhooks/lemon-squeezy/route.ts` | Webhook zakupowy Lemon Squeezy |
+
+## Routing framework-aware
+
+Publiczne strony `/`, `/docs`, `/pricing` i `/about` wspierają query param `?framework=`.
+
+- Wspierane wartości: `capacitor`, `react-native`
+- Source of truth znajduje się w URL, nie w local state ani localStorage
+- Przełącznik zachowuje aktualną ścieżkę i anchor przy zmianie frameworka
+- Niepoprawne lub ucięte wartości są normalizowane do wspieranej formy kanonicznej
+
+Za tę warstwę odpowiadają `src/components/framework/framework-provider.tsx`, `src/components/framework/framework-switcher.tsx` oraz `src/lib/framework.ts`.
+
+## Layout globalny
+
+- `src/app/layout.tsx` — root layout z `FrameworkProvider`, `AnnouncementBanner`, `Header`, `Footer`, `ChatWidget` i metadata icons ustawionymi na `public/bglocation-icon.svg`
+- `src/components/layout/header.tsx` — nawigacja publiczna, `FrameworkSwitcher`, CTA i menu mobilne
+- `src/components/layout/footer.tsx` — linki produktowe, dokumentacyjne i firmowe
+- `src/app/admin/admin-shell.tsx` — layout panelu admina z sidebar navigation i wspólnym logo
 
 ## Landing Page (`/`)
 
-Sekcje (w kolejności od góry):
+Sekcje renderowane kolejno od góry:
 
 | Sekcja | Komponent | Opis |
 |--------|-----------|------|
-| Announcement Banner | `announcement-banner.tsx` | Banner "Coming soon" (globalny — w layout, nie w page) |
-| Hero | `hero.tsx` | Nagłówek, opis produktu, CTA buttons, badge Capacitor 8 |
-| Trust Bar | `trust-bar.tsx` | Statystyki zaufania (unit testy, platformy, itp.) |
-| Features | `features.tsx` | Grid z kluczowymi możliwościami pluginu |
-| Code Example | `code-example.tsx` | Przykład kodu integracji |
-| Comparison | `comparison.tsx` | Porównanie z konkurencją (3 kolumny) |
-| Newsletter CTA | `newsletter-cta.tsx` | Sekcja "Get notified" — email + platforma + consent |
-| CTA Section | `cta-section.tsx` | Call-to-action z przyciskami |
+| Announcement Banner | `announcement-banner.tsx` | Globalny banner renderowany w layoucie |
+| Hero | `hero.tsx` | Główny komunikat produktu, CTA, wyróżnienie frameworka |
+| Trust Bar | `trust-bar.tsx` | Liczby, sygnały zaufania i stabilności |
+| Features | `features.tsx` | Zestaw kluczowych możliwości SDK |
+| Code Example | `code-example.tsx` | Fragment integracji w kodzie |
+| Comparison | `comparison.tsx` | Porównanie z alternatywami |
+| CTA Section | `cta-section.tsx` | Końcowe CTA do pricing/docs |
 
 ## Docs Page (`/docs`)
 
-Pełna strona dokumentacji pluginu. Na górze grid kart z anchor linkami do sekcji, poniżej 6 rozbudowanych sekcji oddzielonych separatorami.
-
-### Karty nawigacyjne
-
-Grid 6 kart z ikonami i opisami — każda prowadzi do odpowiedniej sekcji via `#anchor`:
-
-| Karta | Anchor | Opis |
-|-------|--------|------|
-| Getting Started | `#getting-started` | Instalacja i szybki start |
-| Configuration | `#configuration` | Opcje configure(), HTTP, adaptive filter |
-| API Reference | `#api-reference` | Metody, eventy, interfejsy |
-| Platform Guides | `#platform-guides` | Konfiguracja iOS i Android |
-| Licensing | `#licensing` | Trial mode, klucz licencyjny, RSA |
-| Examples | `#examples` | Wzorce integracji (fleet, fitness, geofencing) |
-
-### Sekcje dokumentacji
+Strona dokumentacji z anchor navigation i sekcjami opisującymi instalację, konfigurację, API, platformy, licencjonowanie i przykłady.
 
 | Sekcja | Komponent | Opis |
 |--------|-----------|------|
-| Getting Started | `docs/getting-started.tsx` | 3 kroki: Install → Configure & Start → Stop |
-| Configuration | `docs/configuration.tsx` | Tabela opcji, HTTP posting, adaptive filter, Android notification |
-| API Reference | `docs/api-reference.tsx` | 10 metod, 11 eventów, Location interface, Geofencing API |
-| Platform Guides | `docs/platform-guides.tsx` | iOS (Info.plist, Background Modes, SLC) + Android (permissions, Foreground Service, battery) |
-| Licensing | `docs/licensing.tsx` | Trial mode (30 min + 1h cooldown), klucz w capacitor.config.ts, RSA-2048 |
-| Examples | `docs/examples.tsx` | Fleet/Delivery, Fitness/Running, Geofencing POI |
-
-## About Page (`/about`)
-
-Strona profilu twórcy — wymagana przez platformy płatności (Stripe/LS) do spełnienia KYC/compliance.
-
-| Sekcja | Opis |
-|--------|------|
-| Header | Tytuł "About" + podtytuł (centered, max-w-6xl — unifikacja z docs/pricing) |
-| Intro | Imię, PMP, PhD, motywacja |
-| Background | 3 karty: GuideTrackee (co-founder), Spry Framework (internal framework), Academic (PhD Math) |
-| Technical Expertise | 9 badges technologicznych |
-| Certifications | PMP #2115680, Apollo Graph Developer Professional |
-| Contact | Kraków, email, LinkedIn |
-
-**Komponent:** `src/components/about/about-section.tsx`
+| Intro | `docs/docs-intro.tsx` | Wprowadzenie do SDK i nawigacja po sekcjach |
+| Getting Started | `docs/getting-started-section.tsx` | Instalacja i pierwszy start |
+| Configuration | `docs/configuration-section.tsx` | `configure()`, HTTP posting, adaptive filter |
+| API Reference | `docs/api-reference-section.tsx` | Metody, eventy, `Location`, geofencing |
+| Platform Guides | `docs/platform-guides-section.tsx` | Konfiguracja iOS i Android |
+| Licensing | `docs/licensing-section.tsx` | Trial mode i klucz licencyjny |
+| Examples | `docs/examples-section.tsx` | Przykłady wdrożeń |
 
 ## Pricing Page (`/pricing`)
 
 | Sekcja | Komponent | Opis |
 |--------|-----------|------|
-| Header | (inline) | Tytuł + komunikat "no license key needed" |
-| Pricing Cards | `pricing-cards.tsx` | Plany: Indie, Team, Enterprise |
-| FAQ | `pricing-faq.tsx` | Często zadawane pytania (accordion) |
+| Header | inline | Tytuł strony i komunikat o modelu licencji |
+| Pricing Cards | `pricing-cards.tsx` | Karty planów i CTA zakupowe |
+| FAQ | `pricing-faq.tsx` | Często zadawane pytania |
 
-### Plany cenowe
+## About Page (`/about`)
 
-| Plan | Cena | Audience |
-|------|------|----------|
-| **Indie** | Niższa cena | Solo developers |
-| **Team** | Średnia cena | Małe zespoły |
-| **Enterprise** | Kontakt | Duże organizacje |
+Strona prezentująca twórcę, doświadczenie techniczne, certyfikaty i kontakt, używana również jako warstwa zaufania dla procesów sprzedażowych.
 
-## Privacy Policy (`/privacy`)
+## HTTP Test Endpoint (`/api/http-test`)
 
-Polityka prywatności zgodna z GDPR Art. 13 — 9 sekcji:
+Endpoint debugowy przyjmuje `GET`, `POST` i `OPTIONS`.
 
-| Sekcja | Opis |
-|--------|------|
-| Data Controller | Szymon Walczak, Kraków |
-| What We Sell | Software product, perpetual licenses |
-| What Data We Collect | Purchase data (via LS), newsletter (consent + IP), portal (magic link), AI chat (via OpenAI) |
-| Data Retention | Pending 7d, unsubscribed 30d, active until unsub, customer per regulations |
-| Third-Party Processors | Lemon Squeezy, Resend, Vercel, OpenAI, Neon — tabela z lokalizacjami |
-| Your Rights | GDPR Art. 15-21, prawo do wycofania zgody |
-| Cookies | Tylko essential (session, admin session) |
-| Changes | Powiadomienie subskrybentów newslettera |
-| Contact | hello@bglocation.dev |
-
-## Terms of Service (`/terms`)
-
-Regulamin usługi — 13 sekcji dotyczących sprzedaży pluginu (software product, nie SaaS):
-
-| Sekcja | Opis |
-|--------|------|
-| Overview | Software product, nie SaaS |
-| License | ELv2, perpetual, tiers: Indie (1 app), Team (5), Factory (20), Enterprise (unlimited) |
-| Purchase | Lemon Squeezy MoR, ceny netto |
-| Refund Policy | Brak automatycznych refundów, case-by-case |
-| Trial Mode | 30 min + 1h cooldown |
-| IP | Własność intelektualna Szymon Walczak |
-| Your Data | Plugin nie przetwarza danych lokalizacyjnych end-userów |
-| Support | hello@bglocation.dev, best-effort |
-| Disclaimer | As is |
-| Liability | Max = kwota licencji |
-| Governing Law | Polska / Kraków |
+- `GET` zwraca przykładowe payloady i opis przeznaczenia endpointu
+- `POST` loguje body requestu, typ payloadu, liczbę lokalizacji oraz status potwierdzenia odbioru
+- Obsługiwane są zarówno payloady z pojedynczym `location`, jak i z `locations[]`
+- CORS jest konfigurowalny: w produkcji domyślnie brak `Access-Control-Allow-Origin`, chyba że ustawiono `NEXT_PUBLIC_HTTP_TEST_ALLOWED_ORIGIN` (konkretny origin), a endpoint może opcjonalnie wymagać `HTTP_TEST_SECRET`

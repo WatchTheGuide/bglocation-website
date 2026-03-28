@@ -1,6 +1,6 @@
 # bglocation-website
 
-Marketing website, documentation, customer portal, and admin panel for [capacitor-bglocation](https://github.com/WatchTheGuide/bglocation-website) — a production-ready background location tracking plugin for Capacitor 8.
+Marketing website, framework-aware documentation, pricing, newsletter flows, customer portal, admin panel, and debug utilities for `bglocation` — a production-ready background location SDK for Capacitor and React Native.
 
 ## Tech Stack
 
@@ -14,31 +14,71 @@ Marketing website, documentation, customer portal, and admin panel for [capacito
 | E2E Tests | Playwright |
 | Linting | ESLint 9 |
 
+## What This App Includes
+
+- Public marketing pages: landing, docs, pricing, about, privacy, and terms
+- Framework-aware navigation driven by `?framework=capacitor|react-native`
+- Customer portal with magic-link authentication and license management
+- Admin panel for customers and newsletter subscribers
+- Newsletter subscribe / confirm / unsubscribe flows
+- AI chat widget backed by `/api/chat`
+- Debug HTTP endpoint at `/api/http-test` for location payload testing from mobile test apps or ngrok
+
 ## Project Structure
 
 ```
-src/
-├── app/
-│   ├── page.tsx              # Landing page
-│   ├── about/                # About page
-│   ├── docs/                 # Documentation page
-│   ├── pricing/              # Pricing page
-│   ├── portal/               # Customer portal (login, verify, dashboard)
-│   ├── admin/                # Admin panel (login, verify, dashboard, customers)
-│   └── api/
-│       ├── dev/              # Dev-only auth endpoints
-│       └── webhooks/         # Lemon Squeezy webhooks
-├── components/
-│   ├── ui/                   # Shadcn UI components
-│   ├── landing/              # Landing page sections
-│   ├── pricing/              # Pricing components
-│   └── layout/               # Header, footer
-├── emails/                   # React Email templates
-├── lib/
-│   ├── auth.ts               # JWT auth (portal + admin)
-│   └── db.ts                 # Prisma client
-└── middleware.ts              # Auth middleware (portal + admin routes)
+bglocation-website/
+├── public/
+│   └── bglocation-icon.svg   # Shared site logo and browser icon
+└── src/
+	├── app/
+	│   ├── page.tsx          # Landing page
+	│   ├── about/            # About page
+	│   ├── admin/            # Admin panel (login, verify, dashboard, customers, subscribers)
+	│   ├── api/
+	│   │   ├── admin/        # Admin API routes
+	│   │   ├── chat/         # AI chat endpoint
+	│   │   ├── dev/          # Dev-only auth endpoints
+	│   │   ├── http-test/    # Debug endpoint for test-app HTTP payloads
+	│   │   ├── newsletter/   # Newsletter subscribe / confirm / unsubscribe
+	│   │   └── webhooks/     # Lemon Squeezy webhooks
+	│   ├── docs/             # Documentation page
+	│   ├── newsletter/       # Confirmation / unsubscribe pages
+	│   ├── portal/           # Customer portal (login, verify, dashboard)
+	│   ├── pricing/          # Pricing page
+	│   ├── privacy/          # Privacy policy
+	│   └── terms/            # Terms of service
+	├── components/
+	│   ├── about/            # About page components
+	│   ├── chat/             # Chat widget + quick replies
+	│   ├── docs/             # Documentation sections
+	│   ├── framework/        # Framework provider + switcher
+	│   ├── landing/          # Landing page sections
+	│   ├── layout/           # Header, footer, shared site logo
+	│   ├── pricing/          # Pricing components
+	│   └── ui/               # Base UI components
+	├── emails/               # React Email templates
+	├── generated/            # Prisma client output
+	├── lib/
+	│   ├── auth.ts           # JWT auth helpers
+	│   ├── chat/             # AI chat prompt / formatting helpers
+	│   ├── db.ts             # Prisma client
+	│   ├── email.ts          # Resend helpers
+	│   ├── framework.ts      # Framework option metadata + URL normalization
+	│   ├── license.ts        # License formatting / helpers
+	│   ├── newsletter/       # Newsletter service helpers
+	│   └── utils.ts          # cn() and utility helpers
+	└── middleware.ts         # Auth middleware for portal/admin
 ```
+
+## Framework-Aware Navigation
+
+The public site supports two framework modes:
+
+- `capacitor`
+- `react-native`
+
+The active framework is stored in the `framework` query parameter and propagated across internal navigation. The website normalizes malformed, partial, or unknown values to a supported canonical value, so links, docs, pricing, and CTAs stay consistent after refreshes and direct deep links.
 
 ## Prerequisites
 
@@ -85,7 +125,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Dev Login Endpoints
+## Debug and Dev Endpoints
 
 In development, magic link emails are bypassed with direct login endpoints:
 
@@ -94,7 +134,29 @@ In development, magic link emails are bypassed with direct login endpoints:
 | `GET /api/dev/login?email=test@bglocation.dev` | Log in to **Customer Portal** as the test customer |
 | `GET /api/dev/admin-login?email=admin@bglocation.dev` | Log in to **Admin Panel** as the test admin |
 
-These endpoints set session cookies and redirect to the portal/admin dashboard. They are available only when `NODE_ENV !== 'production'`.
+For HTTP request debugging from mobile test apps or ngrok, the website also exposes:
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/http-test` | Returns the expected payload shapes and endpoint purpose |
+| `POST /api/http-test` | Logs the request body, payload shape, location count, and acknowledgement status |
+
+Example request:
+
+```bash
+curl -X POST http://localhost:3000/api/http-test \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"location": {
+			"latitude": 52.2297,
+			"longitude": 21.0122,
+			"accuracy": 5,
+			"timestamp": 1700000000000
+		}
+	}'
+```
+
+The dev login endpoints set session cookies and redirect to the portal/admin dashboard. They are available only when `NODE_ENV !== 'production'`.
 
 **Seeded test accounts:**
 
@@ -133,7 +195,9 @@ Test specs:
 | `e2e/pricing.spec.ts` | Pricing cards, FAQ, SEO |
 | `e2e/docs.spec.ts` | Documentation page |
 | `e2e/about.spec.ts` | About page |
-| `e2e/navigation.spec.ts` | Header, footer, mobile menu |
+| `e2e/navigation.spec.ts` | Header, footer, mobile menu, framework switcher, query canonicalization |
+| `e2e/newsletter.spec.ts` | Newsletter forms and confirmation flows |
+| `e2e/chat.spec.ts` | AI chat widget interactions |
 | `e2e/admin.spec.ts` | Admin panel (auth, dashboard, customers, license management) |
 | `e2e/portal.spec.ts` | Customer portal (auth, verify, dashboard, license keys) |
 
