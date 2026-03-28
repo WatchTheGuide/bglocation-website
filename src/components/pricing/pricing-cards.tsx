@@ -14,9 +14,7 @@ import { Separator } from "@/components/ui/separator";
 
 function checkoutUrl(envUrl: string | undefined): string | null {
   if (!envUrl) return null;
-  const url = new URL(envUrl);
-  url.searchParams.set("embed", "1");
-  return url.toString();
+  return envUrl;
 }
 
 const INDIE_CHECKOUT_URL = checkoutUrl(
