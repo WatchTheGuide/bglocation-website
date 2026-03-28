@@ -75,8 +75,11 @@ test.describe('Pricing Page', () => {
       const buyButtons = page.getByRole('button', { name: /Buy License/i });
 
       await expect(buyButtons.first()).toBeVisible();
+      await expect(buyButtons.first()).toBeEnabled();
       await expect(buyButtons.nth(1)).toBeVisible();
+      await expect(buyButtons.nth(1)).toBeEnabled();
       await expect(buyButtons.last()).toBeVisible();
+      await expect(buyButtons.last()).toBeEnabled();
     });
 
     test('should display Contact Us button for Enterprise', async ({ page }) => {
