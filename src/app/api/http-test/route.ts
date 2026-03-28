@@ -141,29 +141,20 @@ export async function GET() {
     endpoint: '/api/http-test',
     method: 'POST',
     purpose: 'Debug endpoint for background location HTTP requests from test apps.',
-    expectedPayloads: [
-      {
-        location: {
-          latitude: 52.2297,
-          longitude: 21.0122,
-          accuracy: 5,
-          speed: 1.2,
-          heading: 180,
-          altitude: 110.5,
-          timestamp: 1700000000000,
-          isMoving: true,
-        },
+    note: 'Each location is sent as an individual POST — including buffered locations during flush. Expect rapid sequential requests when the offline buffer flushes (up to 50 per batch).',
+    expectedPayload: {
+      location: {
+        latitude: 52.2297,
+        longitude: 21.0122,
+        accuracy: 5,
+        speed: 1.2,
+        heading: 180,
+        altitude: 110.5,
+        timestamp: 1700000000000,
+        isMoving: true,
+        isMock: false,
       },
-      {
-        locations: [
-          {
-            latitude: 52.2297,
-            longitude: 21.0122,
-            timestamp: 1700000000000,
-          },
-        ],
-      },
-    ],
+    },
   });
 }
 

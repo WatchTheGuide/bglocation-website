@@ -1,4 +1,4 @@
-const MAX_REQUESTS = 60;
+const MAX_REQUESTS = 300;
 const WINDOW_MS = 60 * 1000; // 1 minute
 const CLEANUP_INTERVAL_MS = 60 * 1000; // 1 minute
 
