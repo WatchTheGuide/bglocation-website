@@ -1,16 +1,16 @@
 # Dokumentacja — bglocation-website
 
-Strona marketingowa / dokumentacja / pricing dla pluginu `capacitor-bglocation`.
+Strona marketingowa, dokumentacja framework-aware, pricing, newsletter, portal klienta, panel admina i endpointy pomocnicze dla `bglocation`.
 
 ## Spis treści
 
 | Dokument | Opis |
 |----------|------|
-| [Structure.md](Structure.md) | Pełna struktura projektu — katalogi, pliki, zależności |
-| [Pages.md](Pages.md) | Opis stron (Landing, Docs, Pricing, About) i ich komponentów |
-| [Components.md](Components.md) | Mapa komponentów — UI, landing, about, pricing, layout |
-| [Testing.md](Testing.md) | Strategia testowania E2E (Playwright) |
-| [Portal.md](Portal.md) | License Portal — architektura, uruchomienie lokalne, dev login |
+| [Structure.md](Structure.md) | Aktualna struktura projektu — App Router, API routes, komponenty, `lib/`, assety |
+| [Pages.md](Pages.md) | Opis stron publicznych, portalu, admina oraz endpointów API i routingu `?framework=` |
+| [Components.md](Components.md) | Mapa komponentów — framework switcher, chat, layout, landing, pricing, admin |
+| [Testing.md](Testing.md) | Strategia testowania E2E, coverage nawigacji i scenariusze framework-aware |
+| [Portal.md](Portal.md) | Portal klienta — auth, dashboard, magic link, uruchomienie lokalne |
 
 ## Stack technologiczny
 

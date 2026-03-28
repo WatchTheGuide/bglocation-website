@@ -1,75 +1,83 @@
 # Struktura projektu — bglocation-website
 
+Aktualna mapa katalogów dla strony publicznej, portalu, panelu admina, endpointów API i warstwy framework-aware.
+
 ## Drzewo plików
 
 ```
 bglocation-website/
-├── package.json              # Zależności i skrypty
-├── next.config.ts            # Konfiguracja Next.js
-├── tsconfig.json             # TypeScript (strict, ES2017, alias @/*)
-├── postcss.config.mjs        # Tailwind PostCSS
-├── eslint.config.mjs         # ESLint 9
-├── components.json           # Konfiguracja Shadcn UI
-├── playwright.config.ts      # Konfiguracja Playwright E2E
-├── public/                   # Pliki statyczne
-├── e2e/                      # Testy E2E
-│   ├── fixtures/             # Fixtures Playwright
-│   ├── landing.spec.ts       # Testy landing page
-│   ├── docs.spec.ts          # Testy docs page
-│   ├── pricing.spec.ts       # Testy pricing page
-│   └── navigation.spec.ts   # Testy nawigacji cross-page
+├── package.json                 # Zależności i skrypty
+├── next.config.ts               # Konfiguracja Next.js
+├── tsconfig.json                # TypeScript + alias @/*
+├── postcss.config.mjs           # Tailwind PostCSS
+├── eslint.config.mjs            # ESLint 9
+├── components.json              # Konfiguracja Shadcn UI
+├── playwright.config.ts         # Konfiguracja Playwright E2E
+├── prisma/                      # Schema, migracje, seed
+├── public/
+│   └── bglocation-icon.svg      # Główne logo / ikona przeglądarki
+├── e2e/
+│   ├── fixtures/                # Shared helpers i ROUTES
+│   ├── about.spec.ts            # Testy About
+│   ├── admin.spec.ts            # Testy panelu admina
+│   ├── chat.spec.ts             # Testy chatu AI
+│   ├── docs.spec.ts             # Testy docs page
+│   ├── landing.spec.ts          # Testy landing page
+│   ├── navigation.spec.ts       # Testy nagłówka, stopki i framework switchera
+│   ├── newsletter.spec.ts       # Testy newslettera
+│   ├── portal.spec.ts           # Testy portalu klienta
+│   └── pricing.spec.ts          # Testy pricing page
 ├── src/
-│   ├── app/                  # Next.js App Router
-│   │   ├── layout.tsx        # Root layout (AnnouncementBanner + Header + Footer + lemon.js)
-│   │   ├── page.tsx          # Landing page (/)
-│   │   ├── globals.css       # Style globalne (Tailwind imports)
-│   │   ├── favicon.ico       # Favicon
-│   │   ├── robots.ts         # SEO — robots.txt
-│   │   ├── sitemap.ts        # SEO — sitemap.xml
+│   ├── app/
+│   │   ├── layout.tsx           # Root layout + metadata icons + FrameworkProvider + ChatWidget
+│   │   ├── page.tsx             # Landing page
+│   │   ├── globals.css          # Style globalne
+│   │   ├── favicon.ico          # Favicon fallback
+│   │   ├── robots.ts            # robots.txt
+│   │   ├── sitemap.ts           # sitemap.xml
 │   │   ├── about/
-│   │   │   └── page.tsx      # Strona o twórcy (/about)
+│   │   ├── admin/
+│   │   │   ├── admin-shell.tsx  # Sidebar/topbar panelu admina
+│   │   │   ├── customers/       # Lista + szczegóły klientów
+│   │   │   ├── login/           # Login admina
+│   │   │   ├── subscribers/     # Lista subskrybentów
+│   │   │   └── verify/          # Weryfikacja tokenu admina
 │   │   ├── api/
-│   │   │   └── webhooks/
-│   │   │       └── lemon-squeezy/
-│   │   │           └── route.ts  # Webhook handler LS (HMAC-SHA256)
+│   │   │   ├── admin/           # Admin API
+│   │   │   ├── chat/            # AI chat endpoint
+│   │   │   ├── dev/             # Dev login endpoints
+│   │   │   ├── http-test/       # Debug endpoint dla payloadów lokalizacji
+│   │   │   ├── newsletter/      # Newsletter API
+│   │   │   └── webhooks/        # Lemon Squeezy webhook
 │   │   ├── docs/
-│   │   │   └── page.tsx      # Strona dokumentacji (/docs)
-│   │   └── pricing/
-│   │       └── page.tsx      # Strona cenowa (/pricing)
+│   │   ├── newsletter/          # Confirm / unsubscribe pages
+│   │   ├── portal/              # Portal klienta
+│   │   ├── pricing/
+│   │   ├── privacy/
+│   │   └── terms/
 │   ├── components/
-│   │   ├── ui/               # Shadcn UI components
-│   │   │   ├── button.tsx
-│   │   │   ├── badge.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── accordion.tsx
-│   │   │   └── separator.tsx
-│   │   ├── landing/          # Komponenty landing page
-│   │   │   ├── announcement-banner.tsx
-│   │   │   ├── hero.tsx
-│   │   │   ├── features.tsx
-│   │   │   ├── comparison.tsx
-│   │   │   ├── trust-bar.tsx
-│   │   │   ├── code-example.tsx
-│   │   │   └── cta-section.tsx
-│   │   ├── about/            # Komponent strony About
-│   │   │   └── about-section.tsx
-│   │   ├── docs/             # Sekcje dokumentacji
-│   │   │   ├── getting-started.tsx
-│   │   │   ├── configuration.tsx
-│   │   │   ├── api-reference.tsx
-│   │   │   ├── platform-guides.tsx
-│   │   │   ├── licensing.tsx
-│   │   │   └── examples.tsx
-│   │   ├── pricing/          # Komponenty pricing page
-│   │   │   ├── pricing-cards.tsx
-│   │   │   └── pricing-faq.tsx
-│   │   └── layout/           # Komponenty layout (header, footer)
-│   │       ├── header.tsx
-│   │       └── footer.tsx
-│   └── lib/
-│       └── utils.ts          # Tailwind merge utility (cn())
-├── playwright-report/        # Raporty Playwright (gitignored)
-└── test-results/             # Wyniki testów (gitignored)
+│   │   ├── about/               # About page sections
+│   │   ├── chat/                # Chat widget + quick replies
+│   │   ├── docs/                # Sekcje strony dokumentacji
+│   │   ├── framework/           # Provider + switcher frameworka
+│   │   ├── landing/             # Sekcje landing page
+│   │   ├── layout/              # Header, footer, site logo
+│   │   ├── pricing/             # Pricing cards + FAQ
+│   │   └── ui/                  # Bazowe komponenty UI
+│   ├── emails/                  # React Email templates
+│   ├── generated/               # Wygenerowany Prisma client
+│   ├── lib/
+│   │   ├── auth.ts              # Auth helpery JWT / sesje
+│   │   ├── chat/                # Helpery promptów i message formatting
+│   │   ├── db.ts                # Prisma client singleton
+│   │   ├── email.ts             # Wysyłka maili
+│   │   ├── framework.ts         # Metadane frameworków + normalizacja query param
+│   │   ├── license.ts           # Helpery licencyjne
+│   │   ├── newsletter/          # Logika newslettera
+│   │   └── utils.ts             # `cn()` i drobne helpery
+│   └── middleware.ts            # Ochrona tras portal/admin
+├── playwright-report/           # Raporty Playwright (gitignored)
+└── test-results/                # Wyniki testów (gitignored)
 ```
 
 ## Zależności produkcyjne
@@ -87,7 +95,17 @@ bglocation-website/
 | `lucide-react` | ^0.577.0 | Icon library |
 | `tw-animate-css` | ^1.4.0 | CSS animations for Tailwind |
 | `@fontsource/ibm-plex-sans` | ^5.2.8 | IBM Plex Sans font |
-| `@fontsource/ibm-plex-mono` | ^5.2.8 | IBM Plex Mono font (code blocks) |
+| `@fontsource/ibm-plex-mono` | ^5.2.7 | IBM Plex Mono font (code blocks) |
+
+## Moduły o największym znaczeniu
+
+| Moduł | Lokalizacja | Rola |
+|-------|-------------|------|
+| Framework routing | `src/components/framework/` + `src/lib/framework.ts` | Framework-aware navigation, canonicalizacja `?framework=` |
+| Branding | `src/components/layout/site-logo.tsx` + `public/bglocation-icon.svg` | Wspólne logo serwisu i ikona metadata |
+| Portal / admin auth | `src/lib/auth.ts`, `src/app/portal/`, `src/app/admin/`, `src/middleware.ts` | Sesje, linki magiczne, ochrona tras |
+| HTTP debug | `src/app/api/http-test/route.ts` | Odbiór i logowanie payloadów lokalizacyjnych z test app |
+| AI chat | `src/app/api/chat/route.ts`, `src/components/chat/`, `src/lib/chat/` | Chat widget i backend odpowiedzi |
 
 ## Zależności deweloperskie
 

@@ -69,15 +69,16 @@ export function NewsletterCta() {
       <div className="mx-auto max-w-2xl px-4 text-center sm:px-6">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
           <Bell className="h-4 w-4" />
-          Coming Soon
+          React Native Is Live
         </div>
 
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Get Notified When Your Platform Drops
+          Follow The Next Wrapper Releases
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          React Native, Flutter, and Kotlin Multiplatform support is on the
-          roadmap. Be the first to know when it&apos;s ready.
+          Capacitor and React Native are supported today. Subscribe for release
+          notes, launch offers, and roadmap updates for Flutter and Kotlin
+          Multiplatform.
         </p>
 
         {status === 'success' ? (

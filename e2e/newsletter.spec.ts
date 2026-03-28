@@ -1,25 +1,25 @@
 import { test, expect, ROUTES } from './fixtures/test';
 
 test.describe('Newsletter', () => {
-  test.describe('Footer Form', () => {
+  test.describe('Landing CTA Section', () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(ROUTES.home);
     });
 
-    test('should display footer newsletter form', async ({ page }) => {
-      const footer = page.locator('footer');
-      await expect(footer.getByText('Stay in the loop')).toBeVisible();
+    test('should display newsletter CTA section', async ({ page }) => {
+      const cta = page.locator('#newsletter-cta');
+      await expect(cta).toBeVisible();
       await expect(
-        footer.getByPlaceholder('you@example.com'),
+        cta.getByRole('heading', {
+          name: /Follow The Next Wrapper Releases/i,
+        }),
       ).toBeVisible();
-      await expect(
-        footer.getByRole('button', { name: /subscribe/i }),
-      ).toBeVisible();
+      await expect(cta.getByText(/React Native Is Live/i)).toBeVisible();
     });
 
     test('should have consent checkbox required', async ({ page }) => {
-      const footer = page.locator('footer');
-      const checkbox = footer.locator('input[type="checkbox"]');
+      const cta = page.locator('#newsletter-cta');
+      const checkbox = cta.locator('input[type="checkbox"]');
       await expect(checkbox).toBeVisible();
       await expect(checkbox).not.toBeChecked();
     });
@@ -27,19 +27,19 @@ test.describe('Newsletter', () => {
     test('should disable subscribe button when consent unchecked', async ({
       page,
     }) => {
-      const footer = page.locator('footer');
+      const cta = page.locator('#newsletter-cta');
       await expect(
-        footer.getByRole('button', { name: /subscribe/i }),
+        cta.getByRole('button', { name: /notify me/i }),
       ).toBeDisabled();
     });
 
     test('should enable subscribe button after checking consent', async ({
       page,
     }) => {
-      const footer = page.locator('footer');
-      await footer.locator('input[type="checkbox"]').check();
+      const cta = page.locator('#newsletter-cta');
+      await cta.locator('input[type="checkbox"]').check();
       await expect(
-        footer.getByRole('button', { name: /subscribe/i }),
+        cta.getByRole('button', { name: /notify me/i }),
       ).toBeEnabled();
     });
 
@@ -54,13 +54,13 @@ test.describe('Newsletter', () => {
         }),
       );
 
-      const footer = page.locator('footer');
-      await footer.getByPlaceholder('you@example.com').fill('test@example.com');
-      await footer.locator('input[type="checkbox"]').check();
-      await footer.getByRole('button', { name: /subscribe/i }).click();
+      const cta = page.locator('#newsletter-cta');
+      await cta.getByPlaceholder('you@example.com').fill('test@example.com');
+      await cta.locator('input[type="checkbox"]').check();
+      await cta.getByRole('button', { name: /notify me/i }).click();
 
       await expect(
-        footer.getByText(/check your email to confirm/i),
+        cta.getByText(/check your email to confirm/i),
       ).toBeVisible();
     });
 
@@ -75,38 +75,21 @@ test.describe('Newsletter', () => {
         }),
       );
 
-      const footer = page.locator('footer');
-      await footer.getByPlaceholder('you@example.com').fill('test@example.com');
-      await footer.locator('input[type="checkbox"]').check();
-      await footer.getByRole('button', { name: /subscribe/i }).click();
+      const cta = page.locator('#newsletter-cta');
+      await cta.getByPlaceholder('you@example.com').fill('test@example.com');
+      await cta.locator('input[type="checkbox"]').check();
+      await cta.getByRole('button', { name: /notify me/i }).click();
 
       await expect(
-        footer.getByText(/internal server error/i),
+        cta.getByText(/internal server error/i),
       ).toBeVisible();
     });
 
     test('should have privacy policy link in newsletter form', async ({ page }) => {
-      const form = page.locator('footer form');
+      const form = page.locator('#newsletter-cta form');
       await expect(
         form.getByRole('link', { name: /privacy policy/i }),
       ).toHaveAttribute('href', '/privacy');
-    });
-  });
-
-  test.describe('Landing CTA Section', () => {
-    test.beforeEach(async ({ page }) => {
-      await page.goto(ROUTES.home);
-    });
-
-    test('should display newsletter CTA section', async ({ page }) => {
-      const cta = page.locator('#newsletter-cta');
-      await expect(cta).toBeVisible();
-      await expect(
-        cta.getByRole('heading', {
-          name: /Get Notified When Your Platform Drops/i,
-        }),
-      ).toBeVisible();
-      await expect(cta.getByText(/Coming Soon/i)).toBeVisible();
     });
 
     test('should display platform chips', async ({ page }) => {
@@ -229,22 +212,22 @@ test.describe('Newsletter', () => {
 
       await page.goto(ROUTES.home);
 
-      const footer = page.locator('footer');
-      await footer.getByPlaceholder('you@example.com').fill('bot@spam.com');
-      await footer.locator('input[type="checkbox"]').check();
+      const cta = page.locator('#newsletter-cta');
+      await cta.getByPlaceholder('you@example.com').fill('bot@spam.com');
+      await cta.locator('input[type="checkbox"]').check();
 
       // Fill honeypot via JS (hidden from view)
       await page.evaluate(() => {
         const honeypot = document.querySelector(
-          'footer input[name="website"]',
+          '#newsletter-cta input[name="website"]',
         ) as HTMLInputElement;
         if (honeypot) honeypot.value = 'http://spam.com';
       });
 
-      await footer.getByRole('button', { name: /subscribe/i }).click();
+      await cta.getByRole('button', { name: /notify me/i }).click();
 
       await expect(
-        footer.getByText(/check your email to confirm/i),
+        cta.getByText(/check your email to confirm/i),
       ).toBeVisible();
 
       expect(requestBody).not.toBeNull();

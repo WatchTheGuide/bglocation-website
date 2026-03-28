@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="b" data-name="Warstwa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148.26 175.55">
+  <defs>
+    <style>
+      .d {
+        fill: none;
+        stroke: #d04693;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 14px;
+      }
+    </style>
+  </defs>
+  <g id="c" data-name="Warstwa 1">
+    <g>
+      <path class="d" d="M62.55,141.48c-1.98.51-4.08.08-5.72-1.14-12.53-10.82-49.83-45.84-49.83-79.46C7,31.12,31.12,7,60.88,7s53.88,24.12,53.88,53.88c0,2.83-.26,5.66-.75,8.5"/>
+      <circle class="d" cx="60.88" cy="60.88" r="20.2"/>
+      <g>
+        <path class="d" d="M87.38,121.41v20.2"/>
+        <path class="d" d="M114.32,94.47v74.08"/>
+        <path class="d" d="M141.26,110.68v41.65"/>
+      </g>
+    </g>
+  </g>
+</svg>

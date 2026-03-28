@@ -71,11 +71,15 @@ test.describe('Pricing Page', () => {
       await expect(buyButtons).toHaveCount(3);
     });
 
-    test('should disable Buy License buttons when checkout is not configured', async ({ page }) => {
+    test('should render actionable Buy License triggers for paid plans', async ({ page }) => {
       const buyButtons = page.getByRole('button', { name: /Buy License/i });
-      await expect(buyButtons.first()).toBeDisabled();
-      await expect(buyButtons.nth(1)).toBeDisabled();
-      await expect(buyButtons.last()).toBeDisabled();
+
+      await expect(buyButtons.first()).toBeVisible();
+      await expect(buyButtons.first()).toBeEnabled();
+      await expect(buyButtons.nth(1)).toBeVisible();
+      await expect(buyButtons.nth(1)).toBeEnabled();
+      await expect(buyButtons.last()).toBeVisible();
+      await expect(buyButtons.last()).toBeEnabled();
     });
 
     test('should display Contact Us button for Enterprise', async ({ page }) => {
@@ -94,6 +98,7 @@ test.describe('Pricing Page', () => {
       const commonFeatures = [
         'All plugin features',
         'iOS + Android',
+        'Capacitor + React Native wrappers',
         'Perpetual license',
         '1 year of updates included',
         'Source code access (ELv2)',
@@ -106,7 +111,7 @@ test.describe('Pricing Page', () => {
 
     test('should display license note', async ({ page }) => {
       await expect(
-        page.getByText(/No license key needed to evaluate/i),
+        page.getByText(/No license key needed.*30 min sessions/i),
       ).toBeVisible();
     });
   });
@@ -118,11 +123,12 @@ test.describe('Pricing Page', () => {
       ).toBeVisible();
     });
 
-    test('should display all 9 FAQ questions', async ({ page }) => {
+    test('should display all FAQ questions including cross-framework licensing', async ({ page }) => {
       const questions = [
         'How does trial mode work?',
         'What is a bundle ID and how are licenses bound?',
         'Can I use one license for both iOS and Android?',
+        'Does one license cover Capacitor and React Native?',
         'What happens if I need more bundle IDs later?',
         'What happens after the first year?',
         'What does "Source Available" mean?',
@@ -150,7 +156,7 @@ test.describe('Pricing Page', () => {
 test.describe('Pricing Page — SEO', () => {
   test('should have correct page title', async ({ page }) => {
     await page.goto(ROUTES.pricing);
-    await expect(page).toHaveTitle(/Pricing.*capacitor-bglocation/i);
+    await expect(page).toHaveTitle(/Pricing.*bglocation/i);
   });
 
   test('should have meta description', async ({ page }) => {
@@ -158,7 +164,7 @@ test.describe('Pricing Page — SEO', () => {
     const description = page.locator('meta[name="description"]');
     await expect(description).toHaveAttribute(
       'content',
-      /Simple pricing for capacitor-bglocation/i,
+      /Capacitor and React Native/i,
     );
   });
 });
