@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin } from "lucide-react";
 import { useFramework } from "@/components/framework/framework-provider";
+import { SiteLogo } from "@/components/layout/site-logo";
 import { Separator } from "@/components/ui/separator";
 
 const GITLAB_URL = "https://gitlab.com/szymonwalczak/capacitor-background-location";
@@ -15,9 +15,8 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Link href={frameworkHref("/")} className="flex items-center gap-2 font-semibold">
-              <MapPin className="h-5 w-5 text-primary" />
-              <span>bglocation</span>
+            <Link href={frameworkHref("/")} className="inline-flex">
+              <SiteLogo iconClassName="h-7" />
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
               Production-ready background location SDK for Capacitor and React Native apps.

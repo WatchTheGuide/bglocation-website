@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     default: "bglocation — Background Location SDK",
     template: "%s | bglocation",
   },
+  icons: {
+    icon: [{ url: "/bglocation-icon.svg", type: "image/svg+xml" }],
+    shortcut: "/bglocation-icon.svg",
+  },
   description:
     "Production-ready background location SDK for Capacitor and React Native. Continuous GPS tracking, native HTTP posting, offline buffer, heartbeat timer, and geofencing.",
   keywords: [

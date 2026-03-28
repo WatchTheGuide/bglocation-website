@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { adminLogoutAction } from './actions';
+import { SiteLogo } from '@/components/layout/site-logo';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Users, LogOut, Shield, Mail } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, Mail } from 'lucide-react';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -25,9 +26,8 @@ export function AdminShell({
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 border-r bg-muted/30 px-4 py-6">
-        <div className="mb-8 flex items-center gap-2 px-2">
-          <Shield className="h-5 w-5" />
-          <span className="text-lg font-semibold">BGLocation</span>
+        <div className="mb-8 px-2">
+          <SiteLogo iconClassName="h-7" wordmarkClassName="text-lg font-semibold tracking-tight" />
         </div>
 
         <nav className="space-y-1">

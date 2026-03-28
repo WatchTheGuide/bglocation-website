@@ -1,88 +1,106 @@
 # Komponenty — bglocation-website
 
-## Mapa komponentów
+Mapa najważniejszych komponentów renderowanych w publicznej stronie, dokumentacji, portalu klienta i panelu admina.
 
-### UI Components (`src/components/ui/`)
+## UI Components (`src/components/ui/`)
 
-Bazowe komponenty Shadcn — nie modyfikować bezpośrednio, dodawać nowe przez CLI:
-
-| Komponent | Plik | Opis |
-|-----------|------|------|
-| Button | `button.tsx` | Przycisk z wariantami (default, outline, ghost, link) |
-| Badge | `badge.tsx` | Badge / tag |
-| Card | `card.tsx` | Karta z CardHeader, CardTitle, CardDescription, CardContent, CardFooter |
-| Accordion | `accordion.tsx` | Rozwijane sekcje (FAQ) |
-| Separator | `separator.tsx` | Linia oddzielająca |
-
-### Landing Components (`src/components/landing/`)
+Bazowe komponenty Shadcn / Base UI używane przez sekcje marketingowe i dashboardy.
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Announcement Banner | `announcement-banner.tsx` | Banner "Coming soon" — globalny (renderowany w layout) |
-| Hero | `hero.tsx` | Sekcja hero z tytułem, opisem, CTA, badge |
-| Features | `features.tsx` | Grid z feature cards |
-| Comparison | `comparison.tsx` | Tabela/kolumny porównania z konkurencją |
-| Trust Bar | `trust-bar.tsx` | Pasek ze statystykami |
-| Code Example | `code-example.tsx` | Blok z przykładem kodu |
-| CTA Section | `cta-section.tsx` | Sekcja call-to-action |
-| Newsletter CTA | `newsletter-cta.tsx` | Sekcja "Get notified" na landing page — email + platforma + consent |
+| Button | `button.tsx` | Przycisk z wariantami, wspiera `render={<Link />}` dla linków stylizowanych jak button |
+| Badge | `badge.tsx` | Badge / tag dla statusów i akcentów |
+| Card | `card.tsx` | Zestaw prymitywów kart używany w hero, pricing i dashboardach |
+| Accordion | `accordion.tsx` | FAQ i rozwijane sekcje |
+| Separator | `separator.tsx` | Wizualny separator między sekcjami |
 
-### Newsletter Components (`src/components/newsletter/`)
+## Framework Components (`src/components/framework/`)
 
-| Komponent | Plik | Opis |
-|-----------|------|------|
-| Footer Form | `footer-form.tsx` | Formularz newsletter w footerze — email + consent + honeypot |
-
-### Pricing Components (`src/components/pricing/`)
+Komponenty odpowiedzialne za tryb `capacitor` / `react-native` w UI publicznym.
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Pricing Cards | `pricing-cards.tsx` | Karty planów (Indie, Team, Enterprise) |
-| Pricing FAQ | `pricing-faq.tsx` | FAQ w formie accordion |
+| Framework Provider | `framework-provider.tsx` | Utrzymuje aktywny framework jako source of truth z URL i generuje framework-aware linki |
+| Framework Switcher | `framework-switcher.tsx` | Przełącznik frameworka; renderuje segmented control albo menu zależnie od liczby opcji |
 
-### Docs Components (`src/components/docs/`)
+## Layout Components (`src/components/layout/`)
 
-Sekcje dokumentacji pluginu — renderowane jako bloki na stronie `/docs`:
-
-| Komponent | Plik | Opis |
-|-----------|------|------|
-| Getting Started | `getting-started.tsx` | Instalacja, konfiguracja, start/stop tracking |
-| Configuration | `configuration.tsx` | Opcje configure(), HTTP POST, adaptive distance filter |
-| API Reference | `api-reference.tsx` | Tabele metod i eventów, Location interface, Geofencing API |
-| Platform Guides | `platform-guides.tsx` | Setup iOS (Info.plist, background modes) + Android (permissions, foreground service) |
-| Licensing | `licensing.tsx` | Trial mode, klucz licencyjny, walidacja RSA-2048 |
-| Examples | `examples.tsx` | Wzorce integracji: fleet, fitness, geofencing |
-
-### Layout Components (`src/components/layout/`)
+Wspólne komponenty ramowe używane globalnie.
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Header | `header.tsx` | Nawigacja (Features, Pricing, Docs, About) + CTA button |
-| Footer | `footer.tsx` | Stopka z linkami |
+| Site Logo | `site-logo.tsx` | Wspólny lockup SVG + wordmark, używany w headerze, footerze i panelu admina |
+| Header | `header.tsx` | Główna nawigacja, `FrameworkSwitcher`, CTA i menu mobilne |
+| Footer | `footer.tsx` | Stopka z linkami produktowymi, dokumentacją, firmą i badge npm |
 
-### About Components (`src/components/about/`)
+## Landing Components (`src/components/landing/`)
 
-| Komponent | Plik | Opis |
-|-----------|------|------|
-| About Section | `about-section.tsx` | Profil twórcy: intro, background (3 karty), expertise (9 badges), certyfikaty, kontakt |
-
-### Admin Components (`src/app/admin/`)
+Sekcje landing page renderowane na `/`.
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Subscriber List | `subscribers/subscriber-list.tsx` | Tabela subskrybentów z filtrami (status, platforma), wyszukiwaniem, paginacją i usuwaniem (GDPR Art. 17) |
+| Announcement Banner | `announcement-banner.tsx` | Globalny banner renderowany nad headerem |
+| Hero | `hero.tsx` | Sekcja otwierająca z CTA i komunikatem framework-aware |
+| Features | `features.tsx` | Grid głównych możliwości SDK |
+| Comparison | `comparison.tsx` | Porównanie produktu z alternatywami |
+| Trust Bar | `trust-bar.tsx` | Pasek liczb i sygnałów zaufania |
+| Code Example | `code-example.tsx` | Przykład integracji w kodzie |
+| CTA Section | `cta-section.tsx` | Zamykające CTA do pricing/docs |
+
+## Docs Components (`src/components/docs/`)
+
+Sekcje strony `/docs`, współdzielące treść między frameworkami z wyborem trybu przez query param.
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Getting Started | `getting-started.tsx` | Instalacja, konfiguracja i start trackingu |
+| Configuration | `configuration.tsx` | Opcje `configure()`, HTTP posting, adaptive distance filter |
+| API Reference | `api-reference.tsx` | Metody, eventy, `Location` interface i geofencing |
+| Platform Guides | `platform-guides.tsx` | Wymagania i setup iOS / Android |
+| Licensing | `licensing.tsx` | Trial mode, klucz licencyjny, zasady licencjonowania |
+| Examples | `examples.tsx` | Przykładowe scenariusze integracji |
+
+## Pricing Components (`src/components/pricing/`)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Pricing Cards | `pricing-cards.tsx` | Karty planów i CTA zakupowe |
+| Pricing FAQ | `pricing-faq.tsx` | FAQ cenowe w formie accordion |
+
+## About Components (`src/components/about/`)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| About Section | `about-section.tsx` | Profil twórcy, doświadczenie, certyfikaty i kontakt |
+
+## Chat Components (`src/components/chat/`)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Chat Widget | `chat-widget.tsx` | Osadzony widget AI do pytań o produkt, pricing i docs |
+| Quick Replies | `quick-replies.tsx` | Szybkie podpowiedzi pytań dla widgetu chatu |
+
+## Admin Components (`src/app/admin/`)
+
+W katalogu `src/app/admin/` znajdują się zarówno komponenty routingu App Router, jak i lokalne komponenty dashboardowe.
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Admin Shell | `admin-shell.tsx` | Sidebar i topbar panelu admina z nawigacją i współdzielonym logo |
+| Customer List | `customers/customer-list.tsx` | Lista klientów z filtrowaniem i przejściem do szczegółu |
+| Customer Detail | `customers/[id]/customer-detail.tsx` | Widok szczegółowy klienta i licencji |
+| Subscriber List | `subscribers/subscriber-list.tsx` | Lista subskrybentów newslettera z filtrami i usuwaniem |
+| Login Form | `login/login-form.tsx` | Formularz logowania admina przez magic link |
+
+## Utility
+
+| Moduł | Plik | Opis |
+|-------|------|------|
+| Classname helper | `src/lib/utils.ts` | Eksportuje `cn()` do łączenia klas Tailwind |
+| Framework metadata | `src/lib/framework.ts` | Definicje frameworków, helpery URL i normalizacja `?framework=` |
 
 ## Dodawanie nowych komponentów Shadcn
 
 ```bash
 npx shadcn@latest add [component-name]
-```
-
-## Utility
-
-- `src/lib/utils.ts` — eksportuje `cn()` — helper do łączenia klas Tailwind:
-
-```typescript
-import { cn } from '@/lib/utils';
-// cn('px-4', condition && 'bg-blue-500') → "px-4 bg-blue-500"
 ```
