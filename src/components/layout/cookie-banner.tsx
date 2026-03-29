@@ -42,7 +42,7 @@ function isExpired(value: string | null): boolean {
   if (value === null || value === SERVER_SNAPSHOT) return false;
   const timestamp = Number(value);
   if (Number.isNaN(timestamp) || value === "") return true;
-  return Date.now() - timestamp > CONSENT_TTL_MS;
+  return Date.now() - timestamp >= CONSENT_TTL_MS;
 }
 
 export function CookieBanner() {
@@ -55,18 +55,25 @@ export function CookieBanner() {
     if (storedValue === null || storedValue === SERVER_SNAPSHOT) return;
     const timestamp = Number(storedValue);
     if (Number.isNaN(timestamp)) return;
-    const remaining = CONSENT_TTL_MS - (Date.now() - timestamp);
-    if (remaining <= 0) return;
-    const delay = Math.min(remaining, MAX_TIMEOUT);
-    const timer = setTimeout(() => {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        memoryFallback = null;
+
+    let timerId: ReturnType<typeof setTimeout>;
+
+    function tick() {
+      const remaining = CONSENT_TTL_MS - (Date.now() - timestamp);
+      if (remaining <= 0) {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+        } catch {
+          memoryFallback = null;
+        }
+        emitChange();
+        return;
       }
-      emitChange();
-    }, delay);
-    return () => clearTimeout(timer);
+      timerId = setTimeout(tick, Math.min(remaining, MAX_TIMEOUT));
+    }
+
+    tick();
+    return () => clearTimeout(timerId);
   }, [storedValue]);
 
   function dismiss() {
