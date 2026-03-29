@@ -79,7 +79,7 @@ Nie wszystkie scenariusze można pokryć automatycznie. Manualnie warto sprawdza
 - Hero section — badge frameworka, nagłówek h1, CTA buttons (Get License, Read the Docs), `npm install` snippet
 - Hero nawigacja — Get License → /pricing, Read the Docs → /docs
 - Trust bar — 5 statystyk (300+, 2, 5,000+, 14, <1%)
-- Comparison — nagłówki kolumn (Feature, capacitor-bglocation, @capacitor/geolocation)
+- Comparison — nagłówki kolumn (Feature, @bglocation/capacitor, @capacitor/geolocation)
 - Code example — blok z przykładowym kodem
 - CTA section — heading, dwa CTA buttons
 - SEO — title, meta description

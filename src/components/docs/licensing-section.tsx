@@ -20,7 +20,7 @@ const EXPO_LICENSE_SNIPPET = `{
   "expo": {
     "plugins": [
       [
-        "react-native-bglocation",
+        "@bglocation/react-native",
         {
           "licenseKey": "BGL1-eyJ..."
         }

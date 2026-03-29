@@ -43,7 +43,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://www.npmjs.com/package/capacitor-bglocation"
+                  href="https://www.npmjs.com/package/@bglocation/capacitor"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-foreground"
@@ -53,7 +53,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="https://www.npmjs.com/package/react-native-bglocation"
+                  href="https://www.npmjs.com/package/@bglocation/react-native"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-foreground"
@@ -135,27 +135,27 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-3">
             <a
-              href="https://www.npmjs.com/package/capacitor-bglocation"
+              href="https://www.npmjs.com/package/@bglocation/capacitor"
               target="_blank"
               rel="noopener noreferrer"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://img.shields.io/npm/v/capacitor-bglocation?color=%23c2185b&label=capacitor"
-                alt="capacitor-bglocation npm version"
+                src="https://img.shields.io/npm/v/@bglocation/capacitor?color=%23c2185b&label=capacitor"
+                alt="@bglocation/capacitor npm version"
                 className="h-5"
                 referrerPolicy="no-referrer"
               />
             </a>
             <a
-              href="https://www.npmjs.com/package/react-native-bglocation"
+              href="https://www.npmjs.com/package/@bglocation/react-native"
               target="_blank"
               rel="noopener noreferrer"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://img.shields.io/npm/v/react-native-bglocation?color=%23c2185b&label=react-native"
-                alt="react-native-bglocation npm version"
+                src="https://img.shields.io/npm/v/@bglocation/react-native?color=%23c2185b&label=react-native"
+                alt="@bglocation/react-native npm version"
                 className="h-5"
                 referrerPolicy="no-referrer"
               />

@@ -83,7 +83,7 @@ test.describe('Navigation — Header', () => {
 
     await expect(page).toHaveURL(/\/docs\?framework=react-native/);
     await expect(
-      page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first(),
+      page.locator('code').filter({ hasText: 'npm install @bglocation/react-native' }).first(),
     ).toBeVisible();
   });
 
@@ -100,7 +100,7 @@ test.describe('Navigation — Header', () => {
 
     await expect(page).toHaveURL(/\/\?framework=react-native/);
     await expect(
-      page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first(),
+      page.locator('code').filter({ hasText: 'npm install @bglocation/react-native' }).first(),
     ).toBeVisible();
   });
 
@@ -165,7 +165,7 @@ test.describe('Navigation — Header', () => {
     await page.locator('header').getByRole('link', { name: 'Docs' }).click();
 
     await expect(page).toHaveURL(/\/docs\?framework=react-native/);
-    await expect(page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first()).toBeVisible();
+    await expect(page.locator('code').filter({ hasText: 'npm install @bglocation/react-native' }).first()).toBeVisible();
   });
 });
 
@@ -218,7 +218,7 @@ test.describe('Navigation — Footer', () => {
 
     await expect(page).toHaveURL(/\/docs\?framework=react-native/);
     await expect(
-      page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first(),
+      page.locator('code').filter({ hasText: 'npm install @bglocation/react-native' }).first(),
     ).toBeVisible();
   });
 });

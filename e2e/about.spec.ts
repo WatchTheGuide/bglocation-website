@@ -14,7 +14,7 @@ test.describe('About Page', () => {
 
     test('should display subtitle', async ({ page }) => {
       await expect(
-        page.getByText('The person behind capacitor-bglocation.'),
+        page.getByText('The person behind @bglocation/capacitor.'),
       ).toBeVisible();
     });
   });
@@ -140,7 +140,7 @@ test.describe('About Page', () => {
 test.describe('About Page — SEO', () => {
   test('should have correct page title', async ({ page }) => {
     await page.goto(ROUTES.about);
-    await expect(page).toHaveTitle(/About.*capacitor-bglocation/i);
+    await expect(page).toHaveTitle(/About.*@bglocation/capacitor/i);
   });
 
   test('should have meta description', async ({ page }) => {

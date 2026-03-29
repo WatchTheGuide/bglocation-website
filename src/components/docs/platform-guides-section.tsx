@@ -17,7 +17,7 @@ const EXPO_PLUGIN_SNIPPET = `{
   "expo": {
     "plugins": [
       [
-        "react-native-bglocation",
+        "@bglocation/react-native",
         {
           "licenseKey": "BGL1-eyJ...",
           "locationWhenInUsePermission": "We use your location to track your route.",

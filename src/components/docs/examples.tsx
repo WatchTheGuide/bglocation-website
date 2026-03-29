@@ -16,7 +16,7 @@ export function Examples() {
           for consistent updates regardless of vehicle speed.
         </p>
         <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
-{`import { BackgroundLocation } from 'capacitor-bglocation';
+{`import { BackgroundLocation } from '@bglocation/capacitor';
 
 await BackgroundLocation.configure({
   distanceFilter: 'auto',
@@ -58,8 +58,8 @@ await BackgroundLocation.start();`}
           memory and sync on demand.
         </p>
         <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
-{`import { BackgroundLocation } from 'capacitor-bglocation';
-import type { Location } from 'capacitor-bglocation';
+{`import { BackgroundLocation } from '@bglocation/capacitor';
+import type { Location } from '@bglocation/capacitor';
 
 const route: Location[] = [];
 
@@ -100,7 +100,7 @@ await BackgroundLocation.start();
           terminated.
         </p>
         <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
-{`import { BackgroundLocation } from 'capacitor-bglocation';
+{`import { BackgroundLocation } from '@bglocation/capacitor';
 
 // Configure first (required before geofencing)
 await BackgroundLocation.configure({

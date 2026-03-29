@@ -14,7 +14,7 @@ export function GettingStarted() {
         <div>
           <h3 className="text-lg font-semibold">1. Install</h3>
           <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
-{`npm install capacitor-bglocation
+{`npm install @bglocation/capacitor
 npx cap sync`}
           </pre>
         </div>
@@ -23,7 +23,7 @@ npx cap sync`}
         <div>
           <h3 className="text-lg font-semibold">2. Configure & Start</h3>
           <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
-{`import { BackgroundLocation } from 'capacitor-bglocation';
+{`import { BackgroundLocation } from '@bglocation/capacitor';
 
 // Configure the plugin (must be called before start)
 await BackgroundLocation.configure({
