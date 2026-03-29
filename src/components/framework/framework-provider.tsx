@@ -141,10 +141,7 @@ export function FrameworkProvider({
       framework,
       frameworkHref: (href) => withFrameworkHref(href, framework),
       frameworkOptionHref: (nextFramework) =>
-        withFrameworkHref(
-          typeof window !== "undefined" ? buildCurrentHref() : pathname,
-          nextFramework,
-        ),
+        withFrameworkHref(pathname, nextFramework),
     }),
     [framework, pathname],
   );
