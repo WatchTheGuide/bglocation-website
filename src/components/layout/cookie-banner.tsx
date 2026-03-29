@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useFramework } from "@/components/framework/framework-provider";
@@ -14,24 +14,16 @@ function emitChange() {
   for (const listener of listeners) listener();
 }
 
-function isConsentExpired(): boolean {
+function getSnapshot(): string | null {
   try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    if (!value) return true;
-    const timestamp = Number(value);
-    if (Number.isNaN(timestamp)) return true;
-    return Date.now() - timestamp > CONSENT_TTL_MS;
+    return localStorage.getItem(STORAGE_KEY);
   } catch {
-    return true;
+    return null;
   }
 }
 
-function getSnapshot(): boolean {
-  return isConsentExpired();
-}
-
-function getServerSnapshot(): boolean {
-  return false;
+function getServerSnapshot(): string | null {
+  return "server";
 }
 
 function subscribe(callback: () => void): () => void {
@@ -43,9 +35,28 @@ function subscribe(callback: () => void): () => void {
   };
 }
 
+function isExpired(value: string | null): boolean {
+  if (!value || value === "server") return false;
+  const timestamp = Number(value);
+  if (Number.isNaN(timestamp)) return true;
+  return Date.now() - timestamp > CONSENT_TTL_MS;
+}
+
 export function CookieBanner() {
-  const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const storedValue = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const { frameworkHref } = useFramework();
+
+  const shouldShow = storedValue === null || isExpired(storedValue);
+
+  useEffect(() => {
+    if (!storedValue || storedValue === "server") return;
+    const timestamp = Number(storedValue);
+    if (Number.isNaN(timestamp)) return;
+    const remaining = CONSENT_TTL_MS - (Date.now() - timestamp);
+    if (remaining <= 0) return;
+    const timer = setTimeout(emitChange, remaining);
+    return () => clearTimeout(timer);
+  }, [storedValue]);
 
   function dismiss() {
     try {
