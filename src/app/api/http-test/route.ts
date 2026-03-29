@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { checkHttpTestRateLimit } from '@/lib/http-test/rate-limiter';
+import { logHttpTestRequest } from '@/lib/http-test/file-logger';
 
 type JsonRecord = Record<string, unknown>;
 
@@ -242,6 +243,19 @@ export async function POST(request: Request) {
     arrived: true,
   });
   console.log(`[HTTP Test] Body ${requestId}\n${serializeForLog(payload)}`);
+
+  void logHttpTestRequest({
+    requestId,
+    receivedAt,
+    clientIp,
+    contentType,
+    userAgent,
+    rawBodyBytes: rawBody.length,
+    locationCount: summary.locationCount,
+    shape: summary.shape,
+    parseError,
+    payload,
+  });
 
   if (parseError) {
     console.warn('[HTTP Test] Request parse failed', {
