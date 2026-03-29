@@ -3,16 +3,16 @@
 import { useFramework } from "@/components/framework/framework-provider";
 import { getFrameworkOption } from "@/lib/framework";
 
-const CAPACITOR_INSTALL = `npm install capacitor-bglocation
+const CAPACITOR_INSTALL = `npm install @bglocation/capacitor
 npx cap sync`;
 
-const REACT_NATIVE_INSTALL = `npm install react-native-bglocation
+const REACT_NATIVE_INSTALL = `npm install @bglocation/react-native
 npx expo prebuild
 
 # Bare React Native
 cd ios && pod install`;
 
-const CAPACITOR_START = `import { BackgroundLocation } from 'capacitor-bglocation';
+const CAPACITOR_START = `import { BackgroundLocation } from '@bglocation/capacitor';
 
 await BackgroundLocation.configure({
   distanceFilter: 15,
@@ -32,7 +32,7 @@ const REACT_NATIVE_START = `import {
   addListener,
   configure,
   start,
-} from 'react-native-bglocation';
+} from '@bglocation/react-native';
 
 await configure({
   distanceFilter: 15,
@@ -54,7 +54,7 @@ locationSubscription.remove();`;
 const CAPACITOR_STOP = `await BackgroundLocation.stop();
 await BackgroundLocation.removeAllListeners();`;
 
-const REACT_NATIVE_STOP = `import { removeAllListeners, stop } from 'react-native-bglocation';
+const REACT_NATIVE_STOP = `import { removeAllListeners, stop } from '@bglocation/react-native';
 
 await stop();
 removeAllListeners();`;

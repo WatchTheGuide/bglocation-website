@@ -4,7 +4,7 @@ import { FrameworkSwitcher } from "@/components/framework/framework-switcher";
 import { useFramework } from "@/components/framework/framework-provider";
 import { Card, CardContent } from "@/components/ui/card";
 
-const CAPACITOR_CODE_SNIPPET = `import { BackgroundLocation } from 'capacitor-bglocation';
+const CAPACITOR_CODE_SNIPPET = `import { BackgroundLocation } from '@bglocation/capacitor';
 
 // 1. Configure
 await BackgroundLocation.configure({
@@ -32,7 +32,7 @@ const REACT_NATIVE_CODE_SNIPPET = `import {
   removeAllListeners,
   start,
   stop,
-} from 'react-native-bglocation';
+} from '@bglocation/react-native';
 
 // 1. Configure
 await configure({

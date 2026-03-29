@@ -30,7 +30,7 @@ test.describe('Landing Page', () => {
 
     test('should display default install command for Capacitor', async ({ page }) => {
       await expect(
-        page.locator('section').first().getByText('npm install capacitor-bglocation'),
+        page.locator('section').first().getByText('npm install @bglocation/capacitor'),
       ).toBeVisible();
     });
   });
@@ -40,7 +40,7 @@ test.describe('Landing Page', () => {
       await page.locator('[data-framework-option="react-native"]').first().click();
 
       await expect(page).toHaveURL(/framework=react-native/);
-      await expect(page.getByText('npm install react-native-bglocation')).toBeVisible();
+      await expect(page.getByText('npm install @bglocation/react-native')).toBeVisible();
       await expect(page.getByText(/const subscription = addListener/).first()).toBeVisible();
       await expect(page.locator('table').getByText('expo-location')).toBeVisible();
     });

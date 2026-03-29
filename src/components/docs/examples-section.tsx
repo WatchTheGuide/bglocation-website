@@ -2,7 +2,7 @@
 
 import { useFramework } from "@/components/framework/framework-provider";
 
-const CAPACITOR_FLEET = `import { BackgroundLocation } from 'capacitor-bglocation';
+const CAPACITOR_FLEET = `import { BackgroundLocation } from '@bglocation/capacitor';
 
 await BackgroundLocation.configure({
   distanceFilter: 'auto',
@@ -28,7 +28,7 @@ BackgroundLocation.addListener('onHttp', (event) => {
 
 await BackgroundLocation.start();`;
 
-const REACT_NATIVE_FLEET = `import { addListener, configure, start } from 'react-native-bglocation';
+const REACT_NATIVE_FLEET = `import { addListener, configure, start } from '@bglocation/react-native';
 
 await configure({
   distanceFilter: 'auto',
@@ -54,8 +54,8 @@ addListener('onHttp', (event) => {
 
 await start();`;
 
-const CAPACITOR_FITNESS = `import { BackgroundLocation } from 'capacitor-bglocation';
-import type { Location } from 'capacitor-bglocation';
+const CAPACITOR_FITNESS = `import { BackgroundLocation } from '@bglocation/capacitor';
+import type { Location } from '@bglocation/capacitor';
 
 const route: Location[] = [];
 
@@ -77,8 +77,8 @@ const REACT_NATIVE_FITNESS = `import {
   addListener,
   configure,
   start,
-} from 'react-native-bglocation';
-import type { Location } from 'react-native-bglocation';
+} from '@bglocation/react-native';
+import type { Location } from '@bglocation/react-native';
 
 const route: Location[] = [];
 
@@ -96,7 +96,7 @@ addListener('onLocation', (location) => {
 
 await start();`;
 
-const CAPACITOR_GEOFENCE = `import { BackgroundLocation } from 'capacitor-bglocation';
+const CAPACITOR_GEOFENCE = `import { BackgroundLocation } from '@bglocation/capacitor';
 
 await BackgroundLocation.configure({
   distanceFilter: 50,
@@ -124,7 +124,7 @@ const REACT_NATIVE_GEOFENCE = `import {
   addListener,
   configure,
   start,
-} from 'react-native-bglocation';
+} from '@bglocation/react-native';
 
 await configure({
   distanceFilter: 50,

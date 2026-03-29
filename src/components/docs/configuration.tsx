@@ -197,12 +197,98 @@ export function Configuration() {
           <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
             buffer.maxSize
           </code>{" "}
-          is set, failed POSTs are stored in a local SQLite database. On the
-          next successful request, buffered locations are flushed
-          automatically in batches of 50 (FIFO order). Flush stops on the
-          first failure. When the buffer is full, the oldest entries are
-          dropped. Without a buffer configured, failed requests are lost.
+          is set, failed POSTs are stored in a local SQLite database (
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+            bgl_location_buffer.db
+          </code>
+          ). Without{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+            buffer
+          </code>{" "}
+          configured, failed requests are silently lost.
         </p>
+
+        <h4 className="mt-6 font-semibold">How Flush Works</h4>
+        <p className="mt-2 text-sm text-muted-foreground">
+          When the network recovers and the next{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+            sendLocation()
+          </code>{" "}
+          succeeds, the plugin automatically starts flushing buffered
+          locations. Each buffered location is sent as{" "}
+          <strong>an individual POST</strong> with the same{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+            {`{ "location": { ... } }`}
+          </code>{" "}
+          body format — your server receives the exact same payload for
+          real-time and buffered locations.
+        </p>
+        <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted-foreground">
+          <li>
+            Flush sends up to <strong>50 locations per batch</strong>, one
+            POST at a time (FIFO order).
+          </li>
+          <li>
+            If any POST fails (non-2xx or network error), flush{" "}
+            <strong>stops immediately</strong> and retries on the next
+            successful send.
+          </li>
+          <li>
+            When the buffer exceeds{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+              maxSize
+            </code>
+            , the oldest entries are dropped automatically.
+          </li>
+          <li>
+            Each{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+              onHttp
+            </code>{" "}
+            event includes{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+              bufferedCount
+            </code>{" "}
+            — the number of locations still waiting in the buffer.
+          </li>
+        </ul>
+
+        <h4 className="mt-6 font-semibold">Server-side Considerations</h4>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Because each buffered location arrives as an individual POST, your
+          server endpoint should:
+        </p>
+        <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted-foreground">
+          <li>
+            <strong>Handle rapid sequential requests</strong> — a buffer
+            flush can send dozens of POSTs within seconds. Set your rate
+            limiter high enough (e.g. 300 req/min per client).
+          </li>
+          <li>
+            <strong>Return 2xx quickly</strong> — the flush sends requests
+            sequentially and waits for each response. Slow responses delay
+            the entire flush.
+          </li>
+          <li>
+            <strong>Use idempotent inserts</strong> — each location includes
+            a{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+              timestamp
+            </code>
+            . Use it with latitude/longitude as a deduplication key to
+            avoid storing the same location twice if a flush is retried.
+          </li>
+        </ul>
+
+        <h4 className="mt-6 font-semibold">Buffer Timeline</h4>
+        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+{`1. Network OK     → POST location → 200 OK
+2. Network lost   → POST fails    → location saved to SQLite buffer
+3. Still offline  → POST fails    → location saved (bufferedCount grows)
+4. Network back   → POST location → 200 OK → flush starts
+5. Flush          → POST buffered #1 → 200 → POST buffered #2 → 200 → ...
+6. Flush done     → bufferedCount = 0`}
+        </pre>
       </div>
 
       {/* Auto Distance Filter */}

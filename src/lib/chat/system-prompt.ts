@@ -11,7 +11,7 @@ If asked about Flutter, Kotlin Multiplatform, or other future platforms — conf
 ---
 ## PLUGIN OVERVIEW
 
-bglocation is a production-ready background location SDK for mobile apps. It is available as a Capacitor 8 plugin (npm package: capacitor-bglocation) and a React Native wrapper (npm package: react-native-bglocation) for iOS and Android. Built from scratch with native APIs — pure Kotlin and Swift, no Cordova wrappers.
+bglocation is a production-ready background location SDK for mobile apps. It is available as a Capacitor 8 plugin (npm package: @bglocation/capacitor) and a React Native wrapper (npm package: @bglocation/react-native) for iOS and Android. Built from scratch with native APIs — pure Kotlin and Swift, no Cordova wrappers.
 
 Upcoming platforms: Kotlin Multiplatform (KMP), Flutter. The same battle-tested native core is exposed through different wrappers.
 
@@ -27,17 +27,17 @@ Key features:
 - Battery Optimization Detection — detects OEM battery killers on Android with dontkillmyapp.com links.
 - Geofencing — monitor up to 20 circular regions for enter, exit, and dwell transitions.
 
-Capacitor install: npm install capacitor-bglocation && npx cap sync
-React Native install: npm install react-native-bglocation && npx expo prebuild (Expo) or cd ios && pod install (bare React Native)
+Capacitor install: npm install @bglocation/capacitor && npx cap sync
+React Native install: npm install @bglocation/react-native && npx expo prebuild (Expo) or cd ios && pod install (bare React Native)
 
 ## GETTING STARTED
 
 1. Capacitor Install:
-npm install capacitor-bglocation
+npm install @bglocation/capacitor
 npx cap sync
 
 2. Capacitor Configure & Start:
-import { BackgroundLocation } from 'capacitor-bglocation';
+import { BackgroundLocation } from '@bglocation/capacitor';
 await BackgroundLocation.configure({
   distanceFilter: 15,
   desiredAccuracy: 'high',
@@ -51,7 +51,7 @@ BackgroundLocation.addListener('onLocation', (location) => {
 await BackgroundLocation.start();
 
 3. React Native Configure & Start:
-import { addListener, configure, start, stop, removeAllListeners } from 'react-native-bglocation';
+import { addListener, configure, start, stop, removeAllListeners } from '@bglocation/react-native';
 await configure({
   distanceFilter: 15,
   desiredAccuracy: 'high',
@@ -169,7 +169,7 @@ Trial Mode (no license key needed):
 
 Adding a License Key:
 - Capacitor: in capacitor.config.ts under plugins.BackgroundLocation. Then run npx cap sync.
-- React Native (Expo): in app.json via the react-native-bglocation config plugin with licenseKey.
+- React Native (Expo): in app.json via the @bglocation/react-native config plugin with licenseKey.
 - React Native (bare): set BGLocationLicenseKey in Info.plist and dev.bglocation.LICENSE_KEY meta-data in AndroidManifest.xml.
 
 License Validation:

@@ -13,7 +13,7 @@ test.describe('Docs Page', () => {
   });
 
   test('should display default Capacitor quick install', async ({ page }) => {
-    await expect(page.locator('code').filter({ hasText: 'npm install capacitor-bglocation' }).first()).toBeVisible();
+    await expect(page.locator('code').filter({ hasText: 'npm install @bglocation/capacitor' }).first()).toBeVisible();
     await expect(page.locator('code').filter({ hasText: 'npx cap sync' }).first()).toBeVisible();
   });
 
@@ -21,7 +21,7 @@ test.describe('Docs Page', () => {
     await page.locator('main [data-framework-option="react-native"]').first().click();
 
     await expect(page).toHaveURL(/framework=react-native/);
-    await expect(page.locator('code').filter({ hasText: 'npm install react-native-bglocation' }).first()).toBeVisible();
+    await expect(page.locator('code').filter({ hasText: 'npm install @bglocation/react-native' }).first()).toBeVisible();
     await expect(page.locator('code').filter({ hasText: 'npx expo prebuild' }).first()).toBeVisible();
     await expect(page.getByText(/Bare React Native apps still need/)).toBeVisible();
   });

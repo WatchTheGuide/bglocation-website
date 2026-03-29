@@ -48,6 +48,9 @@ next-env.d.ts
 node_modules/
 /test-results/
 /playwright-report/
+
+# HTTP test logs
+/logs/
 /blob-report/
 /playwright/.cache/
 /playwright-report/
