@@ -63,8 +63,9 @@ export default function CookiePolicyPage() {
                     </td>
                     <td className="py-2 pr-4">
                       Authenticates you in the License Portal after magic-link
-                      login. Contains a signed JWT token (no personal data in
-                      plaintext).
+                      login. Contains a signed JWT token with your email and
+                      customer ID. The token is signed (not encrypted), so
+                      these values are readable if the cookie is obtained.
                     </td>
                     <td className="py-2 pr-4">Strictly necessary</td>
                     <td className="py-2 pr-4">7 days</td>
@@ -77,7 +78,9 @@ export default function CookiePolicyPage() {
                     </td>
                     <td className="py-2 pr-4">
                       Authenticates administrators in the Admin Panel. Contains
-                      a signed JWT token (no personal data in plaintext).
+                      a signed JWT token with your email and admin ID. The
+                      token is signed (not encrypted), so these values are
+                      readable if the cookie is obtained.
                     </td>
                     <td className="py-2 pr-4">Strictly necessary</td>
                     <td className="py-2 pr-4">7 days</td>
@@ -123,7 +126,9 @@ export default function CookiePolicyPage() {
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               We use browser <strong>localStorage</strong> (not a cookie) to
-              remember that you have acknowledged this cookie notice. This data
+              remember that you have acknowledged this cookie notice. Specifically,
+              we store a single string value under the key &quot;bgl_cookie_consent_v1&quot;
+              to record that you have dismissed the cookie banner. This data
               stays on your device and is never sent to our servers.
             </p>
           </div>

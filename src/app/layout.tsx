@@ -75,8 +75,8 @@ export default async function RootLayout({
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />
-          <CookieBanner />
           <ChatWidget />
+          <CookieBanner />
         </FrameworkProvider>
       </body>
     </html>

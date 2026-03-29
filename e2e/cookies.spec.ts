@@ -16,7 +16,7 @@ test.describe('Cookie Banner', () => {
 
     const banner = page.getByRole('region', { name: /cookie notice/i });
     const link = banner.getByRole('link', { name: /learn more/i });
-    await expect(link).toHaveAttribute('href', '/cookies');
+    await expect(link).toHaveAttribute('href', /\/cookies/);
   });
 
   test('should dismiss banner on "Got it" click', async ({ page }) => {
@@ -55,6 +55,31 @@ test.describe('Cookie Banner', () => {
     );
     expect(value).not.toBeNull();
     expect(Number(value)).toBeGreaterThan(0);
+  });
+
+  test('should re-show banner when consent timestamp is expired (>30 days)', async ({ page }) => {
+    const expiredTimestamp = String(Date.now() - 31 * 24 * 60 * 60 * 1000);
+    await page.addInitScript(({ key, value }) => {
+      localStorage.setItem(key, value);
+    }, { key: STORAGE_KEY, value: expiredTimestamp });
+
+    await page.goto(ROUTES.home);
+
+    const banner = page.getByRole('region', { name: /cookie notice/i });
+    await expect(banner).toBeVisible();
+  });
+
+  test('should hide banner when consent timestamp is fresh (<30 days)', async ({ page }) => {
+    const freshTimestamp = String(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    await page.addInitScript(({ key, value }) => {
+      localStorage.setItem(key, value);
+    }, { key: STORAGE_KEY, value: freshTimestamp });
+
+    await page.goto(ROUTES.home);
+
+    await expect(
+      page.getByRole('region', { name: /cookie notice/i })
+    ).not.toBeVisible();
   });
 });
 

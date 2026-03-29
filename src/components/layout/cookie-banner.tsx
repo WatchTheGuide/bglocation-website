@@ -3,6 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useFramework } from "@/components/framework/framework-provider";
 
 const STORAGE_KEY = "bgl_cookie_consent_v1";
 const CONSENT_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -35,6 +36,7 @@ function subscribe(callback: () => void): () => void {
 export function CookieBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [dismissed, setDismissed] = useState(false);
+  const { frameworkHref } = useFramework();
 
   function dismiss() {
     setDismissed(true);
@@ -58,7 +60,7 @@ export function CookieBanner() {
           This site uses essential cookies for authentication only. No tracking
           or analytics cookies are used.{" "}
           <Link
-            href="/cookies"
+            href={frameworkHref("/cookies")}
             className="underline hover:text-foreground"
           >
             Learn more
