@@ -16,7 +16,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Last updated: March 22, 2026
+            Last updated: March 29, 2026
           </p>
         </div>
       </section>
@@ -316,11 +316,11 @@ export default function PrivacyPage() {
             </p>
             <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
               <li>
-                <strong>Session cookie</strong> — used for License Portal
+                <strong>Session cookie</strong> (<code className="text-xs">bgl_session</code>) — used for License Portal
                 authentication (expires after 7 days)
               </li>
               <li>
-                <strong>Admin session cookie</strong> — used for Admin Panel
+                <strong>Admin session cookie</strong> (<code className="text-xs">bgl_admin_session</code>) — used for Admin Panel
                 authentication
               </li>
             </ul>
@@ -328,6 +328,13 @@ export default function PrivacyPage() {
               We do not use tracking cookies, analytics cookies, or
               advertising cookies. We do not use Google Analytics or any
               third-party tracking scripts.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              For full details, see our{" "}
+              <Link href="/cookies" className="underline hover:text-foreground">
+                Cookie Policy
+              </Link>
+              .
             </p>
           </div>
 

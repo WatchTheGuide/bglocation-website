@@ -114,6 +114,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href={frameworkHref("/cookies")} className="hover:text-foreground">
+                  Cookie Policy
+                </Link>
+              </li>
+              <li>
                 <Link href={frameworkHref("/terms")} className="hover:text-foreground">
                   Terms of Service
                 </Link>

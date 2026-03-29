@@ -11,6 +11,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { AnnouncementBanner } from "@/components/landing/announcement-banner";
 import { ChatWidget } from "@/components/chat/chat-widget";
+import { CookieBanner } from "@/components/layout/cookie-banner";
 import { FrameworkProvider } from "@/components/framework/framework-provider";
 import { isFramework } from "@/lib/framework";
 import "./globals.css";
@@ -74,6 +75,7 @@ export default async function RootLayout({
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />
+          <CookieBanner />
           <ChatWidget />
         </FrameworkProvider>
       </body>
