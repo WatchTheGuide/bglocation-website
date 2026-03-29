@@ -77,6 +77,8 @@ export function FrameworkSwitcher({
             <Link
               key={option.value}
               href={frameworkOptionHref(option.value)}
+              replace
+              scroll={false}
               aria-label={`Switch to ${option.label}`}
               aria-current={active ? "page" : undefined}
               data-framework-option={option.value}
@@ -153,6 +155,8 @@ export function FrameworkSwitcher({
                   key={option.value}
                   id={getFrameworkOptionButtonId(option.value)}
                   href={frameworkOptionHref(option.value)}
+                  replace
+                  scroll={false}
                   role="option"
                   aria-selected={active}
                   aria-current={active ? "page" : undefined}
