@@ -95,8 +95,9 @@ export default function CookiePolicyPage() {
               Both cookies are set only when you explicitly log in. They are{" "}
               <strong>HttpOnly</strong> (not accessible via JavaScript) and{" "}
               <strong>Secure</strong> (transmitted only over HTTPS in
-              production). They use <strong>SameSite=Lax</strong> to prevent
-              cross-site request forgery.
+              production). They use <strong>SameSite=Lax</strong>, which helps
+              protect against cross-site request forgery (CSRF) as part of our
+              overall security measures.
             </p>
           </div>
 
