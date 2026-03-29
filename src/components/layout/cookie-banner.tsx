@@ -7,8 +7,10 @@ import { useFramework } from "@/components/framework/framework-provider";
 
 const STORAGE_KEY = "bgl_cookie_consent_v1";
 const CONSENT_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const SERVER_SNAPSHOT = "__BGL_SSR__";
 
 const listeners = new Set<() => void>();
+let memoryFallback: string | null = null;
 
 function emitChange() {
   for (const listener of listeners) listener();
@@ -18,12 +20,12 @@ function getSnapshot(): string | null {
   try {
     return localStorage.getItem(STORAGE_KEY);
   } catch {
-    return null;
+    return memoryFallback;
   }
 }
 
 function getServerSnapshot(): string | null {
-  return "server";
+  return SERVER_SNAPSHOT;
 }
 
 function subscribe(callback: () => void): () => void {
@@ -36,7 +38,7 @@ function subscribe(callback: () => void): () => void {
 }
 
 function isExpired(value: string | null): boolean {
-  if (!value || value === "server") return false;
+  if (!value || value === SERVER_SNAPSHOT) return false;
   const timestamp = Number(value);
   if (Number.isNaN(timestamp)) return true;
   return Date.now() - timestamp > CONSENT_TTL_MS;
@@ -49,20 +51,28 @@ export function CookieBanner() {
   const shouldShow = storedValue === null || isExpired(storedValue);
 
   useEffect(() => {
-    if (!storedValue || storedValue === "server") return;
+    if (!storedValue || storedValue === SERVER_SNAPSHOT) return;
     const timestamp = Number(storedValue);
     if (Number.isNaN(timestamp)) return;
     const remaining = CONSENT_TTL_MS - (Date.now() - timestamp);
     if (remaining <= 0) return;
-    const timer = setTimeout(emitChange, remaining);
+    const timer = setTimeout(() => {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        memoryFallback = null;
+      }
+      emitChange();
+    }, remaining);
     return () => clearTimeout(timer);
   }, [storedValue]);
 
   function dismiss() {
+    const now = String(Date.now());
     try {
-      localStorage.setItem(STORAGE_KEY, String(Date.now()));
+      localStorage.setItem(STORAGE_KEY, now);
     } catch {
-      // silently ignore if localStorage is unavailable
+      memoryFallback = now;
     }
     emitChange();
   }
