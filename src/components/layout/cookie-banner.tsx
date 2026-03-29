@@ -1,12 +1,18 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useFramework } from "@/components/framework/framework-provider";
 
 const STORAGE_KEY = "bgl_cookie_consent_v1";
 const CONSENT_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+const listeners = new Set<() => void>();
+
+function emitChange() {
+  for (const listener of listeners) listener();
+}
 
 function isConsentExpired(): boolean {
   try {
@@ -29,25 +35,28 @@ function getServerSnapshot(): boolean {
 }
 
 function subscribe(callback: () => void): () => void {
+  listeners.add(callback);
   window.addEventListener("storage", callback);
-  return () => window.removeEventListener("storage", callback);
+  return () => {
+    listeners.delete(callback);
+    window.removeEventListener("storage", callback);
+  };
 }
 
 export function CookieBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const [dismissed, setDismissed] = useState(false);
   const { frameworkHref } = useFramework();
 
   function dismiss() {
-    setDismissed(true);
     try {
       localStorage.setItem(STORAGE_KEY, String(Date.now()));
     } catch {
       // silently ignore if localStorage is unavailable
     }
+    emitChange();
   }
 
-  if (!shouldShow || dismissed) return null;
+  if (!shouldShow) return null;
 
   return (
     <div

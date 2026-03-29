@@ -93,7 +93,7 @@ export default function CookiePolicyPage() {
 
             <p className="text-muted-foreground leading-relaxed">
               Both cookies are set only when you explicitly log in. They are{" "}
-              <strong>httpOnly</strong> (not accessible via JavaScript) and{" "}
+              <strong>HttpOnly</strong> (not accessible via JavaScript) and{" "}
               <strong>Secure</strong> (transmitted only over HTTPS in
               production). They use <strong>SameSite=Lax</strong> to prevent
               cross-site request forgery.
