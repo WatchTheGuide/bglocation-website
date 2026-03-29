@@ -12,6 +12,7 @@ const SERVER_SNAPSHOT = "__BGL_SSR__";
 
 const listeners = new Set<() => void>();
 let memoryFallback: string | null = null;
+let storageBroken = false;
 
 function emitChange() {
   for (const listener of listeners) listener();
@@ -19,7 +20,8 @@ function emitChange() {
 
 function getSnapshot(): string | null {
   try {
-    return localStorage.getItem(STORAGE_KEY);
+    const value = localStorage.getItem(STORAGE_KEY);
+    return storageBroken ? (memoryFallback ?? value) : value;
   } catch {
     return memoryFallback;
   }
@@ -31,10 +33,17 @@ function getServerSnapshot(): string | null {
 
 function subscribe(callback: () => void): () => void {
   listeners.add(callback);
-  window.addEventListener("storage", callback);
+
+  function handleStorage(event: StorageEvent) {
+    if (event.storageArea === localStorage && event.key === STORAGE_KEY) {
+      callback();
+    }
+  }
+
+  window.addEventListener("storage", handleStorage);
   return () => {
     listeners.delete(callback);
-    window.removeEventListener("storage", callback);
+    window.removeEventListener("storage", handleStorage);
   };
 }
 
@@ -81,6 +90,7 @@ export function CookieBanner() {
     try {
       localStorage.setItem(STORAGE_KEY, now);
     } catch {
+      storageBroken = true;
       memoryFallback = now;
     }
     emitChange();
