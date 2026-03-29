@@ -321,7 +321,7 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <strong>Admin session cookie</strong> (<code className="text-xs">bgl_admin_session</code>) — used for Admin Panel
-                authentication
+                authentication (expires after 7 days)
               </li>
             </ul>
             <p className="text-muted-foreground leading-relaxed">

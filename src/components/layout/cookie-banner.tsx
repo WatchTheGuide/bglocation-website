@@ -70,10 +70,12 @@ export function CookieBanner() {
     function tick() {
       const remaining = CONSENT_TTL_MS - (Date.now() - timestamp);
       if (remaining <= 0) {
+        memoryFallback = null;
+        storageBroken = false;
         try {
           localStorage.removeItem(STORAGE_KEY);
         } catch {
-          memoryFallback = null;
+          // Storage still broken — memoryFallback already cleared above
         }
         emitChange();
         return;
@@ -87,11 +89,13 @@ export function CookieBanner() {
 
   function dismiss() {
     const now = String(Date.now());
+    memoryFallback = now;
     try {
       localStorage.setItem(STORAGE_KEY, now);
+      storageBroken = false;
+      memoryFallback = null;
     } catch {
       storageBroken = true;
-      memoryFallback = now;
     }
     emitChange();
   }
