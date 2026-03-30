@@ -5,7 +5,7 @@ import { useFramework } from "@/components/framework/framework-provider";
 import { SiteLogo } from "@/components/layout/site-logo";
 import { Separator } from "@/components/ui/separator";
 
-const GITLAB_URL = "https://gitlab.com/szymonwalczak/capacitor-background-location";
+const GITLAB_URL = "https://gitlab.com/bglocation";
 
 export function Footer() {
   const { frameworkHref } = useFramework();
