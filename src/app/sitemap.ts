@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
 
-const BASE_URL = "https://bglocation.dev";
+const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev").replace(/\/+$/, "");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getAllPosts();

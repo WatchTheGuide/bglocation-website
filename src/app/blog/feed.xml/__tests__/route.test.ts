@@ -36,7 +36,8 @@ describe("GET /blog/feed.xml", () => {
     expect(body).toContain('<?xml version="1.0"');
     expect(body).toContain("<rss version=\"2.0\"");
     expect(body).toContain("<title><![CDATA[Test Post]]></title>");
-    expect(body).toContain("<link>https://bglocation.dev/blog/test-post</link>");
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev";
+    expect(body).toContain(`<link>${baseUrl}/blog/test-post</link>`);
     expect(body).toContain("<category><![CDATA[capacitor]]></category>");
     expect(body).toContain("<category><![CDATA[gps]]></category>");
     expect(body).toContain(

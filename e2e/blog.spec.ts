@@ -70,7 +70,7 @@ test.describe('Blog', () => {
       expect(body).toContain('<item>');
     });
 
-    test('should contain required item elements (title, link, pubDate, category)', async ({ request }) => {
+    test('should contain required item elements (title, link, pubDate)', async ({ request }) => {
       const response = await request.get('/blog/feed.xml');
       const body = await response.text();
 
@@ -78,7 +78,6 @@ test.describe('Blog', () => {
       expect(body).toMatch(/<item>[\s\S]*?<title>/);
       expect(body).toMatch(/<item>[\s\S]*?<link>/);
       expect(body).toMatch(/<item>[\s\S]*?<pubDate>/);
-      expect(body).toMatch(/<category>/);
     });
 
     test('should have RSS feed link in post page head', async ({ page }) => {

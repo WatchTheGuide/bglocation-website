@@ -60,7 +60,7 @@ export const metadata: Metadata = {
       "application/rss+xml": "/blog/feed.xml",
     },
   },
-  metadataBase: new URL("https://bglocation.dev"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev"),
 };
 
 export default async function RootLayout({
