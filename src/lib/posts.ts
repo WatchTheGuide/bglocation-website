@@ -71,5 +71,12 @@ export function getAllPosts(): Post[] {
 }
 
 export function getPostBySlug(slug: string): Post | null {
-  return getAllPosts().find((p) => p.slug === slug) ?? null;
+  if (!fs.existsSync(POSTS_DIR)) return null;
+
+  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"));
+  for (const file of files) {
+    const post = parsePost(file);
+    if (post?.slug === slug) return post;
+  }
+  return null;
 }

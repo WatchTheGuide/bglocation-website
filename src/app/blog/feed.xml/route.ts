@@ -2,19 +2,32 @@ import { getAllPosts } from "@/lib/posts";
 
 const BASE_URL = "https://bglocation.dev";
 
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function escapeCdata(str: string): string {
+  return str.replace(/]]>/g, "]]]]><![CDATA[>");
+}
+
 export async function GET() {
   const posts = getAllPosts();
 
   const items = posts
     .map(
       (post) => `    <item>
-      <title><![CDATA[${post.title}]]></title>
-      <link>${BASE_URL}/blog/${post.slug}</link>
-      <guid isPermaLink="true">${BASE_URL}/blog/${post.slug}</guid>
-      <description><![CDATA[${post.description}]]></description>
+      <title><![CDATA[${escapeCdata(post.title)}]]></title>
+      <link>${BASE_URL}/blog/${escapeXml(post.slug)}</link>
+      <guid isPermaLink="true">${BASE_URL}/blog/${escapeXml(post.slug)}</guid>
+      <description><![CDATA[${escapeCdata(post.description)}]]></description>
       <pubDate>${new Date(post.date).toUTCString()}</pubDate>
-      <author>hello@bglocation.dev (${post.author})</author>
-${post.tags.map((tag) => `      <category><![CDATA[${tag}]]></category>`).join("\n")}
+      <author>hello@bglocation.dev (${escapeXml(post.author)})</author>
+${post.tags.map((tag) => `      <category><![CDATA[${escapeCdata(tag)}]]></category>`).join("\n")}
     </item>`
     )
     .join("\n");

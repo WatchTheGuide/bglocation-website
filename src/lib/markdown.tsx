@@ -2,21 +2,20 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
-import rehypePrettyCode from "rehype-pretty-code";
+import rehypePrettyCode, { type Options as PrettyCodeOptions } from "rehype-pretty-code";
 import rehypeStringify from "rehype-stringify";
 
-const rehypePrettyCodeOptions = {
+const rehypePrettyCodeOptions: PrettyCodeOptions = {
   theme: "github-light",
   keepBackground: false,
 };
 
-async function renderMarkdown(content: string): Promise<string> {
+export async function renderMarkdown(content: string): Promise<string> {
   const result = await unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .use(rehypePrettyCode as any, rehypePrettyCodeOptions)
+    .use(rehypePrettyCode, rehypePrettyCodeOptions)
     .use(rehypeStringify)
     .process(content);
 

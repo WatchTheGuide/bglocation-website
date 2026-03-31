@@ -6,10 +6,19 @@ const BASE_URL = "https://bglocation.dev";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getAllPosts();
 
+  const latestPostDate =
+    posts.length > 0
+      ? new Date(
+          posts
+            .map((post) => new Date(post.date).getTime())
+            .reduce((maxTime, time) => Math.max(maxTime, time), 0),
+        )
+      : new Date("2026-03-31");
+
   const blogEntries: MetadataRoute.Sitemap = [
     {
       url: `${BASE_URL}/blog`,
-      lastModified: new Date(),
+      lastModified: latestPostDate,
       changeFrequency: "weekly",
       priority: 0.7,
     },

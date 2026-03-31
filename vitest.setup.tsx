@@ -1,5 +1,8 @@
-import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
+
+if (typeof globalThis.document !== "undefined") {
+  await import("@testing-library/jest-dom/vitest");
+}
 
 // Mock next/link
 vi.mock("next/link", () => ({
