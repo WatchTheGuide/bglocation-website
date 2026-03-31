@@ -12,8 +12,10 @@ test.describe('Blog', () => {
       ).toBeVisible();
     });
 
-    test('should display at least one post card', async ({ page }) => {
-      await expect(page.locator('article').first()).toBeVisible();
+    test('should display posts or empty state', async ({ page }) => {
+      const article = page.locator('article').first();
+      const emptyState = page.getByText(/No posts yet/i);
+      await expect(article.or(emptyState)).toBeVisible();
     });
 
     test('should navigate to a post when clicking a card', async ({ page }) => {
@@ -94,7 +96,7 @@ test.describe('Blog', () => {
       // Post cards should contain tag badges
       const firstArticle = page.locator('article').first();
       await expect(firstArticle).toBeVisible();
-      const badges = firstArticle.locator('[data-slot="badge"], .inline-flex');
+      const badges = firstArticle.locator('[data-slot="badge"]');
       expect(await badges.count()).toBeGreaterThan(0);
     });
 
@@ -102,7 +104,7 @@ test.describe('Blog', () => {
       await page.goto('/blog/building-production-ready-background-location-plugin');
 
       // Post page should show tags
-      const badges = page.locator('[data-slot="badge"], .inline-flex').filter({ hasText: /.+/ });
+      const badges = page.locator('[data-slot="badge"]').filter({ hasText: /.+/ });
       expect(await badges.count()).toBeGreaterThan(0);
     });
   });

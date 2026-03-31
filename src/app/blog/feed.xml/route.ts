@@ -39,7 +39,7 @@ ${post.tags.map((tag) => `      <category><![CDATA[${escapeCdata(tag)}]]></categ
     <link>${BASE_URL}/blog</link>
     <description>News, tutorials, and insights about background location tracking for Capacitor and React Native.</description>
     <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${posts.length > 0 ? new Date(Math.max(...posts.map((p) => new Date(p.date).getTime()))).toUTCString() : new Date(0).toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/blog/feed.xml" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>

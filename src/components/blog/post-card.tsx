@@ -12,6 +12,7 @@ export function PostCard({ post }: { post: Post }) {
               year: "numeric",
               month: "long",
               day: "numeric",
+              timeZone: "UTC",
             })}
           </time>
           <span>&middot;</span>

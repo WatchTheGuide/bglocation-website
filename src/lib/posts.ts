@@ -24,11 +24,11 @@ type Frontmatter = {
   slug: string;
   description: string;
   date: string;
-  tags: string[];
+  tags?: string[];
   published: boolean;
   author: string;
-  cover_image?: string;
-  canonical_url?: string;
+  cover_image?: string | null;
+  canonical_url?: string | null;
 };
 
 function calculateReadingTime(content: string): number {
