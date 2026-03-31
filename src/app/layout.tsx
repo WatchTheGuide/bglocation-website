@@ -55,7 +55,12 @@ export const metadata: Metadata = {
     description:
       "Production-ready SDK for continuous background GPS tracking on Capacitor and React Native.",
   },
-  metadataBase: new URL("https://bglocation.dev"),
+  alternates: {
+    types: {
+      "application/rss+xml": "/blog/feed.xml",
+    },
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev"),
 };
 
 export default async function RootLayout({

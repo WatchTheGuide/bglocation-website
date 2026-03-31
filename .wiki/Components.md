@@ -68,6 +68,17 @@ Sekcje strony `/docs`, współdzielące treść między frameworkami z wyborem t
 | Pricing Cards | `pricing-cards.tsx` | Karty planów i CTA zakupowe |
 | Pricing FAQ | `pricing-faq.tsx` | FAQ cenowe w formie accordion |
 
+## Blog Components (`src/components/blog/`)
+
+Komponenty sekcji blogowej renderowanej na `/blog` i `/blog/[slug]`.
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Post Card | `post-card.tsx` | Karta posta na listingu — tytuł, opis, data, reading time, tagi (badge) |
+| Post Layout | `post-layout.tsx` | Wrapper dla treści posta — nagłówek, meta, autor, tagi, link "Back to Blog" |
+
+Rendering Markdown odbywa się przez async Server Component `Markdown` w `src/lib/markdown.tsx` (pipeline: remark-parse → remark-gfm → remark-rehype → rehype-pretty-code[github-light] → rehype-stringify).
+
 ## About Components (`src/components/about/`)
 
 | Komponent | Plik | Opis |
@@ -99,6 +110,8 @@ W katalogu `src/app/admin/` znajdują się zarówno komponenty routingu App Rout
 |-------|------|------|
 | Classname helper | `src/lib/utils.ts` | Eksportuje `cn()` do łączenia klas Tailwind |
 | Framework metadata | `src/lib/framework.ts` | Definicje frameworków, helpery URL i normalizacja `?framework=` |
+| Blog posts | `src/lib/posts.ts` | Parsowanie frontmatter (gray-matter), czytanie plików `.md`, sortowanie, reading time |
+| Markdown renderer | `src/lib/markdown.tsx` | Async Server Component — unified pipeline z syntax highlighting (rehype-pretty-code) |
 
 ## Dodawanie nowych komponentów Shadcn
 
