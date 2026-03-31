@@ -71,6 +71,21 @@ export function Footer() {
                   GitLab
                 </Link>
               </li>
+              <li>
+                <Link href="/blog" className="hover:text-foreground">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog/feed.xml"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground"
+                >
+                  RSS Feed
+                </Link>
+              </li>
             </ul>
           </div>
 

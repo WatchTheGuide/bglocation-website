@@ -12,7 +12,9 @@ e2e/
 ├── fixtures/             # Fixtures Playwright (shared setup, ROUTES)
 ├── about.spec.ts         # Testy strony About
 ├── admin.spec.ts         # Testy admin panelu (auth, dashboard, customers)
+├── blog.spec.ts          # Testy bloga (listing, post, RSS feed)
 ├── chat.spec.ts          # Testy AI chatbota
+├── cookies.spec.ts       # Testy cookie consent (GDPR)
 ├── docs.spec.ts          # Testy docs page
 ├── landing.spec.ts       # Testy landing page
 ├── navigation.spec.ts    # Testy nawigacji, banner, framework switchera i cross-page
@@ -122,6 +124,18 @@ Nie wszystkie scenariusze można pokryć automatycznie. Manualnie warto sprawdza
 - Certifications — PMP #2115680, Apollo GraphQL
 - Contact — Kraków, email, LinkedIn
 - SEO — title, meta description
+
+### Blog (`blog.spec.ts`)
+- Listing — nagłówek "Blog", wyświetlanie kart postów
+- Nawigacja — kliknięcie karty prowadzi do `/blog/[slug]`
+- Post — content z `.prose`, nagłówki h2, metadata (reading time, autor)
+- Back link — link "Back to blog" wraca na listing
+- 404 — nieistniejący slug zwraca 404
+- RSS Feed — valid RSS 2.0 XML, nagłówki `application/rss+xml`, poprawna struktura (title, items)
+
+### Cookies (`cookies.spec.ts`)
+- Cookie banner — widoczność, przyciski akceptacji/odmowy
+- Polityka cookies — strona `/cookies` z treścią
 
 ## Ważne wzorce w testach
 

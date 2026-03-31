@@ -20,7 +20,9 @@ bglocation-website/
 │   ├── fixtures/                # Shared helpers i ROUTES
 │   ├── about.spec.ts            # Testy About
 │   ├── admin.spec.ts            # Testy panelu admina
+│   ├── blog.spec.ts             # Testy bloga (listing, post, RSS)
 │   ├── chat.spec.ts             # Testy chatu AI
+│   ├── cookies.spec.ts          # Testy cookie consent (GDPR)
 │   ├── docs.spec.ts             # Testy docs page
 │   ├── landing.spec.ts          # Testy landing page
 │   ├── navigation.spec.ts       # Testy nagłówka, stopki i framework switchera
@@ -49,6 +51,13 @@ bglocation-website/
 │   │   │   ├── http-test/       # Debug endpoint dla payloadów lokalizacji
 │   │   │   ├── newsletter/      # Newsletter API
 │   │   │   └── webhooks/        # Lemon Squeezy webhook
+│   │   ├── blog/
+│   │   │   ├── page.tsx         # Listing postów blogowych
+│   │   │   ├── [slug]/
+│   │   │   │   └── page.tsx     # Pojedynczy post (GFM Markdown)
+│   │   │   └── feed.xml/
+│   │   │       └── route.ts     # RSS 2.0 feed
+│   │   ├── cookies/             # Polityka cookies (GDPR)
 │   │   ├── docs/
 │   │   ├── newsletter/          # Confirm / unsubscribe pages
 │   │   ├── portal/              # Portal klienta
@@ -57,11 +66,12 @@ bglocation-website/
 │   │   └── terms/
 │   ├── components/
 │   │   ├── about/               # About page sections
+│   │   ├── blog/                # Post card + post layout
 │   │   ├── chat/                # Chat widget + quick replies
 │   │   ├── docs/                # Sekcje strony dokumentacji
 │   │   ├── framework/           # Provider + switcher frameworka
 │   │   ├── landing/             # Sekcje landing page
-│   │   ├── layout/              # Header, footer, site logo
+│   │   ├── layout/              # Header, footer, site logo, cookie banner
 │   │   ├── pricing/             # Pricing cards + FAQ
 │   │   └── ui/                  # Bazowe komponenty UI
 │   ├── emails/                  # React Email templates
@@ -72,9 +82,14 @@ bglocation-website/
 │   │   ├── db.ts                # Prisma client singleton
 │   │   ├── email.ts             # Wysyłka maili
 │   │   ├── framework.ts         # Metadane frameworków + normalizacja query param
+│   │   ├── http-test/           # Rate limiter i file logger dla /api/http-test
 │   │   ├── license.ts           # Helpery licencyjne
-│   │   ├── newsletter/          # Logika newslettera
+│   │   ├── markdown.tsx         # Async Markdown renderer (unified + rehype-pretty-code)
+│   │   ├── newsletter/          # Logika newslettera (rate limiter, cleanup)
+│   │   ├── posts.ts             # Parsowanie postów blogowych (frontmatter, reading time)
 │   │   └── utils.ts             # `cn()` i drobne helpery
+│   ├── content/
+│   │   └── posts/               # Pliki GFM Markdown z frontmatter (źródło bloga)
 │   └── middleware.ts            # Ochrona tras portal/admin
 ├── playwright-report/           # Raporty Playwright (gitignored)
 └── test-results/                # Wyniki testów (gitignored)
@@ -96,6 +111,13 @@ bglocation-website/
 | `tw-animate-css` | ^1.4.0 | CSS animations for Tailwind |
 | `@fontsource/ibm-plex-sans` | ^5.2.8 | IBM Plex Sans font |
 | `@fontsource/ibm-plex-mono` | ^5.2.7 | IBM Plex Mono font (code blocks) |
+| `gray-matter` | ^4.0.3 | Parsowanie YAML frontmatter z plików Markdown |
+| `unified` | ^11 | Pipeline przetwarzania Markdown |
+| `remark-parse` | ^11 | Parser Markdown (remark) |
+| `remark-gfm` | ^4 | Rozszerzenia GFM (tabele, listy zadań, strikethrough) |
+| `remark-rehype` | ^11 | Konwersja Markdown AST → HTML AST |
+| `rehype-pretty-code` | ^0.14 | Syntax highlighting (shiki, theme: github-light) |
+| `rehype-stringify` | ^10 | Serializacja HTML AST do stringa |
 
 ## Moduły o największym znaczeniu
 

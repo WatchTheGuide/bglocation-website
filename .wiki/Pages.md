@@ -12,6 +12,9 @@ Opis routingu App Router, sekcji publicznych oraz endpointów API wykorzystywany
 | `/pricing` | `src/app/pricing/page.tsx` | Cennik i FAQ |
 | `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności |
 | `/terms` | `src/app/terms/page.tsx` | Regulamin licencyjny |
+| `/blog` | `src/app/blog/page.tsx` | Lista artykułów blogowych |
+| `/blog/[slug]` | `src/app/blog/[slug]/page.tsx` | Pojedynczy post blogowy (GFM Markdown) |
+| `/blog/feed.xml` | `src/app/blog/feed.xml/route.ts` | RSS 2.0 feed |
 | `/newsletter/confirm` | `src/app/newsletter/confirm/page.tsx` | Potwierdzenie subskrypcji newslettera |
 | `/newsletter/unsubscribe` | `src/app/newsletter/unsubscribe/page.tsx` | Wypisanie z newslettera |
 
@@ -57,8 +60,8 @@ Za tę warstwę odpowiadają `src/components/framework/framework-provider.tsx`, 
 ## Layout globalny
 
 - `src/app/layout.tsx` — root layout z `FrameworkProvider`, `AnnouncementBanner`, `Header`, `Footer`, `ChatWidget` i metadata icons ustawionymi na `public/bglocation-icon.svg`
-- `src/components/layout/header.tsx` — nawigacja publiczna, `FrameworkSwitcher`, CTA i menu mobilne
-- `src/components/layout/footer.tsx` — linki produktowe, dokumentacyjne i firmowe
+- `src/components/layout/header.tsx` — nawigacja publiczna (Features, Pricing, Docs, Blog, About), `FrameworkSwitcher`, CTA i menu mobilne
+- `src/components/layout/footer.tsx` — linki produktowe (w tym Blog i RSS), dokumentacyjne i firmowe
 - `src/app/admin/admin-shell.tsx` — layout panelu admina z sidebar navigation i wspólnym logo
 
 ## Landing Page (`/`)
@@ -100,6 +103,52 @@ Strona dokumentacji z anchor navigation i sekcjami opisującymi instalację, kon
 ## About Page (`/about`)
 
 Strona prezentująca twórcę, doświadczenie techniczne, certyfikaty i kontakt, używana również jako warstwa zaufania dla procesów sprzedażowych.
+
+## Blog (`/blog`)
+
+Sekcja blogowa oparta na plikach GFM Markdown w repozytorium (`src/content/posts/*.md`). Bez bazy danych — pliki Markdown dają wersjonowanie i code review.
+
+### Listing (`/blog`)
+
+- Server Component, statycznie generowany
+- Wyświetla posty posortowane od najnowszego (tylko `published: true`)
+- Każdy post jako `PostCard` z tytułem, opisem, datą, tagami i estimated reading time
+- Responsive grid: 1 kolumna (mobile) → 2-3 kolumny (desktop)
+- Pusty stan z komunikatem informacyjnym
+- RSS feed link w `<head>` (`<link rel="alternate" type="application/rss+xml">`)
+
+### Post (`/blog/[slug]`)
+
+- Server Component z async rendering Markdown
+- Pipeline: `remark-parse` → `remark-gfm` → `remark-rehype` → `rehype-pretty-code` (theme: `github-light`) → `rehype-stringify`
+- Nagłówek: tytuł, data, autor, tagi, estimated reading time
+- Open Graph metadata per post (`generateMetadata` z dynamic params)
+- `canonical_url` z frontmatter jako `<link rel="canonical">`
+- Link "Back to Blog" z ikoną strzałki
+- 404 dla nieistniejących slugów
+- `generateStaticParams` dla ISR
+
+### RSS Feed (`/blog/feed.xml`)
+
+- Route Handler zwracający valid RSS 2.0 XML
+- Zawiera tytuł, link, opis, datę, autora i kategorie (tagi) dla każdego posta
+- `Content-Type: application/rss+xml; charset=utf-8`
+
+### Frontmatter
+
+Każdy post w `src/content/posts/*.md` używa YAML frontmatter:
+
+```yaml
+title: "Tytuł posta"
+slug: "slug-posta"
+description: "Krótki opis"
+date: "2026-04-01"
+tags: ["capacitor", "react-native"]
+published: true
+author: "Imię Nazwisko"
+cover_image: null
+canonical_url: "https://bglocation.dev/blog/slug-posta"
+```
 
 ## HTTP Test Endpoint (`/api/http-test`)
 

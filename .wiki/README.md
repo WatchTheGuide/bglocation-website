@@ -7,8 +7,8 @@ Strona marketingowa, dokumentacja framework-aware, pricing, newsletter, portal k
 | Dokument | Opis |
 |----------|------|
 | [Structure.md](Structure.md) | Aktualna struktura projektu — App Router, API routes, komponenty, `lib/`, assety |
-| [Pages.md](Pages.md) | Opis stron publicznych, portalu, admina oraz endpointów API i routingu `?framework=` |
-| [Components.md](Components.md) | Mapa komponentów — framework switcher, chat, layout, landing, pricing, admin |
+| [Pages.md](Pages.md) | Opis stron publicznych, bloga, portalu, admina oraz endpointów API i routingu `?framework=` |
+| [Components.md](Components.md) | Mapa komponentów — blog, framework switcher, chat, layout, landing, pricing, admin |
 | [Testing.md](Testing.md) | Strategia testowania E2E, coverage nawigacji i scenariusze framework-aware |
 | [Portal.md](Portal.md) | Portal klienta — auth, dashboard, magic link, uruchomienie lokalne |
 
@@ -22,6 +22,7 @@ Strona marketingowa, dokumentacja framework-aware, pricing, newsletter, portal k
 | **UI Components** | Shadcn + Base UI | — |
 | **Icons** | Lucide React | 0.577.0 |
 | **Animations** | tw-animate-css | 1.4.0 |
+| **Blog** | gray-matter + unified + rehype-pretty-code | — |
 | **Testy E2E** | Playwright | 1.58.2 |
 | **Linting** | ESLint | 9 |
 | **TypeScript** | TypeScript | 5 |
