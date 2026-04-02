@@ -63,6 +63,34 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev"),
 };
 
+const jsonLdOrganization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "bglocation",
+  url: "https://bglocation.dev",
+  logo: "https://bglocation.dev/bglocation-icon.svg",
+  description:
+    "Production-ready background location SDK for Capacitor, React Native, and Flutter.",
+  sameAs: ["https://gitlab.com/bglocation"],
+};
+
+const jsonLdSoftware = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "bglocation",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "iOS, Android",
+  description:
+    "Continuous background GPS tracking SDK for Capacitor, React Native, and Flutter. Native HTTP posting, offline buffer, heartbeat timer, and geofencing.",
+  offers: {
+    "@type": "AggregateOffer",
+    lowPrice: "149",
+    highPrice: "749",
+    priceCurrency: "USD",
+    offerCount: 3,
+  },
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -75,6 +103,14 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrganization) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSoftware) }}
+        />
         <FrameworkProvider initialFramework={initialFramework}>
           <AnnouncementBanner />
           <Header />

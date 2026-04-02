@@ -39,11 +39,33 @@ export default async function BlogPostPage({ params }: Props) {
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const jsonLdArticle = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    author: { "@type": "Person", name: post.author },
+    publisher: {
+      "@type": "Organization",
+      name: "bglocation",
+      url: "https://bglocation.dev",
+    },
+    mainEntityOfPage: `https://bglocation.dev/blog/${slug}`,
+    keywords: post.tags.join(", "),
+  };
+
   return (
-    <PostLayout post={post}>
-      <div className="prose">
-        <Markdown content={post.content} />
-      </div>
-    </PostLayout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}
+      />
+      <PostLayout post={post}>
+        <div className="prose">
+          <Markdown content={post.content} />
+        </div>
+      </PostLayout>
+    </>
   );
 }
