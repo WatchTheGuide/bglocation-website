@@ -118,7 +118,7 @@ const CONFIGURE_RESULT = `interface ConfigureResult {
 }`;
 
 const HEARTBEAT_EVENT = `interface HeartbeatEvent {
-  location: Location;
+  location: Location | null;
   timestamp: number;
 }`;
 
@@ -126,7 +126,7 @@ const HTTP_EVENT = `interface HttpEvent {
   success: boolean;
   statusCode: number;
   error?: string;
-  bufferedCount: number;
+  bufferedCount?: number;
   timestamp: number;
 }`;
 

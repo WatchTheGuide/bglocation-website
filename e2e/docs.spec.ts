@@ -37,7 +37,7 @@ test.describe('Docs Hub Page', () => {
 test.describe('Docs Subpages', () => {
   const docPages = [
     { route: ROUTES.docsQuickStart, heading: /Quick Start/i, hasFrameworkSwitcher: true },
-    { route: ROUTES.docsBackgroundTracking, heading: /Background Tracking/i, hasFrameworkSwitcher: true },
+    { route: ROUTES.docsBackgroundTracking, heading: /Background.*Tracking/i, hasFrameworkSwitcher: true },
     { route: ROUTES.docsHttpPosting, heading: /HTTP Posting/i, hasFrameworkSwitcher: true },
     { route: ROUTES.docsGeofencing, heading: /Geofencing/i, hasFrameworkSwitcher: true },
     { route: ROUTES.docsPermissions, heading: /Permissions/i, hasFrameworkSwitcher: true },
@@ -83,24 +83,28 @@ test.describe('Docs Navigation', () => {
 
   test('should display breadcrumbs on subpage', async ({ page }) => {
     await page.goto(ROUTES.docsQuickStart);
-    await expect(page.getByRole('link', { name: /Docs/i })).toBeVisible();
+    const breadcrumb = page.locator('nav[aria-label="breadcrumb"]');
+    await expect(breadcrumb.getByRole('link', { name: /Docs/i })).toBeVisible();
   });
 
   test('should display breadcrumbs on later subpage', async ({ page }) => {
     await page.goto(ROUTES.docsLicensing);
-    await expect(page.getByRole('link', { name: /Docs/i })).toBeVisible();
+    const breadcrumb = page.locator('nav[aria-label="breadcrumb"]');
+    await expect(breadcrumb.getByRole('link', { name: /Docs/i })).toBeVisible();
   });
 
   test('should display prev/next navigation on subpage', async ({ page }) => {
     await page.goto(ROUTES.docsBackgroundTracking);
-    await expect(page.getByRole('link', { name: /Quick Start/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /HTTP Posting/i })).toBeVisible();
+    const pagination = page.locator('nav[aria-label="Pagination"]');
+    await expect(pagination.getByRole('link', { name: /Quick Start/i })).toBeVisible();
+    await expect(pagination.getByRole('link', { name: /HTTP Posting/i })).toBeVisible();
   });
 
   test('should display prev/next navigation on later subpage', async ({ page }) => {
     await page.goto(ROUTES.docsExamples);
-    await expect(page.getByRole('link', { name: /Error Codes/i })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Troubleshooting/i })).toBeVisible();
+    const pagination = page.locator('nav[aria-label="Pagination"]');
+    await expect(pagination.getByRole('link', { name: /Error Codes/i })).toBeVisible();
+    await expect(pagination.getByRole('link', { name: /Troubleshooting/i })).toBeVisible();
   });
 });
 
