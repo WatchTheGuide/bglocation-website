@@ -159,17 +159,17 @@ Here's the catch: **iOS and Android handle dwell completely differently**.
 
 ### Android
 
-Android's `GeofencingClient` supports dwell natively via `setLoiteringDelay()`. It works reliably even when the app is terminated. Set it and forget it.
+Android's `GeofencingClient` supports dwell natively. It works reliably even when the app is terminated. Set it and forget it.
 
 ### iOS
 
-iOS has no native dwell API. The plugin implements it using a `DispatchSourceTimer`:
+iOS has no native dwell API. The plugin implements it using an internal timer:
 
 1. User enters the geofence → timer starts for `dwellDelay` seconds
 2. Timer expires → `dwell` event emitted
 3. User exits before timer expires → timer cancelled
 
-The important caveat: if iOS kills your app before the timer fires, the dwell event is emitted **retroactively** on the next app launch — not in real-time. The plugin persists the entry timestamp in UserDefaults and checks it when the app restarts.
+The important caveat: if iOS kills your app before the timer fires, the dwell event is emitted **retroactively** on the next app launch — not in real-time. The plugin persists the entry timestamp internally and checks it when the app restarts.
 
 For most use cases (visit logs, analytics), retroactive dwell is fine. For real-time alerts ("user has been on-site for 5 minutes"), keep this limitation in mind.
 
@@ -239,7 +239,7 @@ All `extras` values must be strings. If you need numbers or objects, serialize t
 
 On **iOS**, geofence registrations survive device reboots — the OS re-registers them automatically.
 
-On **Android**, geofences are cleared on reboot. The plugin re-registers them from SharedPreferences when `configure()` is called (typically on app launch). Make sure you call `configure()` early in your app lifecycle.
+On **Android**, geofences are cleared on reboot. The plugin re-registers them automatically when `configure()` is called (typically on app launch). Make sure you call `configure()` early in your app lifecycle.
 
 ## Debug Mode
 
@@ -334,4 +334,4 @@ Key takeaways:
 - Use **extras** to attach business logic metadata to geofence events
 - Test with **debug mode** and **trial mode** before buying a license
 
-Ready to add geofencing to your app? Check the [full API documentation](/docs) or install the plugin and try the 30-minute trial.
+Ready to add geofencing to your app? Check the [geofencing documentation](/docs/geofencing) or install the plugin and try the 30-minute trial.
