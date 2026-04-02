@@ -70,7 +70,7 @@ export function LaunchCountdown() {
     return (
       <section className="border-b bg-gradient-to-b from-primary/5 to-background py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 px-4 py-1.5 text-sm font-medium text-green-600 dark:text-green-400">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 dark:bg-green-400/10 px-4 py-1.5 text-sm font-medium text-green-600 dark:text-green-400">
             <Rocket className="h-4 w-4" />
             Now Available
           </div>

@@ -35,7 +35,7 @@ export function AdminLoginForm() {
       <Card>
         <CardContent className="pt-6">
           <div className="text-center">
-            <CheckCircle className="mx-auto mb-4 h-12 w-12 text-green-500" />
+            <CheckCircle className="mx-auto mb-4 h-12 w-12 text-green-500 dark:text-green-400" />
             <h2 className="mb-2 text-lg font-semibold">Check your email</h2>
             <p className="text-muted-foreground">
               If an admin account exists with that email, we sent you a sign-in
