@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useFramework } from "@/components/framework/framework-provider";
 import { FrameworkSwitcher } from "@/components/framework/framework-switcher";
 import { getFrameworkOption } from "@/lib/framework";
@@ -84,7 +85,7 @@ await start();
 // removeAllListeners();`;
 
 export function QuickStartSection() {
-  const { framework } = useFramework();
+  const { framework, frameworkHref } = useFramework();
   const frameworkOption = getFrameworkOption(framework);
 
   return (
@@ -139,19 +140,19 @@ export function QuickStartSection() {
         <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
           <li>
             <strong>Configure tracking</strong> — Fine-tune distance filter, accuracy, and heartbeat in the{" "}
-            <a href="/docs/background-tracking" className="text-primary underline underline-offset-2">Background Tracking</a> guide.
+            <Link href={frameworkHref("/docs/background-tracking")} className="text-primary underline underline-offset-2">Background Tracking</Link> guide.
           </li>
           <li>
             <strong>Send data to your server</strong> — Enable native HTTP posting in the{" "}
-            <a href="/docs/http-posting" className="text-primary underline underline-offset-2">HTTP Posting</a> guide.
+            <Link href={frameworkHref("/docs/http-posting")} className="text-primary underline underline-offset-2">HTTP Posting</Link> guide.
           </li>
           <li>
             <strong>Set up geofences</strong> — Monitor circular regions in the{" "}
-            <a href="/docs/geofencing" className="text-primary underline underline-offset-2">Geofencing</a> guide.
+            <Link href={frameworkHref("/docs/geofencing")} className="text-primary underline underline-offset-2">Geofencing</Link> guide.
           </li>
           <li>
             <strong>Add your license key</strong> — Remove trial restrictions in the{" "}
-            <a href="/docs/licensing" className="text-primary underline underline-offset-2">Licensing</a> guide.
+            <Link href={frameworkHref("/docs/licensing")} className="text-primary underline underline-offset-2">Licensing</Link> guide.
           </li>
         </ul>
       </div>

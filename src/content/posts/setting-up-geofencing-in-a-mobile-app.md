@@ -14,7 +14,7 @@ Geofencing lets your app react when a user enters or leaves a geographic area. T
 
 Sounds simple. The reality? iOS and Android handle geofencing very differently under the hood, dwell detection is platform-specific, and your app might be suspended or killed before a transition fires.
 
-This guide walks through implementing geofencing in a Capacitor or React Native app using the bglocation plugin — from defining your first region to handling edge cases in production.
+This guide walks through implementing geofencing in a Capacitor or React Native app using the **bglocation** plugin — from defining your first region to handling edge cases in production.
 
 ## What is Geofencing?
 

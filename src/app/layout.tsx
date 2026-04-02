@@ -70,7 +70,7 @@ const jsonLdOrganization = {
   url: "https://bglocation.dev",
   logo: "https://bglocation.dev/bglocation-icon.svg",
   description:
-    "Production-ready background location SDK for Capacitor, React Native, and Flutter.",
+    "Production-ready background location SDK for Capacitor and React Native.",
   sameAs: ["https://gitlab.com/bglocation"],
 };
 
@@ -81,7 +81,7 @@ const jsonLdSoftware = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "iOS, Android",
   description:
-    "Continuous background GPS tracking SDK for Capacitor, React Native, and Flutter. Native HTTP posting, offline buffer, heartbeat timer, and geofencing.",
+    "Continuous background GPS tracking SDK for Capacitor and React Native. Native HTTP posting, offline buffer, heartbeat timer, and geofencing.",
   offers: {
     "@type": "AggregateOffer",
     lowPrice: "149",
