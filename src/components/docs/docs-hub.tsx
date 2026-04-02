@@ -12,7 +12,6 @@ import {
   Locate,
   MapPin,
   MoveRight,
-  Radio,
   Send,
   Settings,
   Shield,
