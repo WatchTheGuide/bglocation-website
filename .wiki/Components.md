@@ -49,17 +49,47 @@ Sekcje landing page renderowane na `/`.
 
 ## Docs Components (`src/components/docs/`)
 
-Sekcje strony `/docs`, współdzielące treść między frameworkami z wyborem trybu przez query param.
+Sekcje strony `/docs` (multi-page), współdzielące treść między frameworkami z wyborem trybu przez query param. Shared layout (`src/app/docs/layout.tsx`) renderuje sidebar, breadcrumbs i prev/next navigation.
+
+### Nawigacja
 
 | Komponent | Plik | Opis |
 |-----------|------|------|
-| Intro | `docs-intro.tsx` | Wprowadzenie do SDK i nawigacja po sekcjach |
-| Getting Started | `getting-started-section.tsx` | Instalacja, konfiguracja i start trackingu |
-| Configuration | `configuration-section.tsx` | Opcje `configure()`, HTTP posting, adaptive distance filter |
-| API Reference | `api-reference-section.tsx` | Metody, eventy, `Location` interface i geofencing |
-| Platform Guides | `platform-guides-section.tsx` | Wymagania i setup iOS / Android |
-| Licensing | `licensing-section.tsx` | Trial mode, klucz licencyjny, zasady licencjonowania |
-| Examples | `examples-section.tsx` | Przykładowe scenariusze integracji |
+| Sidebar | `docs-sidebar.tsx` | Sidebar z grupami stron i aktywną pozycją |
+| Breadcrumbs | `docs-breadcrumbs.tsx` | Breadcrumbs (Shadcn) z linkami do docs hub i bieżącej strony |
+| Prev / Next | `docs-prev-next.tsx` | Nawigacja prev/next page z tytułami sąsiednich stron |
+| Hub | `docs-hub.tsx` | Hub page (`/docs`) — karty sekcji z opisami i linkami |
+
+### Sekcje tematyczne (14 podstron)
+
+| Komponent | Plik | Podstrona |
+|-----------|------|-----------|
+| Quick Start | `quick-start-section.tsx` | `/docs/quick-start` |
+| Background Tracking | `background-tracking-section.tsx` | `/docs/background-tracking` |
+| HTTP Posting | `http-posting-section.tsx` | `/docs/http-posting` |
+| Geofencing | `geofencing-section.tsx` | `/docs/geofencing` |
+| Permissions | `permissions-section.tsx` | `/docs/permissions` |
+| Adaptive Filter | `adaptive-filter-section.tsx` | `/docs/adaptive-filter` |
+| Debug Mode | `debug-mode-section.tsx` | `/docs/debug-mode` |
+| Licensing | `licensing-page-section.tsx` | `/docs/licensing` |
+| Platform Differences | `platform-differences-section.tsx` | `/docs/platform-differences` |
+| Error Codes | `error-codes-section.tsx` | `/docs/error-codes` |
+| Examples | `examples-page-section.tsx` | `/docs/examples` |
+| Troubleshooting | `troubleshooting-section.tsx` | `/docs/troubleshooting` |
+| Migration | `migration-section.tsx` | `/docs/migration` |
+| API Reference | `api-reference-page-section.tsx` | `/docs/api-reference` |
+
+### Legacy (pre-EPIC-039, zachowane dla kompatybilności)
+
+| Komponent | Plik | Opis |
+|-----------|------|------|
+| Intro | `docs-intro.tsx` | Stare wprowadzenie do SDK |
+| Getting Started | `getting-started-section.tsx` | Stara sekcja instalacji |
+| Configuration | `configuration-section.tsx` | Stara sekcja konfiguracji |
+| API Reference (old) | `api-reference-section.tsx` | Stara sekcja API |
+| Platform Guides | `platform-guides-section.tsx` | Stare platform guides |
+| Licensing (old) | `licensing-section.tsx` | Stara sekcja licencji |
+| Examples (old) | `examples-section.tsx` | Stare przykłady |
 
 ## Pricing Components (`src/components/pricing/`)
 
