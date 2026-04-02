@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight } from "lucide-react";
 import { useFramework } from "@/components/framework/framework-provider";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { getDocPage } from "@/lib/docs-navigation";
 
 export function DocsBreadcrumbs() {
@@ -14,16 +21,22 @@ export function DocsBreadcrumbs() {
   const page = slug ? getDocPage(slug) : undefined;
 
   return (
-    <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-muted-foreground">
-      <Link href={frameworkHref("/docs")} className="transition-colors hover:text-foreground">
-        Docs
-      </Link>
-      {page && (
-        <>
-          <ChevronRight className="size-3.5" />
-          <span className="font-medium text-foreground">{page.title}</span>
-        </>
-      )}
-    </nav>
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink render={<Link href={frameworkHref("/docs")} />}>
+            Docs
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        {page && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{page.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 }
