@@ -70,7 +70,7 @@ const LOCATION_INTERFACE = `interface Location {
 
 const LOCATION_CONFIG = `interface LocationConfig {
   distanceFilter?: number | 'auto';
-  desiredAccuracy?: 'high' | 'balanced' | 'low' | 'passive';
+  desiredAccuracy?: 'high' | 'balanced' | 'low';
   heartbeatInterval?: number;            // seconds (default: 15)
   locationUpdateInterval?: number;       // ms, Android minimum interval
   debug?: boolean;
@@ -85,7 +85,7 @@ const HTTP_CONFIG = `interface HttpConfig {
   method?: 'POST';
   headers?: Record<string, string>;
   buffer?: {
-    maxSize?: number;                   // default: 500
+    maxSize?: number;                   // default: 1000
   };
 }`;
 
@@ -111,6 +111,7 @@ const GEOFENCE_EVENT = `interface GeofenceEvent {
 
 const CONFIGURE_RESULT = `interface ConfigureResult {
   licenseMode: 'full' | 'trial';
+  distanceFilterMode: 'fixed' | 'auto';
   licenseUpdatesUntil?: string;
   licenseUpdateExpired?: boolean;
   licenseError?: string;

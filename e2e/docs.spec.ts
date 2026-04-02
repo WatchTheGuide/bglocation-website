@@ -20,7 +20,8 @@ test.describe('Docs Hub Page', () => {
     await expect(page.locator('code').filter({ hasText: 'npm install @bglocation/react-native' }).first()).toBeVisible();
   });
 
-  test('should display sidebar with grouped navigation links', async ({ page }) => {
+  test('should display sidebar with grouped navigation links', async ({ page, viewport }) => {
+    test.skip(!!viewport && viewport.width < 1024, 'Sidebar hidden on mobile');
     const sidebar = page.locator('aside');
     await expect(sidebar.getByRole('link', { name: /Quick Start/i })).toBeVisible();
     await expect(sidebar.getByRole('link', { name: /API Reference/i })).toBeVisible();
@@ -69,7 +70,8 @@ test.describe('Docs Navigation', () => {
     await expect(page.getByRole('heading', { level: 1, name: /Quick Start/i })).toBeVisible();
   });
 
-  test('should navigate via sidebar', async ({ page }) => {
+  test('should navigate via sidebar', async ({ page, viewport }) => {
+    test.skip(!!viewport && viewport.width < 1024, 'Sidebar hidden on mobile');
     await page.goto(ROUTES.docsQuickStart);
     const sidebar = page.locator('aside');
     await sidebar.getByRole('link', { name: /Geofencing/i }).click();

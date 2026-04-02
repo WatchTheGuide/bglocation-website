@@ -123,6 +123,7 @@ export function getAdjacentPages(slug: string): {
   next: DocPage | undefined;
 } {
   const index = DOC_PAGES.findIndex((page) => page.slug === slug);
+  if (index === -1) return { prev: undefined, next: undefined };
   return {
     prev: index > 0 ? DOC_PAGES[index - 1] : undefined,
     next: index < DOC_PAGES.length - 1 ? DOC_PAGES[index + 1] : undefined,
