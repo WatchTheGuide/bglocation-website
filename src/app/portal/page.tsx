@@ -6,6 +6,7 @@ import { DashboardContent } from './dashboard-content';
 
 export const metadata: Metadata = {
   title: 'Dashboard — License Portal',
+  robots: { index: false, follow: false },
 };
 
 function getRenewalCheckoutUrl(plan: string): string | null {

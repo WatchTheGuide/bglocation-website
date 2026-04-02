@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
+import { DOC_PAGES } from "@/lib/docs-navigation";
 
 const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL ?? "https://bglocation.dev").replace(/\/+$/, "");
 
@@ -49,6 +50,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    ...DOC_PAGES.map((page) => ({
+      url: `${BASE_URL}/docs/${page.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       url: `${BASE_URL}/about`,
       lastModified: new Date(),
