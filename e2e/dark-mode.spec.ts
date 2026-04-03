@@ -13,7 +13,11 @@ async function ensureToggleVisible(page: import('@playwright/test').Page) {
   if (await hamburger.isVisible()) {
     await hamburger.click();
     await toggle.waitFor({ state: 'visible' });
+    return;
   }
+
+  // Desktop or hydration fallback: wait until the toggle becomes visible.
+  await toggle.waitFor({ state: 'visible' });
 }
 
 test.describe('Dark Mode', () => {
