@@ -8,7 +8,21 @@ Opis routingu App Router, sekcji publicznych oraz endpointów API wykorzystywany
 |---------|------|------|
 | `/` | `src/app/page.tsx` | Landing page produktu |
 | `/about` | `src/app/about/page.tsx` | Strona o twórcy i tle projektu |
-| `/docs` | `src/app/docs/page.tsx` | Publiczna dokumentacja SDK |
+| `/docs` | `src/app/docs/page.tsx` | Hub dokumentacji SDK (karty sekcji) |
+| `/docs/quick-start` | `src/app/docs/quick-start/page.tsx` | Quick Start — od zera do trackingu |
+| `/docs/background-tracking` | `src/app/docs/background-tracking/page.tsx` | Background Location Tracking |
+| `/docs/http-posting` | `src/app/docs/http-posting/page.tsx` | HTTP Posting & Offline Buffer |
+| `/docs/geofencing` | `src/app/docs/geofencing/page.tsx` | Geofencing Guide |
+| `/docs/permissions` | `src/app/docs/permissions/page.tsx` | Permissions & Setup (iOS/Android) |
+| `/docs/adaptive-filter` | `src/app/docs/adaptive-filter/page.tsx` | Adaptive Distance Filter |
+| `/docs/debug-mode` | `src/app/docs/debug-mode/page.tsx` | Debug Mode |
+| `/docs/licensing` | `src/app/docs/licensing/page.tsx` | Licensing & Trial |
+| `/docs/platform-differences` | `src/app/docs/platform-differences/page.tsx` | Platform Differences (iOS/Android/Web) |
+| `/docs/error-codes` | `src/app/docs/error-codes/page.tsx` | Error Codes Reference |
+| `/docs/examples` | `src/app/docs/examples/page.tsx` | Use Case Examples |
+| `/docs/troubleshooting` | `src/app/docs/troubleshooting/page.tsx` | Troubleshooting FAQ |
+| `/docs/migration` | `src/app/docs/migration/page.tsx` | Migration from capacitor-community |
+| `/docs/api-reference` | `src/app/docs/api-reference/page.tsx` | API Reference (metody, eventy, interfejsy) |
 | `/pricing` | `src/app/pricing/page.tsx` | Cennik i FAQ |
 | `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności |
 | `/terms` | `src/app/terms/page.tsx` | Regulamin licencyjny |

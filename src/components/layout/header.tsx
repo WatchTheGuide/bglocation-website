@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { FrameworkSwitcher } from "@/components/framework/framework-switcher";
 import { useFramework } from "@/components/framework/framework-provider";
 import { SiteLogo } from "@/components/layout/site-logo";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 const NAV_ITEMS = [
@@ -40,6 +41,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          <ThemeToggle />
           <Button render={<Link href={frameworkHref("/pricing")} />} nativeButton={false} size="sm">
             Get License
           </Button>
@@ -58,8 +60,9 @@ export function Header() {
       {/* Mobile nav */}
       {mobileOpen && (
         <nav className="border-t px-4 pb-4 pt-2 md:hidden">
-          <div className="py-2">
+          <div className="flex items-center justify-between py-2">
             <FrameworkSwitcher compact className="w-full justify-center" />
+            <ThemeToggle />
           </div>
           {NAV_ITEMS.map((item) => (
             <Link

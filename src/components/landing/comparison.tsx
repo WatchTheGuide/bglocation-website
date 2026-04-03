@@ -111,7 +111,7 @@ function ComparisonCell({
 }) {
   if (value === "partial") {
     return (
-      <span className="inline-flex items-center gap-1 text-amber-600">
+      <span className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400">
         <Minus className="h-4 w-4" />
         <span className="text-xs">limited</span>
       </span>
@@ -128,7 +128,7 @@ function ComparisonCell({
     );
   }
   return value ? (
-    <Check className="mx-auto h-5 w-5 text-green-600" />
+    <Check className="mx-auto h-5 w-5 text-green-600 dark:text-green-400" />
   ) : (
     <X className="mx-auto h-5 w-5 text-muted-foreground/40" />
   );

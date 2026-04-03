@@ -59,6 +59,22 @@ bglocation-website/
 │   │   │       └── route.ts     # RSS 2.0 feed
 │   │   ├── cookies/             # Polityka cookies (GDPR)
 │   │   ├── docs/
+│   │   │   ├── layout.tsx       # Shared layout: sidebar + breadcrumbs + prev/next
+│   │   │   ├── page.tsx         # /docs — hub z kartami sekcji
+│   │   │   ├── quick-start/     # /docs/quick-start
+│   │   │   ├── background-tracking/  # /docs/background-tracking
+│   │   │   ├── http-posting/    # /docs/http-posting
+│   │   │   ├── geofencing/      # /docs/geofencing
+│   │   │   ├── permissions/     # /docs/permissions
+│   │   │   ├── adaptive-filter/ # /docs/adaptive-filter
+│   │   │   ├── debug-mode/      # /docs/debug-mode
+│   │   │   ├── licensing/       # /docs/licensing
+│   │   │   ├── platform-differences/  # /docs/platform-differences
+│   │   │   ├── error-codes/     # /docs/error-codes
+│   │   │   ├── examples/        # /docs/examples
+│   │   │   ├── troubleshooting/ # /docs/troubleshooting
+│   │   │   ├── migration/       # /docs/migration
+│   │   │   └── api-reference/   # /docs/api-reference
 │   │   ├── newsletter/          # Confirm / unsubscribe pages
 │   │   ├── portal/              # Portal klienta
 │   │   ├── pricing/
@@ -68,7 +84,7 @@ bglocation-website/
 │   │   ├── about/               # About page sections
 │   │   ├── blog/                # Post card + post layout
 │   │   ├── chat/                # Chat widget + quick replies
-│   │   ├── docs/                # Sekcje strony dokumentacji
+│   │   ├── docs/                # Sekcje dokumentacji (14 podstron + sidebar + breadcrumbs + prev/next + hub)
 │   │   ├── framework/           # Provider + switcher frameworka
 │   │   ├── landing/             # Sekcje landing page
 │   │   ├── layout/              # Header, footer, site logo, cookie banner
