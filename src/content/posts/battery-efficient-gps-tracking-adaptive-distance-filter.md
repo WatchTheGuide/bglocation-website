@@ -2,7 +2,7 @@
 title: "Battery-Efficient GPS Tracking in Mobile Apps — How Adaptive Distance Filter Works"
 slug: "battery-efficient-gps-tracking-adaptive-distance-filter"
 description: "GPS tracking drains battery fast. Learn how an adaptive distance filter adjusts precision based on speed — saving power on highways and delivering accuracy on foot."
-date: "2026-04-02"
+date: "2026-04-03"
 tags: ["gps", "battery", "capacitor", "react-native", "mobile", "location", "performance"]
 published: true
 author: "Szymon Walczak"
@@ -14,9 +14,7 @@ Continuous GPS tracking kills battery. A typical 1 Hz GPS session (one fix per s
 
 Most location plugins give you one knob to tune: the **distance filter** — the minimum distance in meters between location updates. Set it low (10m) and you get precise tracking but aggressive battery drain. Set it high (500m) and battery lasts, but you lose detail around turns, stops, and slow-speed movement.
 
-What if the filter adjusted itself — tight when you're walking, loose when you're on a highway?
-
-That's what the adaptive distance filter in the **bglocation** plugin does. This article explains how it works, how to configure it, and what kind of battery savings you can expect in production.
+What if the filter adjusted itself — tight when you're walking, loose when you're on a highway? That's what the adaptive distance filter in the **bglocation** plugin does. This article explains how it works, how to configure it, and what kind of battery savings you can expect in production.
 
 ## The Problem with Fixed Distance Filters
 
@@ -38,29 +36,15 @@ Here's the dilemma with a fixed value:
 
 ### The "just right" problem
 
-There is no single distance filter that works well for all movement speeds. A courier's day involves highway driving, city streets, walking between buildings, and standing still at a door. Each phase needs different precision.
-
-You could change the filter manually based on some heuristic — but then you're reimplementing something the plugin should handle for you.
+There is no single distance filter that works well for all movement speeds. A courier's day involves highway driving, city streets, walking between buildings, and standing still at a door. Each phase needs different precision. You could change the filter manually based on some heuristic — but then you're reimplementing something the plugin should handle for you.
 
 ## How The Adaptive Distance Filter Works
 
-The bglocation plugin includes an auto mode that adjusts the distance filter dynamically based on the device's current speed. The algorithm follows a simple principle:
+The **bglocation** plugin includes an auto mode that adjusts the distance filter dynamically based on the device's current speed. The algorithm follows a simple principle:
 
 > **Maintain a consistent time interval between location updates, regardless of speed.**
 
 Instead of "give me an update every 15 meters," you're saying "give me an update roughly every 10 seconds." The plugin translates that into a distance filter based on how fast the device is moving.
-
-The formula:
-
-```
-effectiveDistance = clamp(speed × targetInterval, minDistance, maxDistance)
-```
-
-Where:
-- **speed** — the device's current speed (internally stabilized to avoid GPS jitter)
-- **targetInterval** — your desired seconds between updates (default: 10)
-- **minDistance** — floor for the filter, prevents excessive updates at low speed (default: 10m)
-- **maxDistance** — ceiling, ensures updates even at high speed (default: 500m)
 
 ### What this looks like in practice
 
@@ -307,3 +291,7 @@ cd ios && pod install
 ```
 
 Try the 30-minute trial — watch the distance filter adapt in real-time as you walk, drive, and stop.
+
+---
+
+*Have questions or feedback? Reach out at hello@bglocation.dev.*

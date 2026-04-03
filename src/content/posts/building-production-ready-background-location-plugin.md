@@ -269,4 +269,4 @@ If you're building something that needs reliable background GPS tracking, **give
 
 ---
 
-*Have questions or feedback? Drop a comment below or reach out at hello@bglocation.dev.*
+*Have questions or feedback? Reach out at hello@bglocation.dev.*
