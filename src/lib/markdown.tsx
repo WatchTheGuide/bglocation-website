@@ -6,7 +6,10 @@ import rehypePrettyCode, { type Options as PrettyCodeOptions } from "rehype-pret
 import rehypeStringify from "rehype-stringify";
 
 const rehypePrettyCodeOptions: PrettyCodeOptions = {
-  theme: "github-light",
+  theme: {
+    light: "github-light",
+    dark: "github-dark",
+  },
   keepBackground: false,
 };
 

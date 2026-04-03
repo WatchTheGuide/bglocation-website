@@ -186,3 +186,11 @@
 .prose pre code {
   @apply bg-transparent p-0;
 }
+
+/* rehype-pretty-code dual theme support */
+[data-rehype-pretty-code-figure] code [style*="--shiki-light"] {
+  color: var(--shiki-light);
+}
+.dark [data-rehype-pretty-code-figure] code [style*="--shiki-dark"] {
+  color: var(--shiki-dark);
+}
