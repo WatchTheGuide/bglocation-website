@@ -167,8 +167,8 @@ export function SubscriberList({
       {/* KPI counters */}
       <div className="grid gap-4 sm:grid-cols-4">
         <StatCard title="Total" value={statusCounts.total} icon={<Users className="h-4 w-4 text-muted-foreground" />} />
-        <StatCard title="Confirmed" value={statusCounts.confirmed} icon={<CheckCircle className="h-4 w-4 text-green-600" />} />
-        <StatCard title="Pending" value={statusCounts.pending} icon={<Clock className="h-4 w-4 text-yellow-600" />} />
+        <StatCard title="Confirmed" value={statusCounts.confirmed} icon={<CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />} />
+        <StatCard title="Pending" value={statusCounts.pending} icon={<Clock className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />} />
         <StatCard title="Unsubscribed" value={statusCounts.unsubscribed} icon={<UserX className="h-4 w-4 text-muted-foreground" />} />
       </div>
 

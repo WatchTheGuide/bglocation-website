@@ -140,7 +140,7 @@ test.describe('About Page', () => {
 test.describe('About Page — SEO', () => {
   test('should have correct page title', async ({ page }) => {
     await page.goto(ROUTES.about);
-    await expect(page).toHaveTitle(/About.*@bglocation/capacitor/i);
+    await expect(page).toHaveTitle(/About.*@bglocation\/capacitor/i);
   });
 
   test('should have meta description', async ({ page }) => {

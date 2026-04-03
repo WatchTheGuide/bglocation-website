@@ -13,6 +13,7 @@ import { AnnouncementBanner } from "@/components/landing/announcement-banner";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { CookieBanner } from "@/components/layout/cookie-banner";
 import { FrameworkProvider } from "@/components/framework/framework-provider";
+import { ThemeProvider } from "@/components/layout/theme-provider";
 import { isFramework } from "@/lib/framework";
 import "./globals.css";
 
@@ -101,7 +102,7 @@ export default async function RootLayout({
   const initialFramework = isFramework(frameworkHeader) ? frameworkHeader : undefined;
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <script
           type="application/ld+json"
@@ -111,14 +112,16 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSoftware) }}
         />
-        <FrameworkProvider initialFramework={initialFramework}>
-          <AnnouncementBanner />
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-          <ChatWidget />
-          <CookieBanner />
-        </FrameworkProvider>
+        <ThemeProvider>
+          <FrameworkProvider initialFramework={initialFramework}>
+            <AnnouncementBanner />
+            <Header />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+            <ChatWidget />
+            <CookieBanner />
+          </FrameworkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
