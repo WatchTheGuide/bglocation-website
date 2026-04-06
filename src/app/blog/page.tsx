@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description:
     "News, tutorials, and insights about background location tracking for Capacitor and React Native.",
   alternates: {
+    canonical: "/blog",
     types: {
       "application/rss+xml": "/blog/feed.xml",
     },

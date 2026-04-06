@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Examples — @bglocation Documentation",
   description:
     "Real-world integration patterns: fleet tracking, fitness apps, geofencing, and attendance systems.",
+  alternates: { canonical: "/docs/examples" },
 };
 
 export default function ExamplesPage() {

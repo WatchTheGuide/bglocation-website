@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Licensing — @bglocation Documentation",
   description:
     "Trial mode, license key placement, offline RSA validation, perpetual model, and update gating.",
+  alternates: { canonical: "/docs/licensing" },
 };
 
 export default function LicensingPage() {

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "HTTP Posting & Offline Buffer — Documentation",
   description:
     "Configure native HTTP POST for location data with automatic offline buffering and retry in bglocation.",
+  alternates: { canonical: "/docs/http-posting" },
 };
 
 export default function HttpPostingPage() {

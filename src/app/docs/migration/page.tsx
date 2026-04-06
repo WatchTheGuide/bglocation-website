@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Migration Guide — @bglocation Documentation",
   description:
     "Step-by-step migration from capacitor-community/background-geolocation to @bglocation/capacitor.",
+  alternates: { canonical: "/docs/migration" },
 };
 
 export default function MigrationPage() {

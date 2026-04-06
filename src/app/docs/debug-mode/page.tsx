@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Debug Mode — Documentation",
   description:
     "Enable verbose logs, system sounds, and onDebug events for development and testing with bglocation.",
+  alternates: { canonical: "/docs/debug-mode" },
 };
 
 export default function DebugModePage() {
