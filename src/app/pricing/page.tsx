@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Pricing",
   description:
     "Simple pricing for bglocation. One perpetual license model for Capacitor and React Native, with 1 year of updates included. From $149.",
+  alternates: { canonical: "/pricing" },
 };
 
 export default function PricingPage() {

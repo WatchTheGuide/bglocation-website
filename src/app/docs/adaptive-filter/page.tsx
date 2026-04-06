@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Adaptive Distance Filter — Documentation",
   description:
     "Speed-adaptive distance filter for optimal battery use and accuracy. Configure auto mode for walking, cycling, and driving.",
+  alternates: { canonical: "/docs/adaptive-filter" },
 };
 
 export default function AdaptiveFilterPage() {

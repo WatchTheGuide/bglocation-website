@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Terms of Service for bglocation — perpetual software license terms for the background location plugin.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

@@ -20,6 +20,13 @@ async function verifyToken(token: string, expectedType: string): Promise<boolean
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // --- www → non-www canonical redirect ---
+  if (request.headers.get('host')?.startsWith('www.')) {
+    const url = request.nextUrl.clone();
+    url.host = url.host.replace(/^www\./, '');
+    return NextResponse.redirect(url, 301);
+  }
+
   // --- Portal (customer) auth ---
   if (pathname.startsWith('/portal')) {
     if (pathname === '/portal/login' || pathname === '/portal/verify') {
@@ -75,11 +82,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
-    '/docs/:path*',
-    '/pricing/:path*',
-    '/about/:path*',
-    '/portal/:path*',
-    '/admin/:path*',
+    '/((?!_next/static|_next/image|favicon\\.ico|.*\\.svg|.*\\.png|.*\\.jpg|.*\\.webp|sitemap\\.xml|robots\\.txt).*)',
   ],
 };

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Geofencing Guide — Documentation",
   description:
     "Monitor circular regions, react to enter/exit/dwell transitions, and manage up to 20 geofences with bglocation.",
+  alternates: { canonical: "/docs/geofencing" },
 };
 
 export default function GeofencingPage() {

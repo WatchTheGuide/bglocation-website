@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "API Reference — @bglocation Documentation",
   description:
     "Complete TypeScript API: methods, events, interfaces, and error codes.",
+  alternates: { canonical: "/docs/api-reference" },
 };
 
 export default function ApiReferencePage() {

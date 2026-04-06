@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Quick Start — Documentation",
   description:
     "Install, configure, and get your first background location update in 5 minutes with bglocation for Capacitor or React Native.",
+  alternates: { canonical: "/docs/quick-start" },
 };
 
 export default function QuickStartPage() {

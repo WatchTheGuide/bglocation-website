@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Background Location Tracking — Documentation",
   description:
     "Configure distance filter, heartbeat interval, accuracy, and understand battery impact for background GPS tracking with bglocation.",
+  alternates: { canonical: "/docs/background-tracking" },
 };
 
 export default function BackgroundTrackingPage() {

@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Cookie Policy",
   description:
     "Cookie Policy for bglocation.dev — what cookies we use and why.",
+  alternates: { canonical: "/cookies" },
 };
 
 export default function CookiePolicyPage() {

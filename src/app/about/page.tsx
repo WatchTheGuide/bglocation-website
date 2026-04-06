@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Meet Szymon Walczak — the creator of bglocation. Senior Software Architect with 20+ years of experience in web and mobile development.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

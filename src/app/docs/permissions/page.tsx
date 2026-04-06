@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Permissions & Setup — Documentation",
   description:
     "iOS and Android location permissions, background modes, Expo config plugin, and App Store/Play Store guidelines for bglocation.",
+  alternates: { canonical: "/docs/permissions" },
 };
 
 export default function PermissionsPage() {

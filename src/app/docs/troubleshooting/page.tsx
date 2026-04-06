@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Troubleshooting — @bglocation Documentation",
   description:
     "Common issues and solutions for background location tracking on iOS and Android.",
+  alternates: { canonical: "/docs/troubleshooting" },
 };
 
 export default function TroubleshootingPage() {

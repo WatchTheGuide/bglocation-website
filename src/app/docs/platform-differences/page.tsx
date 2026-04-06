@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Platform Differences — @bglocation Documentation",
   description:
     "Feature availability and behavioral differences across iOS, Android, and Web platforms.",
+  alternates: { canonical: "/docs/platform-differences" },
 };
 
 export default function PlatformDifferencesPage() {
