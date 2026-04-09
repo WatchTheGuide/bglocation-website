@@ -90,18 +90,27 @@ export async function generateKeyAction(
 
   const customer = await prisma.customer.findUnique({
     where: { id: session.customerId },
+    include: { orders: { where: { type: 'purchase' } } },
   });
 
   if (!customer) redirect('/portal/login');
 
-  // Check limit (0 = unlimited)
-  if (customer.maxBundleIds > 0) {
+  // Check limit from orders (0 = unlimited)
+  const hasUnlimited = customer.orders.some((o) => o.maxBundleIds === 0);
+  if (!hasUnlimited) {
+    const totalSlots = customer.orders.reduce(
+      (sum, o) => sum + o.maxBundleIds,
+      0,
+    );
     const licenseCount = await prisma.license.count({
       where: { customerId: customer.id, active: true },
     });
-    if (licenseCount >= customer.maxBundleIds) {
+    if (licenseCount >= totalSlots) {
       return {
-        error: `You have reached the maximum of ${customer.maxBundleIds} bundle IDs for your ${customer.plan} plan.`,
+        error:
+          totalSlots === 0
+            ? 'No bundle ID slots available. Please purchase a license first.'
+            : `You have reached the maximum of ${totalSlots} bundle IDs for your plan.`,
       };
     }
   }

@@ -24,6 +24,7 @@ function higherPlan(a: Plan, b: Plan): Plan {
 async function upsertCustomerForOrder(params: {
   email: string;
   lsCustomerId: string;
+  lsOrderId: string;
   variant: {
     plan: Plan;
     maxBundleIds: number;
@@ -38,34 +39,64 @@ async function upsertCustomerForOrder(params: {
         async (transaction) => {
           const existing = await transaction.customer.findUnique({
             where: { email: normalizedEmail },
+            include: { orders: { where: { type: "purchase" } } },
           });
 
+          // Create order record inside the transaction
+          const orderData = {
+            lsOrderId: params.lsOrderId,
+            type: params.variant.orderType,
+            plan: params.variant.plan,
+            maxBundleIds:
+              params.variant.orderType === "purchase"
+                ? params.variant.maxBundleIds
+                : 0,
+          };
+
           if (!existing) {
-            return transaction.customer.create({
+            const customer = await transaction.customer.create({
               data: {
                 lsCustomerId: params.lsCustomerId,
                 email: normalizedEmail,
                 plan: params.variant.plan,
-                maxBundleIds: params.variant.maxBundleIds,
+                maxBundleIds:
+                  params.variant.orderType === "purchase"
+                    ? params.variant.maxBundleIds
+                    : 0,
+                orders: { create: orderData },
               },
             });
+            return customer;
           }
+
+          // Create the order
+          await transaction.order.create({
+            data: {
+              ...orderData,
+              customerId: existing.id,
+            },
+          });
+
+          // Recalculate cache from all purchase orders (including the new one)
+          const allPurchaseOrders = [
+            ...existing.orders,
+            ...(params.variant.orderType === "purchase"
+              ? [{ maxBundleIds: params.variant.maxBundleIds }]
+              : []),
+          ];
+          const hasUnlimited = allPurchaseOrders.some(
+            (o) => o.maxBundleIds === 0,
+          );
+          const cachedMaxBundleIds = hasUnlimited
+            ? 0
+            : allPurchaseOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
 
           return transaction.customer.update({
             where: { id: existing.id },
             data: {
               lsCustomerId: params.lsCustomerId,
               plan: higherPlan(existing.plan, params.variant.plan),
-              ...(params.variant.orderType === "purchase"
-                ? params.variant.plan === existing.plan
-                  ? { maxBundleIds: { increment: params.variant.maxBundleIds } }
-                  : {
-                      maxBundleIds: Math.max(
-                        existing.maxBundleIds,
-                        params.variant.maxBundleIds,
-                      ),
-                    }
-                : {}),
+              maxBundleIds: cachedMaxBundleIds,
             },
           });
         },
@@ -273,16 +304,8 @@ async function handleOrderCreated(payload: WebhookPayload) {
   const customer = await upsertCustomerForOrder({
     email,
     lsCustomerId: String(lsCustomerId),
+    lsOrderId,
     variant,
-  });
-
-  // Record the order
-  await prisma.order.create({
-    data: {
-      lsOrderId,
-      customerId: customer.id,
-      type: variant.orderType,
-    },
   });
 
   // For renewals, regenerate license keys with new exp date
