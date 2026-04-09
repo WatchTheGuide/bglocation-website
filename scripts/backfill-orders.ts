@@ -12,7 +12,7 @@
  * Usage: npx tsx scripts/backfill-orders.ts
  */
 import 'dotenv/config';
-import { PrismaClient, type Plan } from '.prisma/client';
+import { PrismaClient, type Plan } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });

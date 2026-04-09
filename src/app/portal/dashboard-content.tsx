@@ -329,9 +329,11 @@ export function DashboardContent({
                       {order.plan ?? '—'}
                     </TableCell>
                     <TableCell>
-                      {order.maxBundleIds === 0
-                        ? 'Unlimited'
-                        : order.maxBundleIds}
+                      {order.plan == null
+                        ? '—'
+                        : order.maxBundleIds === 0
+                          ? 'Unlimited'
+                          : order.maxBundleIds}
                     </TableCell>
                     <TableCell className="font-mono text-xs">
                       #{order.lsOrderId}
