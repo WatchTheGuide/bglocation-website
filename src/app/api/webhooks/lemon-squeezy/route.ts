@@ -69,7 +69,15 @@ async function upsertCustomerForOrder(params: {
             return customer;
           }
 
-          // Create the order
+          // Idempotency: skip if this order was already processed (e.g. webhook retry)
+          const existingOrder = await transaction.order.findUnique({
+            where: { lsOrderId: params.lsOrderId },
+          });
+          if (existingOrder) {
+            return existing;
+          }
+
+          // Create order record
           await transaction.order.create({
             data: {
               ...orderData,
@@ -78,8 +86,10 @@ async function upsertCustomerForOrder(params: {
           });
 
           // Recalculate cache from all purchase orders (including the new one)
+          // Only count backfilled orders (plan !== null) to avoid treating
+          // pre-migration orders (plan=null, maxBundleIds=0) as unlimited
           const allPurchaseOrders = [
-            ...existing.orders,
+            ...existing.orders.filter((o) => o.plan !== null),
             ...(params.variant.orderType === "purchase"
               ? [{ maxBundleIds: params.variant.maxBundleIds }]
               : []),

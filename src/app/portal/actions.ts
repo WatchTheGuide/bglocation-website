@@ -95,10 +95,12 @@ export async function generateKeyAction(
 
   if (!customer) redirect('/portal/login');
 
-  // Check limit from orders (0 = unlimited)
-  const hasUnlimited = customer.orders.some((o) => o.maxBundleIds === 0);
+  // Check limit from orders — only consider backfilled orders (plan !== null)
+  // to avoid treating pre-migration orders (plan=null, maxBundleIds=0) as unlimited
+  const backfilledOrders = customer.orders.filter((o) => o.plan !== null);
+  const hasUnlimited = backfilledOrders.some((o) => o.maxBundleIds === 0);
   if (!hasUnlimited) {
-    const totalSlots = customer.orders.reduce(
+    const totalSlots = backfilledOrders.reduce(
       (sum, o) => sum + o.maxBundleIds,
       0,
     );

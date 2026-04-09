@@ -76,8 +76,10 @@ export function CustomerDetail({
   const router = useRouter();
   const [togglingId, setTogglingId] = useState<string | null>(null);
 
-  // Calculate slots from orders
-  const purchaseOrders = orders.filter((o) => o.type === 'purchase');
+  // Calculate slots from orders (only backfilled ones with plan set)
+  const purchaseOrders = orders.filter(
+    (o) => o.type === 'purchase' && o.plan !== null,
+  );
   const hasUnlimited = purchaseOrders.some((o) => o.maxBundleIds === 0);
   const totalFromOrders = hasUnlimited
     ? 0

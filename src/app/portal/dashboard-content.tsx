@@ -187,8 +187,10 @@ export function DashboardContent({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [generateKey, setGenerateKey] = useState(0);
 
-  // Calculate slots from purchase orders
-  const purchaseOrders = orders.filter((o) => o.type === 'purchase');
+  // Calculate slots from purchase orders (only backfilled ones with plan set)
+  const purchaseOrders = orders.filter(
+    (o) => o.type === 'purchase' && o.plan !== null,
+  );
   const hasUnlimited = purchaseOrders.some((o) => o.maxBundleIds === 0);
   const totalSlots = hasUnlimited
     ? 0
