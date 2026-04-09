@@ -41,6 +41,7 @@ export default async function PortalDashboard() {
   return (
     <DashboardContent
       email={customer.email}
+      cachedMaxBundleIds={customer.maxBundleIds}
       renewalCheckoutUrl={renewalCheckoutUrl}
       orders={customer.orders.map((o) => ({
         id: o.id,

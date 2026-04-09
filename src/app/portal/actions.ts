@@ -95,15 +95,19 @@ export async function generateKeyAction(
 
   if (!customer) redirect('/portal/login');
 
-  // Check limit from orders — only consider backfilled orders (plan !== null)
-  // to avoid treating pre-migration orders (plan=null, maxBundleIds=0) as unlimited
+  // Check limit from orders — only consider backfilled orders (plan !== null).
+  // If any purchase orders are unbackfilled, fall back to customer.maxBundleIds
+  // to avoid blocking legitimate customers during the migration window.
+  const hasLegacyOrders = customer.orders.some((o) => o.plan === null);
   const backfilledOrders = customer.orders.filter((o) => o.plan !== null);
-  const hasUnlimited = backfilledOrders.some((o) => o.maxBundleIds === 0);
+  const effectiveMaxBundleIds = hasLegacyOrders
+    ? customer.maxBundleIds
+    : backfilledOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
+  const hasUnlimited = hasLegacyOrders
+    ? customer.maxBundleIds === 0
+    : backfilledOrders.some((o) => o.maxBundleIds === 0);
   if (!hasUnlimited) {
-    const totalSlots = backfilledOrders.reduce(
-      (sum, o) => sum + o.maxBundleIds,
-      0,
-    );
+    const totalSlots = effectiveMaxBundleIds;
     const licenseCount = await prisma.license.count({
       where: { customerId: customer.id, active: true },
     });

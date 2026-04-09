@@ -54,6 +54,7 @@ interface OrderInfo {
 
 interface DashboardContentProps {
   email: string;
+  cachedMaxBundleIds: number;
   renewalCheckoutUrl: string | null;
   orders: OrderInfo[];
   licenses: License[];
@@ -179,6 +180,7 @@ function GenerateKeySection({ canGenerate, onDone }: GenerateKeySectionProps) {
 
 export function DashboardContent({
   email,
+  cachedMaxBundleIds,
   renewalCheckoutUrl,
   orders,
   licenses,
@@ -187,20 +189,27 @@ export function DashboardContent({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [generateKey, setGenerateKey] = useState(0);
 
-  // Calculate slots from purchase orders (only backfilled ones with plan set)
-  const purchaseOrders = orders.filter(
-    (o) => o.type === 'purchase' && o.plan !== null,
-  );
-  const hasUnlimited = purchaseOrders.some((o) => o.maxBundleIds === 0);
+  // Calculate slots from purchase orders (only backfilled ones with plan set).
+  // If any legacy orders have plan=null (not yet backfilled), fall back to
+  // the cached customer.maxBundleIds to avoid blocking legitimate customers.
+  const allPurchaseOrders = orders.filter((o) => o.type === 'purchase');
+  const hasLegacyOrders = allPurchaseOrders.some((o) => o.plan === null);
+  const backfilledOrders = allPurchaseOrders.filter((o) => o.plan !== null);
+  const hasUnlimited = hasLegacyOrders
+    ? cachedMaxBundleIds === 0
+    : backfilledOrders.some((o) => o.maxBundleIds === 0);
   const totalSlots = hasUnlimited
     ? 0
-    : purchaseOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
+    : hasLegacyOrders
+      ? cachedMaxBundleIds
+      : backfilledOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
 
   const slotsUsed = licenses.length;
+  const hasSlots = hasUnlimited || totalSlots > 0;
   const slotsText = hasUnlimited
     ? `${slotsUsed} / unlimited`
     : `${slotsUsed} / ${totalSlots}`;
-  const canGenerate = hasUnlimited || slotsUsed < totalSlots;
+  const canGenerate = hasUnlimited || (hasSlots && slotsUsed < totalSlots);
   const now = new Date();
 
   const renewUrl = renewalCheckoutUrl
@@ -240,7 +249,7 @@ export function DashboardContent({
       </div>
 
       {/* Purchases */}
-      {purchaseOrders.length > 0 && (
+      {allPurchaseOrders.length > 0 && (
         <Card className="mb-6">
           <CardHeader>
             <div className="flex items-start justify-between">
@@ -311,7 +320,7 @@ export function DashboardContent({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {purchaseOrders.map((order) => (
+                {allPurchaseOrders.map((order: OrderInfo) => (
                   <TableRow key={order.id}>
                     <TableCell>
                       {new Date(order.createdAt).toLocaleDateString()}

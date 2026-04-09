@@ -263,9 +263,11 @@ export function CustomerDetail({
                     <TableCell>
                       {o.type === 'renewal'
                         ? '—'
-                        : o.maxBundleIds === 0
-                          ? 'Unlimited'
-                          : o.maxBundleIds}
+                        : o.plan == null
+                          ? '—'
+                          : o.maxBundleIds === 0
+                            ? 'Unlimited'
+                            : o.maxBundleIds}
                     </TableCell>
                     <TableCell className="font-mono text-xs">
                       {o.lsOrderId}

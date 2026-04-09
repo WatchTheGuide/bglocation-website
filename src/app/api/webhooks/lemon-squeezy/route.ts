@@ -30,7 +30,7 @@ async function upsertCustomerForOrder(params: {
     maxBundleIds: number;
     orderType: OrderType;
   };
-}) {
+}): Promise<{ customer: { id: string; email: string; plan: Plan; maxBundleIds: number }; alreadyProcessed: boolean }> {
   const normalizedEmail = params.email.toLowerCase();
 
   for (let attempt = 0; attempt < SERIALIZATION_RETRY_LIMIT; attempt++) {
@@ -66,7 +66,7 @@ async function upsertCustomerForOrder(params: {
                 orders: { create: orderData },
               },
             });
-            return customer;
+            return { customer, alreadyProcessed: false };
           }
 
           // Idempotency: skip if this order was already processed (e.g. webhook retry)
@@ -74,7 +74,7 @@ async function upsertCustomerForOrder(params: {
             where: { lsOrderId: params.lsOrderId },
           });
           if (existingOrder) {
-            return existing;
+            return { customer: existing, alreadyProcessed: true };
           }
 
           // Create order record
@@ -85,30 +85,45 @@ async function upsertCustomerForOrder(params: {
             },
           });
 
-          // Recalculate cache from all purchase orders (including the new one)
-          // Only count backfilled orders (plan !== null) to avoid treating
-          // pre-migration orders (plan=null, maxBundleIds=0) as unlimited
-          const allPurchaseOrders = [
-            ...existing.orders.filter((o) => o.plan !== null),
-            ...(params.variant.orderType === "purchase"
-              ? [{ maxBundleIds: params.variant.maxBundleIds }]
-              : []),
-          ];
-          const hasUnlimited = allPurchaseOrders.some(
-            (o) => o.maxBundleIds === 0,
+          // Recalculate cache from purchase orders.
+          // If any legacy orders have plan=null (not yet backfilled), fall back
+          // to incrementing the existing cache to avoid undercounting.
+          const hasLegacyOrders = existing.orders.some(
+            (o) => o.plan === null,
           );
-          const cachedMaxBundleIds = hasUnlimited
-            ? 0
-            : allPurchaseOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
+          const cachedMaxBundleIds = hasLegacyOrders
+            ? params.variant.orderType !== "purchase"
+              ? existing.maxBundleIds
+              : existing.maxBundleIds === 0 ||
+                  params.variant.maxBundleIds === 0
+                ? 0
+                : existing.maxBundleIds + params.variant.maxBundleIds
+            : (() => {
+                const allPurchaseOrders = [
+                  ...existing.orders.filter((o) => o.plan !== null),
+                  ...(params.variant.orderType === "purchase"
+                    ? [{ maxBundleIds: params.variant.maxBundleIds }]
+                    : []),
+                ];
+                const hasUnlimited = allPurchaseOrders.some(
+                  (o) => o.maxBundleIds === 0,
+                );
+                return hasUnlimited
+                  ? 0
+                  : allPurchaseOrders.reduce(
+                      (sum, o) => sum + o.maxBundleIds,
+                      0,
+                    );
+              })();
 
-          return transaction.customer.update({
+          return { customer: await transaction.customer.update({
             where: { id: existing.id },
             data: {
               lsCustomerId: params.lsCustomerId,
               plan: higherPlan(existing.plan, params.variant.plan),
               maxBundleIds: cachedMaxBundleIds,
             },
-          });
+          }), alreadyProcessed: false };
         },
         { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
       );
@@ -311,12 +326,20 @@ async function handleOrderCreated(payload: WebhookPayload) {
     return;
   }
 
-  const customer = await upsertCustomerForOrder({
+  const { customer, alreadyProcessed } = await upsertCustomerForOrder({
     email,
     lsCustomerId: String(lsCustomerId),
     lsOrderId,
     variant,
   });
+
+  // Skip side effects on duplicate webhook delivery
+  if (alreadyProcessed) {
+    console.log(
+      `[LS Webhook] Order ${lsOrderId} already processed — skipping side effects`,
+    );
+    return;
+  }
 
   // For renewals, regenerate license keys with new exp date
   if (variant.orderType === "renewal") {
