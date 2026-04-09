@@ -49,6 +49,8 @@ interface OrderInfo {
   id: string;
   lsOrderId: string;
   type: string;
+  plan: string | null;
+  maxBundleIds: number;
   createdAt: string;
 }
 
@@ -73,6 +75,15 @@ export function CustomerDetail({
 }: CustomerDetailProps) {
   const router = useRouter();
   const [togglingId, setTogglingId] = useState<string | null>(null);
+
+  // Calculate slots from orders (only backfilled ones with plan set)
+  const purchaseOrders = orders.filter(
+    (o) => o.type === 'purchase' && o.plan !== null,
+  );
+  const hasUnlimited = purchaseOrders.some((o) => o.maxBundleIds === 0);
+  const totalFromOrders = hasUnlimited
+    ? 0
+    : purchaseOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
 
   async function handleToggle(licenseId: string, newActive: boolean) {
     setTogglingId(licenseId);
@@ -114,9 +125,13 @@ export function CustomerDetail({
               <dd className="text-sm font-medium capitalize">{customer.plan}</dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Bundle ID Slots</dt>
+              <dt className="text-sm text-muted-foreground">Bundle ID Slots (from orders)</dt>
               <dd className="text-sm font-medium">
-                {customer.maxBundleIds === 0 ? 'Unlimited' : customer.maxBundleIds}
+                {hasUnlimited ? 'Unlimited' : totalFromOrders}
+                {' '}
+                <span className="text-xs text-muted-foreground">
+                  (cache: {customer.maxBundleIds === 0 ? '∞' : customer.maxBundleIds})
+                </span>
               </dd>
             </div>
             <div>
@@ -221,13 +236,15 @@ export function CustomerDetail({
               <TableRow>
                 <TableHead>Date</TableHead>
                 <TableHead>Type</TableHead>
+                <TableHead>Plan</TableHead>
+                <TableHead>Bundle IDs</TableHead>
                 <TableHead>Lemon Squeezy Order ID</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {orders.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="py-8 text-center text-muted-foreground">
+                  <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
                     No orders yet.
                   </TableCell>
                 </TableRow>
@@ -239,6 +256,18 @@ export function CustomerDetail({
                       <Badge variant={o.type === 'purchase' ? 'default' : 'secondary'}>
                         {o.type}
                       </Badge>
+                    </TableCell>
+                    <TableCell className="capitalize">
+                      {o.plan ?? '—'}
+                    </TableCell>
+                    <TableCell>
+                      {o.type === 'renewal'
+                        ? '—'
+                        : o.plan == null
+                          ? '—'
+                          : o.maxBundleIds === 0
+                            ? 'Unlimited'
+                            : o.maxBundleIds}
                     </TableCell>
                     <TableCell className="font-mono text-xs">
                       {o.lsOrderId}

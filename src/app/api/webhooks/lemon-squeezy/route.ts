@@ -24,12 +24,13 @@ function higherPlan(a: Plan, b: Plan): Plan {
 async function upsertCustomerForOrder(params: {
   email: string;
   lsCustomerId: string;
+  lsOrderId: string;
   variant: {
     plan: Plan;
     maxBundleIds: number;
     orderType: OrderType;
   };
-}) {
+}): Promise<{ customer: { id: string; email: string; plan: Plan; maxBundleIds: number }; alreadyProcessed: boolean }> {
   const normalizedEmail = params.email.toLowerCase();
 
   for (let attempt = 0; attempt < SERIALIZATION_RETRY_LIMIT; attempt++) {
@@ -38,36 +39,91 @@ async function upsertCustomerForOrder(params: {
         async (transaction) => {
           const existing = await transaction.customer.findUnique({
             where: { email: normalizedEmail },
+            include: { orders: { where: { type: "purchase" } } },
           });
 
+          // Create order record inside the transaction
+          const orderData = {
+            lsOrderId: params.lsOrderId,
+            type: params.variant.orderType,
+            plan: params.variant.plan,
+            maxBundleIds:
+              params.variant.orderType === "purchase"
+                ? params.variant.maxBundleIds
+                : 0,
+          };
+
           if (!existing) {
-            return transaction.customer.create({
+            const customer = await transaction.customer.create({
               data: {
                 lsCustomerId: params.lsCustomerId,
                 email: normalizedEmail,
                 plan: params.variant.plan,
-                maxBundleIds: params.variant.maxBundleIds,
+                maxBundleIds:
+                  params.variant.orderType === "purchase"
+                    ? params.variant.maxBundleIds
+                    : 0,
+                orders: { create: orderData },
               },
             });
+            return { customer, alreadyProcessed: false };
           }
 
-          return transaction.customer.update({
+          // Idempotency: skip if this order was already processed (e.g. webhook retry)
+          const existingOrder = await transaction.order.findUnique({
+            where: { lsOrderId: params.lsOrderId },
+          });
+          if (existingOrder) {
+            return { customer: existing, alreadyProcessed: true };
+          }
+
+          // Create order record
+          await transaction.order.create({
+            data: {
+              ...orderData,
+              customerId: existing.id,
+            },
+          });
+
+          // Recalculate cache from purchase orders.
+          // If any legacy orders have plan=null (not yet backfilled), fall back
+          // to incrementing the existing cache to avoid undercounting.
+          const hasLegacyOrders = existing.orders.some(
+            (o) => o.plan === null,
+          );
+          const cachedMaxBundleIds = hasLegacyOrders
+            ? params.variant.orderType !== "purchase"
+              ? existing.maxBundleIds
+              : existing.maxBundleIds === 0 ||
+                  params.variant.maxBundleIds === 0
+                ? 0
+                : existing.maxBundleIds + params.variant.maxBundleIds
+            : (() => {
+                const allPurchaseOrders = [
+                  ...existing.orders.filter((o) => o.plan !== null),
+                  ...(params.variant.orderType === "purchase"
+                    ? [{ maxBundleIds: params.variant.maxBundleIds }]
+                    : []),
+                ];
+                const hasUnlimited = allPurchaseOrders.some(
+                  (o) => o.maxBundleIds === 0,
+                );
+                return hasUnlimited
+                  ? 0
+                  : allPurchaseOrders.reduce(
+                      (sum, o) => sum + o.maxBundleIds,
+                      0,
+                    );
+              })();
+
+          return { customer: await transaction.customer.update({
             where: { id: existing.id },
             data: {
               lsCustomerId: params.lsCustomerId,
               plan: higherPlan(existing.plan, params.variant.plan),
-              ...(params.variant.orderType === "purchase"
-                ? params.variant.plan === existing.plan
-                  ? { maxBundleIds: { increment: params.variant.maxBundleIds } }
-                  : {
-                      maxBundleIds: Math.max(
-                        existing.maxBundleIds,
-                        params.variant.maxBundleIds,
-                      ),
-                    }
-                : {}),
+              maxBundleIds: cachedMaxBundleIds,
             },
-          });
+          }), alreadyProcessed: false };
         },
         { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
       );
@@ -270,20 +326,20 @@ async function handleOrderCreated(payload: WebhookPayload) {
     return;
   }
 
-  const customer = await upsertCustomerForOrder({
+  const { customer, alreadyProcessed } = await upsertCustomerForOrder({
     email,
     lsCustomerId: String(lsCustomerId),
+    lsOrderId,
     variant,
   });
 
-  // Record the order
-  await prisma.order.create({
-    data: {
-      lsOrderId,
-      customerId: customer.id,
-      type: variant.orderType,
-    },
-  });
+  // Skip side effects on duplicate webhook delivery
+  if (alreadyProcessed) {
+    console.log(
+      `[LS Webhook] Order ${lsOrderId} already processed — skipping side effects`,
+    );
+    return;
+  }
 
   // For renewals, regenerate license keys with new exp date
   if (variant.orderType === "renewal") {

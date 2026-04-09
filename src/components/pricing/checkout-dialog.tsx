@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { Loader2, ShieldCheck, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -79,8 +79,9 @@ export function CheckoutDialog({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           className="flex h-[min(90vh,700px)] flex-col gap-0 overflow-hidden p-0 sm:max-w-md md:max-w-lg"
+          showCloseButton={false}
         >
-          <div className="flex items-center border-b px-4 py-3">
+          <div className="flex items-center justify-between border-b px-4 py-3">
             <div>
               <DialogTitle>{planName} — {price}</DialogTitle>
               <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
@@ -88,6 +89,14 @@ export function CheckoutDialog({
                 Secure checkout via Lemon Squeezy
               </p>
             </div>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => setOpen(false)}
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </div>
 
           <div className="relative flex-1">
@@ -98,13 +107,12 @@ export function CheckoutDialog({
             )}
             <iframe
               ref={iframeRef}
-              src={checkoutUrl}
+              src={`${checkoutUrl}${checkoutUrl.includes("?") ? "&" : "?"}embed=1`}
               className="h-full w-full"
               onLoad={() => setLoading(false)}
               title={`${planName} Checkout`}
               allow="payment"
-              sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin"
-              referrerPolicy="no-referrer-when-downgrade"
+              sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-top-navigation-by-user-activation"
             />
           </div>
         </DialogContent>

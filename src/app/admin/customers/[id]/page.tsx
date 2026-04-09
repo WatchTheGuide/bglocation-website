@@ -61,6 +61,8 @@ export default async function CustomerDetailPage({
         id: o.id,
         lsOrderId: o.lsOrderId,
         type: o.type,
+        plan: o.plan,
+        maxBundleIds: o.maxBundleIds,
         createdAt: o.createdAt.toISOString(),
       }))}
     />

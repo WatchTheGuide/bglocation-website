@@ -29,10 +29,10 @@ import {
   Check,
   LogOut,
   Plus,
-  Shield,
   AlertCircle,
   RefreshCw,
   ExternalLink,
+  ShoppingCart,
 } from 'lucide-react';
 
 interface License {
@@ -43,11 +43,20 @@ interface License {
   updatesUntil: string;
 }
 
+interface OrderInfo {
+  id: string;
+  lsOrderId: string;
+  type: string;
+  plan: string | null;
+  maxBundleIds: number;
+  createdAt: string;
+}
+
 interface DashboardContentProps {
   email: string;
-  plan: string;
-  maxBundleIds: number;
+  cachedMaxBundleIds: number;
   renewalCheckoutUrl: string | null;
+  orders: OrderInfo[];
   licenses: License[];
 }
 
@@ -171,21 +180,36 @@ function GenerateKeySection({ canGenerate, onDone }: GenerateKeySectionProps) {
 
 export function DashboardContent({
   email,
-  plan,
-  maxBundleIds,
+  cachedMaxBundleIds,
   renewalCheckoutUrl,
+  orders,
   licenses,
 }: DashboardContentProps) {
   const router = useRouter();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [generateKey, setGenerateKey] = useState(0);
 
+  // Calculate slots from purchase orders (only backfilled ones with plan set).
+  // If any legacy orders have plan=null (not yet backfilled), fall back to
+  // the cached customer.maxBundleIds to avoid blocking legitimate customers.
+  const allPurchaseOrders = orders.filter((o) => o.type === 'purchase');
+  const hasLegacyOrders = allPurchaseOrders.some((o) => o.plan === null);
+  const backfilledOrders = allPurchaseOrders.filter((o) => o.plan !== null);
+  const hasUnlimited = hasLegacyOrders
+    ? cachedMaxBundleIds === 0
+    : backfilledOrders.some((o) => o.maxBundleIds === 0);
+  const totalSlots = hasUnlimited
+    ? 0
+    : hasLegacyOrders
+      ? cachedMaxBundleIds
+      : backfilledOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
+
   const slotsUsed = licenses.length;
-  const slotsText =
-    maxBundleIds === 0
-      ? `${slotsUsed} / unlimited`
-      : `${slotsUsed} / ${maxBundleIds}`;
-  const canGenerate = maxBundleIds === 0 || slotsUsed < maxBundleIds;
+  const hasSlots = hasUnlimited || totalSlots > 0;
+  const slotsText = hasUnlimited
+    ? `${slotsUsed} / unlimited`
+    : `${slotsUsed} / ${totalSlots}`;
+  const canGenerate = hasUnlimited || (hasSlots && slotsUsed < totalSlots);
   const now = new Date();
 
   const renewUrl = renewalCheckoutUrl
@@ -224,67 +248,103 @@ export function DashboardContent({
         </form>
       </div>
 
-      {/* Plan info */}
-      <Card className="mb-6">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                {plan.charAt(0).toUpperCase() + plan.slice(1)} Plan
-              </CardTitle>
-              <CardDescription className="mt-1.5">
-                Bundle IDs: {slotsText}
-                {earliestUpdatesUntil && (
-                  <>
-                    {' · '}Updates until{' '}
-                    <span className={planExpired ? 'text-destructive' : ''}>
-                      {earliestUpdatesUntil.toLocaleDateString()}
-                    </span>
-                    {planExpired && (
-                      <Badge variant="destructive" className="ml-2">
-                        Expired
-                      </Badge>
-                    )}
-                    {!planExpired && daysUntilPlanExpiry !== null && daysUntilPlanExpiry <= 60 && (
-                      <Badge variant="secondary" className="ml-2">
-                        Expires soon
-                      </Badge>
-                    )}
-                  </>
-                )}
-              </CardDescription>
+      {/* Purchases */}
+      {allPurchaseOrders.length > 0 && (
+        <Card className="mb-6">
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  Your Purchases
+                </CardTitle>
+                <CardDescription className="mt-1.5">
+                  {slotsText} bundle IDs used
+                  {earliestUpdatesUntil && (
+                    <>
+                      {' · '}Updates until{' '}
+                      <span className={planExpired ? 'text-destructive' : ''}>
+                        {earliestUpdatesUntil.toLocaleDateString()}
+                      </span>
+                      {planExpired && (
+                        <Badge variant="destructive" className="ml-2">
+                          Expired
+                        </Badge>
+                      )}
+                      {!planExpired && daysUntilPlanExpiry !== null && daysUntilPlanExpiry <= 60 && (
+                        <Badge variant="secondary" className="ml-2">
+                          Expires soon
+                        </Badge>
+                      )}
+                    </>
+                  )}
+                </CardDescription>
+              </div>
+              {showPlanRenew && renewUrl && (
+                <Button
+                  render={
+                    <a
+                      href={renewUrl}
+                      className="lemonsqueezy-button"
+                    />
+                  }
+                  nativeButton={false}
+                  variant="outline"
+                  size="sm"
+                >
+                  <RefreshCw className="mr-1 h-4 w-4" />
+                  Renew Updates
+                </Button>
+              )}
+              {showPlanRenew && !renewUrl && (
+                <Button
+                  render={<a href="mailto:hello@bglocation.dev" />}
+                  nativeButton={false}
+                  variant="outline"
+                  size="sm"
+                >
+                  <ExternalLink className="mr-1 h-4 w-4" />
+                  Contact us
+                </Button>
+              )}
             </div>
-            {showPlanRenew && renewUrl && (
-              <Button
-                render={
-                  <a
-                    href={renewUrl}
-                    className="lemonsqueezy-button"
-                  />
-                }
-                nativeButton={false}
-                variant="outline"
-                size="sm"
-              >
-                <RefreshCw className="mr-1 h-4 w-4" />
-                Renew Updates
-              </Button>
-            )}
-            {showPlanRenew && !renewUrl && (
-              <Button
-                render={<a href="mailto:hello@bglocation.dev" />}
-                nativeButton={false}
-                variant="outline"
-                size="sm"
-              >
-                <ExternalLink className="mr-1 h-4 w-4" />
-                Contact us
-              </Button>
-            )}
-          </div>
-        </CardHeader>
-      </Card>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Plan</TableHead>
+                  <TableHead>Bundle IDs</TableHead>
+                  <TableHead>Order ID</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {allPurchaseOrders.map((order: OrderInfo) => (
+                  <TableRow key={order.id}>
+                    <TableCell>
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="capitalize">
+                      {order.plan ?? '—'}
+                    </TableCell>
+                    <TableCell>
+                      {order.plan == null
+                        ? '—'
+                        : order.maxBundleIds === 0
+                          ? 'Unlimited'
+                          : order.maxBundleIds}
+                    </TableCell>
+                    <TableCell className="font-mono text-xs">
+                      #{order.lsOrderId}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Generate new key */}
       <GenerateKeySection

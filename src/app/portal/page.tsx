@@ -28,6 +28,9 @@ export default async function PortalDashboard() {
         where: { active: true },
         orderBy: { issuedAt: 'desc' },
       },
+      orders: {
+        orderBy: { createdAt: 'desc' },
+      },
     },
   });
 
@@ -38,9 +41,16 @@ export default async function PortalDashboard() {
   return (
     <DashboardContent
       email={customer.email}
-      plan={customer.plan}
-      maxBundleIds={customer.maxBundleIds}
+      cachedMaxBundleIds={customer.maxBundleIds}
       renewalCheckoutUrl={renewalCheckoutUrl}
+      orders={customer.orders.map((o) => ({
+        id: o.id,
+        lsOrderId: o.lsOrderId,
+        type: o.type,
+        plan: o.plan,
+        maxBundleIds: o.maxBundleIds,
+        createdAt: o.createdAt.toISOString(),
+      }))}
       licenses={customer.licenses.map((l) => ({
         id: l.id,
         bundleId: l.bundleId,

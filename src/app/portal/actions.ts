@@ -90,18 +90,33 @@ export async function generateKeyAction(
 
   const customer = await prisma.customer.findUnique({
     where: { id: session.customerId },
+    include: { orders: { where: { type: 'purchase' } } },
   });
 
   if (!customer) redirect('/portal/login');
 
-  // Check limit (0 = unlimited)
-  if (customer.maxBundleIds > 0) {
+  // Check limit from orders — only consider backfilled orders (plan !== null).
+  // If any purchase orders are unbackfilled, fall back to customer.maxBundleIds
+  // to avoid blocking legitimate customers during the migration window.
+  const hasLegacyOrders = customer.orders.some((o) => o.plan === null);
+  const backfilledOrders = customer.orders.filter((o) => o.plan !== null);
+  const effectiveMaxBundleIds = hasLegacyOrders
+    ? customer.maxBundleIds
+    : backfilledOrders.reduce((sum, o) => sum + o.maxBundleIds, 0);
+  const hasUnlimited = hasLegacyOrders
+    ? customer.maxBundleIds === 0
+    : backfilledOrders.some((o) => o.maxBundleIds === 0);
+  if (!hasUnlimited) {
+    const totalSlots = effectiveMaxBundleIds;
     const licenseCount = await prisma.license.count({
       where: { customerId: customer.id, active: true },
     });
-    if (licenseCount >= customer.maxBundleIds) {
+    if (licenseCount >= totalSlots) {
       return {
-        error: `You have reached the maximum of ${customer.maxBundleIds} bundle IDs for your ${customer.plan} plan.`,
+        error:
+          totalSlots === 0
+            ? 'No bundle ID slots available. Please purchase a license first.'
+            : `You have reached the maximum of ${totalSlots} bundle IDs for your plan.`,
       };
     }
   }

@@ -22,11 +22,13 @@ model Customer {
 }
 
 model Order {
-  id         String   @id @default(uuid())
-  lsOrderId  String   @unique @map("ls_order_id")
-  customerId String   @map("customer_id")
-  type       OrderType
-  createdAt  DateTime @default(now()) @map("created_at")
+  id           String    @id @default(uuid())
+  lsOrderId    String    @unique @map("ls_order_id")
+  customerId   String    @map("customer_id")
+  type         OrderType
+  plan         Plan?
+  maxBundleIds Int       @default(0) @map("max_bundle_ids")
+  createdAt    DateTime  @default(now()) @map("created_at")
 
   customer Customer @relation(fields: [customerId], references: [id])
 
