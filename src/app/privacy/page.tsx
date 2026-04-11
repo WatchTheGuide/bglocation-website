@@ -17,7 +17,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Last updated: March 29, 2026
+            Last updated: April 10, 2026
           </p>
         </div>
       </section>
@@ -166,6 +166,41 @@ export default function PrivacyPage() {
                   6(1)(f)) — providing product support.
                 </p>
               </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium">
+                  e) Website Analytics
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  With your consent, we use{" "}
+                  <a
+                    href="https://vercel.com/docs/analytics"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-foreground"
+                  >
+                    Vercel Web Analytics
+                  </a>{" "}
+                  to understand how visitors use our website. Vercel Analytics
+                  is cookieless and does not collect personally identifiable
+                  information. It records aggregated data such as page views,
+                  referrer URLs, country, browser, and device type. IP
+                  addresses are not stored. For details, see{" "}
+                  <a
+                    href="https://vercel.com/legal/privacy-policy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-foreground"
+                  >
+                    Vercel&apos;s Privacy Policy
+                  </a>
+                  .
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  <strong>Legal basis:</strong> Your consent (GDPR Art.
+                  6(1)(a)). You can withdraw consent at any time via the
+                  &quot;Manage cookie preferences&quot; link in the footer.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -227,7 +262,9 @@ export default function PrivacyPage() {
                   </tr>
                   <tr className="border-b">
                     <td className="py-2 pr-4">Vercel</td>
-                    <td className="py-2 pr-4">Website hosting</td>
+                    <td className="py-2 pr-4">
+                      Website hosting &amp; analytics (with consent)
+                    </td>
                     <td className="py-2">USA / Global CDN</td>
                   </tr>
                   <tr className="border-b">
@@ -281,7 +318,8 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <strong>Right to withdraw consent</strong> (Art. 7(3)) — for
-                newsletter, via the unsubscribe link or by contacting us
+                newsletter (via unsubscribe link) or analytics (via
+                &quot;Manage cookie preferences&quot; in the footer)
               </li>
             </ul>
             <p className="text-muted-foreground leading-relaxed">
@@ -312,8 +350,9 @@ export default function PrivacyPage() {
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">7. Cookies</h2>
             <p className="text-muted-foreground leading-relaxed">
-              bglocation.dev uses only{" "}
-              <strong>essential, functional cookies</strong>:
+              bglocation.dev uses{" "}
+              <strong>essential, functional cookies</strong> and, with your
+              consent, <strong>optional analytics</strong>:
             </p>
             <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
               <li>
@@ -324,11 +363,14 @@ export default function PrivacyPage() {
                 <strong>Admin session cookie</strong> (<code className="text-xs">bgl_admin_session</code>) — used for Admin Panel
                 authentication (expires after 7 days)
               </li>
+              <li>
+                <strong>Analytics</strong> — Vercel Web Analytics (cookieless,
+                loaded only with your consent)
+              </li>
             </ul>
             <p className="text-muted-foreground leading-relaxed">
-              We do not use tracking cookies, analytics cookies, or
-              advertising cookies. We do not use Google Analytics or any
-              third-party tracking scripts.
+              We do not use advertising cookies or third-party tracking
+              scripts.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               For full details, see our{" "}

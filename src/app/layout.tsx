@@ -12,6 +12,7 @@ import { Footer } from "@/components/layout/footer";
 import { AnnouncementBanner } from "@/components/landing/announcement-banner";
 import { ChatWidget } from "@/components/chat/chat-widget";
 import { CookieBanner } from "@/components/layout/cookie-banner";
+import { ConditionalAnalytics } from "@/components/layout/conditional-analytics";
 import { FrameworkProvider } from "@/components/framework/framework-provider";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { isFramework } from "@/lib/framework";
@@ -119,6 +120,7 @@ export default async function RootLayout({
             <main className="min-h-screen">{children}</main>
             <Footer />
             <ChatWidget />
+            <ConditionalAnalytics />
             <CookieBanner />
           </FrameworkProvider>
         </ThemeProvider>

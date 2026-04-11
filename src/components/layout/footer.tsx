@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useFramework } from "@/components/framework/framework-provider";
 import { SiteLogo } from "@/components/layout/site-logo";
 import { Separator } from "@/components/ui/separator";
+import { resetConsent } from "@/lib/consent";
 
 const GITLAB_URL = "https://gitlab.com/bglocation";
 
@@ -132,6 +133,15 @@ export function Footer() {
                 <Link href={frameworkHref("/cookies")} className="hover:text-foreground">
                   Cookie Policy
                 </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={resetConsent}
+                  className="hover:text-foreground"
+                >
+                  Manage cookie preferences
+                </button>
               </li>
               <li>
                 <Link href={frameworkHref("/terms")} className="hover:text-foreground">

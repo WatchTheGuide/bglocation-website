@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ManageCookiePreferences } from "./manage-cookie-preferences";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
@@ -17,7 +18,7 @@ export default function CookiePolicyPage() {
             Cookie Policy
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Last updated: March 29, 2026
+            Last updated: April 10, 2026
           </p>
         </div>
       </section>
@@ -36,13 +37,13 @@ export default function CookiePolicyPage() {
 
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">
-              2. Cookies We Use
+              2. Strictly Necessary Cookies
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              bglocation.dev uses only{" "}
+              bglocation.dev uses{" "}
               <strong>strictly necessary cookies</strong> required for
-              authentication. We do not use any tracking, analytics, advertising,
-              or third-party cookies.
+              authentication. These cookies are always active and do not
+              require consent.
             </p>
 
             <div className="overflow-x-auto">
@@ -104,13 +105,46 @@ export default function CookiePolicyPage() {
 
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">
-              3. What We Do Not Use
+              3. Analytics
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              With your consent, we use{" "}
+              <strong>Vercel Web Analytics</strong> to understand how visitors
+              use our website. Vercel Analytics is a privacy-focused,{" "}
+              <strong>cookieless</strong> service — it does not set any cookies,
+              does not use localStorage, and does not fingerprint visitors.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Data collected by Vercel Analytics:
+            </p>
+            <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
+              <li>Page views and navigation paths</li>
+              <li>Referrer URL (how you arrived at our site)</li>
+              <li>Country and browser type (derived from headers, not cookies)</li>
+              <li>Device type (desktop, mobile, tablet)</li>
+            </ul>
+            <p className="text-muted-foreground leading-relaxed">
+              <strong>No personally identifiable information (PII)</strong> is
+              collected. IP addresses are not stored by Vercel Analytics. Data
+              is sent via lightweight beacon requests and is aggregated — no
+              individual visitor profiles are created.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Analytics data is only collected when you click{" "}
+              <strong>&quot;Accept all&quot;</strong> on the cookie banner. If
+              you select &quot;Essential only&quot;, no analytics data is
+              collected. You can change your preference at any time using the
+              button below or the &quot;Manage cookie preferences&quot; link in
+              the footer.
+            </p>
+            <ManageCookiePreferences />
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">
+              4. What We Do Not Use
             </h2>
             <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
-              <li>
-                <strong>Analytics cookies</strong> — we do not use Google
-                Analytics, PostHog, Plausible, or any other analytics service
-              </li>
               <li>
                 <strong>Advertising cookies</strong> — we do not serve ads or
                 use retargeting
@@ -119,25 +153,31 @@ export default function CookiePolicyPage() {
                 <strong>Third-party tracking</strong> — we do not embed
                 third-party trackers or social media pixels
               </li>
+              <li>
+                <strong>Fingerprinting</strong> — we do not use browser or
+                device fingerprinting techniques
+              </li>
             </ul>
           </div>
 
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">
-              4. Local Storage
+              5. Local Storage
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               We use browser <strong>localStorage</strong> (not a cookie) to
-              remember that you have acknowledged this cookie notice. Specifically,
-              we store a single string value under the key &quot;bgl_cookie_consent_v1&quot;
-              to record that you have dismissed the cookie banner. This data
-              stays on your device and is never sent to our servers.
+              remember your cookie preferences. Specifically, we store a JSON
+              object under the key{" "}
+              <code className="rounded bg-muted px-1.5 py-0.5 text-sm">bgl_cookie_consent_v2</code>{" "}
+              containing your consent choices (necessary cookies, analytics) and
+              a timestamp. This data stays on your device and is never sent to
+              our servers.
             </p>
           </div>
 
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">
-              5. How to Manage Cookies
+              6. How to Manage Cookies
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               You can control and delete cookies through your browser settings.
@@ -161,7 +201,7 @@ export default function CookiePolicyPage() {
 
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">
-              6. Changes to This Policy
+              7. Changes to This Policy
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               We may update this Cookie Policy if we introduce new cookies or
@@ -171,7 +211,7 @@ export default function CookiePolicyPage() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">7. More Information</h2>
+            <h2 className="text-2xl font-semibold">8. More Information</h2>
             <p className="text-muted-foreground leading-relaxed">
               For details on how we process personal data, see our{" "}
               <Link
