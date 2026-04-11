@@ -1,106 +1,15 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useFramework } from "@/components/framework/framework-provider";
-
-const STORAGE_KEY = "bgl_cookie_consent_v1";
-const CONSENT_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
-const MAX_TIMEOUT = 2_147_483_647; // setTimeout max (2^31 - 1)
-const SERVER_SNAPSHOT = "__BGL_SSR__";
-
-const listeners = new Set<() => void>();
-let memoryFallback: string | null = null;
-let storageBroken = false;
-
-function emitChange() {
-  for (const listener of listeners) listener();
-}
-
-function getSnapshot(): string | null {
-  try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    return storageBroken ? (memoryFallback ?? value) : value;
-  } catch {
-    return memoryFallback;
-  }
-}
-
-function getServerSnapshot(): string | null {
-  return SERVER_SNAPSHOT;
-}
-
-function subscribe(callback: () => void): () => void {
-  listeners.add(callback);
-
-  function handleStorage(event: StorageEvent) {
-    if (event.storageArea === localStorage && event.key === STORAGE_KEY) {
-      callback();
-    }
-  }
-
-  window.addEventListener("storage", handleStorage);
-  return () => {
-    listeners.delete(callback);
-    window.removeEventListener("storage", handleStorage);
-  };
-}
-
-function isExpired(value: string | null): boolean {
-  if (value === null || value === SERVER_SNAPSHOT) return false;
-  const timestamp = Number(value);
-  if (Number.isNaN(timestamp) || value === "") return true;
-  return Date.now() - timestamp >= CONSENT_TTL_MS;
-}
+import { useConsent, saveConsent } from "@/lib/consent";
 
 export function CookieBanner() {
-  const storedValue = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const { shouldShowBanner } = useConsent();
   const { frameworkHref } = useFramework();
 
-  const shouldShow = storedValue === null || isExpired(storedValue);
-
-  useEffect(() => {
-    if (storedValue === null || storedValue === SERVER_SNAPSHOT) return;
-    const timestamp = Number(storedValue);
-    if (Number.isNaN(timestamp)) return;
-
-    let timerId: ReturnType<typeof setTimeout>;
-
-    function tick() {
-      const remaining = CONSENT_TTL_MS - (Date.now() - timestamp);
-      if (remaining <= 0) {
-        memoryFallback = null;
-        storageBroken = false;
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-        } catch {
-          // Storage still broken — memoryFallback already cleared above
-        }
-        emitChange();
-        return;
-      }
-      timerId = setTimeout(tick, Math.min(remaining, MAX_TIMEOUT));
-    }
-
-    tick();
-    return () => clearTimeout(timerId);
-  }, [storedValue]);
-
-  function dismiss() {
-    const now = String(Date.now());
-    memoryFallback = now;
-    try {
-      localStorage.setItem(STORAGE_KEY, now);
-      storageBroken = false;
-      memoryFallback = null;
-    } catch {
-      storageBroken = true;
-    }
-    emitChange();
-  }
-
-  if (!shouldShow) return null;
+  if (!shouldShowBanner) return null;
 
   return (
     <div
@@ -110,8 +19,8 @@ export function CookieBanner() {
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-4 sm:flex-row sm:justify-between sm:px-6">
         <p className="text-center text-sm text-muted-foreground sm:text-left">
-          This site uses essential cookies for authentication only. No tracking
-          or analytics cookies are used.{" "}
+          This site uses essential cookies for authentication and optional
+          analytics to improve the experience.{" "}
           <Link
             href={frameworkHref("/cookies")}
             className="underline hover:text-foreground"
@@ -119,14 +28,21 @@ export function CookieBanner() {
             Learn more
           </Link>
         </p>
-        <Button
-          onClick={dismiss}
-          size="sm"
-          variant="outline"
-          className="shrink-0"
-        >
-          Got it
-        </Button>
+        <div className="flex shrink-0 gap-2">
+          <Button
+            onClick={() => saveConsent(false)}
+            size="sm"
+            variant="outline"
+          >
+            Essential only
+          </Button>
+          <Button
+            onClick={() => saveConsent(true)}
+            size="sm"
+          >
+            Accept all
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,15 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-const STORAGE_KEY = "bgl_cookie_consent_v1";
+const STORAGE_KEY = "bgl_cookie_consent_v2";
+
+function makeConsent(analytics: boolean, timestamp?: number): string {
+  return JSON.stringify({
+    necessary: true,
+    analytics,
+    timestamp: timestamp ?? Date.now(),
+  });
+}
 
 vi.mock("@/components/framework/framework-provider", () => ({
   useFramework: () => ({
@@ -35,23 +43,45 @@ describe("CookieBanner", () => {
   });
 
   it("should be hidden when consent is set in localStorage", async () => {
-    localStorage.setItem(STORAGE_KEY, String(Date.now()));
+    localStorage.setItem(STORAGE_KEY, makeConsent(false));
     const { CookieBanner } = await import("../cookie-banner");
     render(<CookieBanner />);
 
     expect(screen.queryByRole("region", { name: /cookie notice/i })).not.toBeInTheDocument();
   });
 
-  it("should save consent and hide banner when clicking Got it", async () => {
+  it("should save consent and hide banner when clicking Essential only", async () => {
     const user = userEvent.setup();
     const { CookieBanner } = await import("../cookie-banner");
     render(<CookieBanner />);
 
     expect(screen.getByRole("region", { name: /cookie notice/i })).toBeInTheDocument();
 
-    await user.click(screen.getByText("Got it"));
+    await user.click(screen.getByRole("button", { name: /essential only/i }));
 
     expect(screen.queryByRole("region", { name: /cookie notice/i })).not.toBeInTheDocument();
-    expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
+    const stored = localStorage.getItem(STORAGE_KEY);
+    expect(stored).not.toBeNull();
+    const parsed = JSON.parse(stored!);
+    expect(parsed.necessary).toBe(true);
+    expect(parsed.analytics).toBe(false);
+    expect(parsed.timestamp).toBeGreaterThan(0);
+  });
+
+  it("should save consent with analytics when clicking Accept all", async () => {
+    const user = userEvent.setup();
+    const { CookieBanner } = await import("../cookie-banner");
+    render(<CookieBanner />);
+
+    expect(screen.getByRole("region", { name: /cookie notice/i })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /accept all/i }));
+
+    expect(screen.queryByRole("region", { name: /cookie notice/i })).not.toBeInTheDocument();
+    const stored = localStorage.getItem(STORAGE_KEY);
+    expect(stored).not.toBeNull();
+    const parsed = JSON.parse(stored!);
+    expect(parsed.necessary).toBe(true);
+    expect(parsed.analytics).toBe(true);
   });
 });
