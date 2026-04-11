@@ -82,7 +82,8 @@ function subscribe(callback: () => void): () => void {
   }
 
   function handleStorage(event: StorageEvent) {
-    if (event.storageArea === localStorage && event.key === STORAGE_KEY_V2) {
+    if (!event.storageArea) return;
+    if (event.key === STORAGE_KEY_V2) {
       callback();
     }
   }

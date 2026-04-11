@@ -142,7 +142,7 @@ test.describe('Cookie Banner', () => {
 });
 
 test.describe('Analytics Consent', () => {
-  test('should not load analytics script when "Essential only" is chosen', async ({ page }) => {
+  test('should save consent without analytics when "Essential only" is chosen', async ({ page }) => {
     await page.goto(ROUTES.home);
 
     const banner = page.getByRole('region', { name: /cookie notice/i });

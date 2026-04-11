@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ManageCookiePreferences } from "./manage-cookie-preferences";
+import { ManageCookiePreferences } from "@/components/layout/manage-cookie-preferences";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
