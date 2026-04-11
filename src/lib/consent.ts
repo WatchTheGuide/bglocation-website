@@ -136,14 +136,15 @@ export function resetConsent(): void {
 
 export function useConsent() {
   const raw = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const isHydrated = raw !== SERVER_SNAPSHOT;
   const consent = parseConsent(raw);
   const expired = isConsentExpired(consent);
 
   return {
     /** Parsed consent preferences, null if not yet given or expired */
     consent: expired ? null : consent,
-    /** Whether the banner should be shown */
-    shouldShowBanner: consent === null || expired,
+    /** Whether the banner should be shown (false during SSR to avoid flash) */
+    shouldShowBanner: isHydrated && (consent === null || expired),
     /** Whether analytics consent was granted (and not expired) */
     analyticsAllowed: consent !== null && !expired && consent.analytics,
   };
