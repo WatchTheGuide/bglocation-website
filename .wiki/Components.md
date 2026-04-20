@@ -31,7 +31,10 @@ Wspólne komponenty ramowe używane globalnie.
 |-----------|------|------|
 | Site Logo | `site-logo.tsx` | Wspólny lockup SVG + wordmark, używany w headerze, footerze i panelu admina |
 | Header | `header.tsx` | Główna nawigacja, `FrameworkSwitcher`, CTA i menu mobilne |
-| Footer | `footer.tsx` | Stopka z linkami produktowymi, dokumentacją, firmą i badge npm |
+| Footer | `footer.tsx` | Stopka z linkami produktowymi, dokumentacją, firmą, badge npm i linkiem "Manage cookie preferences" |
+| Cookie Banner | `cookie-banner.tsx` | Banner consent GDPR z opcjami "Tylko niezbędne" / "Akceptuj wszystkie", persistencja zgody w localStorage v2 |
+| Conditional Analytics | `conditional-analytics.tsx` | Warunkowe ładowanie `<Analytics />` z Vercel Web Analytics po wyrażeniu zgody na analitykę |
+| Manage Cookie Preferences | `manage-cookie-preferences.tsx` | Współdzielony przycisk resetowania zgód cookies, używany w footerze i na stronie `/cookies` |
 
 ## Landing Components (`src/components/landing/`)
 
@@ -140,6 +143,7 @@ W katalogu `src/app/admin/` znajdują się zarówno komponenty routingu App Rout
 |-------|------|------|
 | Classname helper | `src/lib/utils.ts` | Eksportuje `cn()` do łączenia klas Tailwind |
 | Framework metadata | `src/lib/framework.ts` | Definicje frameworków, helpery URL i normalizacja `?framework=` |
+| Consent store | `src/lib/consent.ts` | Zarządzanie zgodami cookies (localStorage v2), migracja v1→v2, reaktywny hook `useConsent()`, TTL 365 dni |
 | Blog posts | `src/lib/posts.ts` | Parsowanie frontmatter (gray-matter), czytanie plików `.md`, sortowanie, reading time |
 | Markdown renderer | `src/lib/markdown.tsx` | Async Server Component — unified pipeline z syntax highlighting (rehype-pretty-code) |
 

@@ -96,7 +96,7 @@ export function ApiReference() {
           </code>
           .
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`interface Location {
   latitude: number;
   longitude: number;
@@ -185,7 +185,7 @@ export function ApiReference() {
         </p>
 
         <h4 className="mt-6 font-semibold">Geofence Interface</h4>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`interface Geofence {
   identifier: string;          // unique ID, used to remove/replace
   latitude: number;            // center latitude in degrees
@@ -200,7 +200,7 @@ export function ApiReference() {
         </pre>
 
         <h4 className="mt-6 font-semibold">GeofenceEvent Interface</h4>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`interface GeofenceEvent {
   identifier: string;              // which geofence triggered
   action: 'enter' | 'exit' | 'dwell';

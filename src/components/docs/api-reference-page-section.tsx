@@ -206,28 +206,28 @@ export function ApiReferenceSection() {
         <h2 className="text-xl font-semibold">Interfaces</h2>
 
         <h3 className="mt-6 text-lg font-semibold">Location</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{LOCATION_INTERFACE}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{LOCATION_INTERFACE}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">LocationConfig</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{LOCATION_CONFIG}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{LOCATION_CONFIG}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">HttpConfig</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_CONFIG}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_CONFIG}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">Geofence</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{GEOFENCE_INTERFACE}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{GEOFENCE_INTERFACE}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">GeofenceEvent</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{GEOFENCE_EVENT}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{GEOFENCE_EVENT}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">ConfigureResult</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{CONFIGURE_RESULT}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{CONFIGURE_RESULT}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">HeartbeatEvent</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HEARTBEAT_EVENT}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HEARTBEAT_EVENT}</pre>
 
         <h3 className="mt-8 text-lg font-semibold">HttpEvent</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_EVENT}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_EVENT}</pre>
       </div>
 
       {/* Error Codes */}

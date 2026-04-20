@@ -13,7 +13,7 @@ export function GettingStarted() {
         {/* Step 1 */}
         <div>
           <h3 className="text-lg font-semibold">1. Install</h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`npm install @bglocation/capacitor
 npx cap sync`}
           </pre>
@@ -22,7 +22,7 @@ npx cap sync`}
         {/* Step 2 */}
         <div>
           <h3 className="text-lg font-semibold">2. Configure & Start</h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`import { BackgroundLocation } from '@bglocation/capacitor';
 
 // Configure the plugin (must be called before start)
@@ -47,7 +47,7 @@ await BackgroundLocation.start();`}
         {/* Step 3 */}
         <div>
           <h3 className="text-lg font-semibold">3. Stop Tracking</h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`await BackgroundLocation.stop();
 await BackgroundLocation.removeAllListeners();`}
           </pre>

@@ -2,7 +2,6 @@
 
 import { FrameworkSwitcher } from "@/components/framework/framework-switcher";
 import { useFramework } from "@/components/framework/framework-provider";
-import { Card, CardContent } from "@/components/ui/card";
 
 const CAPACITOR_CODE_SNIPPET = `import { BackgroundLocation } from '@bglocation/capacitor';
 
@@ -78,15 +77,13 @@ export function CodeExample() {
           </div>
         </div>
 
-        <Card className="mx-auto mt-12 max-w-3xl overflow-hidden">
-          <CardContent className="p-0">
-            <pre className="overflow-x-auto p-6 text-sm leading-relaxed">
-              <code className="font-mono text-foreground">
-                {framework === "capacitor" ? CAPACITOR_CODE_SNIPPET : REACT_NATIVE_CODE_SNIPPET}
-              </code>
-            </pre>
-          </CardContent>
-        </Card>
+        <div className="mx-auto mt-12 max-w-3xl">
+          <pre className="overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
+            <code className="text-foreground">
+              {framework === "capacitor" ? CAPACITOR_CODE_SNIPPET : REACT_NATIVE_CODE_SNIPPET}
+            </code>
+          </pre>
+        </div>
       </div>
     </section>
   );

@@ -27,7 +27,7 @@ export function PlatformGuides() {
               </code>
               . Apple rejects apps without them.
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`<key>NSLocationWhenInUseUsageDescription</key>
 <string>We need your location to track your route.</string>
 
@@ -42,7 +42,7 @@ export function PlatformGuides() {
               Enable <strong>Location updates</strong> in Xcode → Signing &
               Capabilities → Background Modes. This adds to your entitlements:
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`<key>UIBackgroundModes</key>
 <array>
   <string>location</string>
@@ -84,7 +84,7 @@ export function PlatformGuides() {
               . They merge automatically via manifest merger — no manual edits
               needed:
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`ACCESS_FINE_LOCATION
 ACCESS_COARSE_LOCATION
 ACCESS_BACKGROUND_LOCATION    <!-- Android 10+ -->
@@ -137,7 +137,7 @@ POST_NOTIFICATIONS            <!-- Android 13+ -->`}
               before the background prompt so you can show a custom UI explaining
               why it&apos;s needed.
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`// Step 1: foreground
 await BackgroundLocation.requestPermissions({
   permissions: ['location'],

@@ -154,7 +154,7 @@ export function ApiReference() {
 
       <div className="mt-10">
         <h3 className="text-lg font-semibold">Location Object</h3>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{LOCATION_INTERFACE}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{LOCATION_INTERFACE}</pre>
       </div>
 
       <div className="mt-10">
@@ -162,10 +162,10 @@ export function ApiReference() {
         <p className="mt-2 text-sm text-muted-foreground">
           Geofencing is available through the same API surface in both wrappers. Up to 20 regions can be active at once.
         </p>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{GEOFENCE_INTERFACE}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{GEOFENCE_INTERFACE}</pre>
 
         <h4 className="mt-6 font-semibold">GeofenceEvent Interface</h4>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{GEOFENCE_EVENT_INTERFACE}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{GEOFENCE_EVENT_INTERFACE}</pre>
 
         <h4 className="mt-6 font-semibold">Error Codes</h4>
         <div className="mt-3 overflow-x-auto">

@@ -146,15 +146,15 @@ export function Configuration() {
           Native HTTP delivery works the same in Capacitor and React Native. The JavaScript wrapper configures it once,
           then URLSession on iOS and HttpURLConnection on Android post directly from the native layer.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_HTTP_SNIPPET : REACT_NATIVE_HTTP_SNIPPET}
         </pre>
 
         <h4 className="mt-6 font-semibold">HTTP POST Body</h4>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_POST_BODY}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_POST_BODY}</pre>
 
         <h4 className="mt-6 font-semibold">HttpEvent</h4>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_EVENT}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_EVENT}</pre>
 
         <h4 className="mt-6 font-semibold">Offline Buffer &amp; Retry</h4>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -168,7 +168,7 @@ export function Configuration() {
         <p className="mt-2 text-sm text-muted-foreground">
           Use auto mode to target stable update intervals regardless of whether the user is walking, cycling, or driving.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{AUTO_DISTANCE_SNIPPET}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{AUTO_DISTANCE_SNIPPET}</pre>
       </div>
 
       <div className="mt-10">
@@ -176,7 +176,7 @@ export function Configuration() {
         <p className="mt-2 text-sm text-muted-foreground">
           Android tracking runs as a foreground service. Customize the persistent notification text from the wrapper.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{NOTIFICATION_SNIPPET}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{NOTIFICATION_SNIPPET}</pre>
       </div>
 
       <div className="mt-10 rounded-lg border border-primary/20 bg-primary/5 p-4">

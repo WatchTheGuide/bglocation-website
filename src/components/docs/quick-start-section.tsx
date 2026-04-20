@@ -100,7 +100,7 @@ export function QuickStartSection() {
 
       <div className="mt-8">
         <h2 className="text-xl font-semibold">1. Install</h2>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor"
             ? `npm install @bglocation/capacitor\nnpx cap sync`
             : `npm install @bglocation/react-native\nnpx expo prebuild\n\n# Bare React Native (no Expo)\ncd ios && pod install`}
@@ -112,7 +112,7 @@ export function QuickStartSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           This is a complete, copy-paste-ready snippet. No license key required — the plugin runs in trial mode (30 minutes of full functionality, then 1-hour cooldown).
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm leading-relaxed">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
           {framework === "capacitor" ? CAPACITOR_FULL : REACT_NATIVE_FULL}
         </pre>
       </div>
@@ -127,7 +127,7 @@ export function QuickStartSection() {
             </p>
           </div>
 
-          <pre className="overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
             {framework === "capacitor"
               ? `# iOS\nnpx cap run ios --target <device-id>\n\n# Android\nnpx cap run android --target <device-id>`
               : `# iOS\nnpx expo run:ios --device\n\n# Android\nnpx expo run:android --device`}

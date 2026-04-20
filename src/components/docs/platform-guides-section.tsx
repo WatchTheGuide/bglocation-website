@@ -71,7 +71,7 @@ export function PlatformGuides() {
                 ? "Capacitor apps still need the usual location usage descriptions in the host app's Info.plist."
                 : "Expo projects can generate these values through the config plugin. Bare React Native apps should add them directly in Info.plist."}
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{IOS_KEYS}</pre>
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{IOS_KEYS}</pre>
           </div>
 
           <div>
@@ -80,7 +80,7 @@ export function PlatformGuides() {
               Enable <strong>Location updates</strong> in Xcode. Expo users get this automatically after
               <span className="font-mono"> expo prebuild</span> when the config plugin is configured.
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{IOS_BACKGROUND_MODES}</pre>
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{IOS_BACKGROUND_MODES}</pre>
           </div>
 
           {framework === "react-native" && (
@@ -89,7 +89,7 @@ export function PlatformGuides() {
               <p className="mt-1 text-sm text-muted-foreground">
                 The React Native package ships with an Expo config plugin that injects permissions, background modes, and the license key during prebuild.
               </p>
-              <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{EXPO_PLUGIN_SNIPPET}</pre>
+              <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{EXPO_PLUGIN_SNIPPET}</pre>
             </div>
           )}
 
@@ -117,7 +117,7 @@ export function PlatformGuides() {
                 ? "The Capacitor plugin contributes its manifest entries automatically during sync and manifest merge."
                 : "Expo prebuild or the Android manifest merger will add the required permissions from the React Native package."}
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{ANDROID_PERMISSIONS}</pre>
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{ANDROID_PERMISSIONS}</pre>
           </div>
 
           <div>
@@ -136,7 +136,7 @@ export function PlatformGuides() {
 
           <div>
             <h4 className="font-semibold">Two-Step Permission Flow</h4>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
               {framework === "capacitor" ? CAPACITOR_PERMISSION_FLOW : REACT_NATIVE_PERMISSION_FLOW}
             </pre>
           </div>

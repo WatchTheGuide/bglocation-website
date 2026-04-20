@@ -119,7 +119,7 @@ export function Configuration() {
           Send location updates directly from native code — no JS bridge
           overhead. Includes automatic offline buffering with retry.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`await BackgroundLocation.configure({
   distanceFilter: 15,
   desiredAccuracy: 'high',
@@ -151,7 +151,7 @@ export function Configuration() {
           </code>{" "}
           event triggers a POST with this JSON body:
         </p>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`// POST https://api.example.com/locations
 // Content-Type: application/json
 {
@@ -181,7 +181,7 @@ export function Configuration() {
           </code>{" "}
           event:
         </p>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`interface HttpEvent {
   statusCode: number;       // HTTP code (0 = network error)
   success: boolean;         // true for 2xx responses
@@ -281,7 +281,7 @@ export function Configuration() {
         </ul>
 
         <h4 className="mt-6 font-semibold">Buffer Timeline</h4>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`1. Network OK     → POST location → 200 OK
 2. Network lost   → POST fails    → location saved to SQLite buffer
 3. Still offline  → POST fails    → location saved (bufferedCount grows)
@@ -302,7 +302,7 @@ export function Configuration() {
           to dynamically adjust the filter based on speed (EMA smoothing),
           targeting consistent ~10s intervals regardless of transport mode.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`await BackgroundLocation.configure({
   distanceFilter: 'auto',
   autoDistanceFilter: {
@@ -324,7 +324,7 @@ export function Configuration() {
           Customize the persistent foreground service notification on Android.
           Has no effect on iOS or Web.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`notification: {
   title: 'Tracking Active',
   text: 'Your location is being recorded',

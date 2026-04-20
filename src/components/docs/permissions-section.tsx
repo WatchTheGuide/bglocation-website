@@ -146,7 +146,7 @@ export function PermissionsSection() {
               ? "Add these keys to your Xcode project's Info.plist. Capacitor apps managed with Xcode should add them directly."
               : "Expo projects: the config plugin injects these automatically from app.json. Bare RN apps need to add them manually."}
           </p>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{IOS_PLIST_KEYS}</pre>
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{IOS_PLIST_KEYS}</pre>
         </div>
 
         <div className="mt-8">
@@ -154,7 +154,7 @@ export function PermissionsSection() {
           <p className="mt-2 text-sm text-muted-foreground">
             Enable <strong>Location updates</strong> in Xcode &gt; Signing & Capabilities &gt; Background Modes, or add to Info.plist:
           </p>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{IOS_BACKGROUND_MODES}</pre>
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{IOS_BACKGROUND_MODES}</pre>
         </div>
 
         {framework === "react-native" && (
@@ -163,7 +163,7 @@ export function PermissionsSection() {
             <p className="mt-2 text-sm text-muted-foreground">
               The React Native package ships with an Expo config plugin that injects permissions, background modes, and the license key during prebuild.
             </p>
-            <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{EXPO_CONFIG}</pre>
+            <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{EXPO_CONFIG}</pre>
           </div>
         )}
 
@@ -188,7 +188,7 @@ export function PermissionsSection() {
               ? "The Capacitor plugin contributes its manifest entries automatically during sync and manifest merge."
               : "Expo prebuild and the Android manifest merger add the required permissions from the React Native package."}
           </p>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{ANDROID_PERMISSIONS}</pre>
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{ANDROID_PERMISSIONS}</pre>
         </div>
 
         <div className="mt-8">
@@ -210,7 +210,7 @@ export function PermissionsSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           On Android 10+, background location must be requested as a separate step after foreground permission is granted. The plugin provides a two-step flow:
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm leading-relaxed">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
           {framework === "capacitor" ? CAPACITOR_FLOW : REACT_NATIVE_FLOW}
         </pre>
       </div>
@@ -221,7 +221,7 @@ export function PermissionsSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Android OEM battery killers (Xiaomi, Huawei, Samsung, etc.) can stop background tracking. The plugin detects this automatically and emits <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">onBatteryWarning</code> with an OEM-specific help URL from <a href="https://dontkillmyapp.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">dontkillmyapp.com</a>.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm leading-relaxed">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
           {framework === "capacitor" ? CAPACITOR_BATTERY : REACT_NATIVE_BATTERY}
         </pre>
       </div>

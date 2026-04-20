@@ -61,7 +61,7 @@ export function DebugModeSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Set <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">debug: true</code> in your configuration. Optionally enable <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">debugSounds: true</code> for audio feedback.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm leading-relaxed">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
           {framework === "capacitor" ? CAPACITOR_DEBUG : REACT_NATIVE_DEBUG}
         </pre>
       </div>
@@ -107,7 +107,7 @@ export function DebugModeSection() {
       {/* DebugEvent */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">DebugEvent Interface</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{DEBUG_EVENT_INTERFACE}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{DEBUG_EVENT_INTERFACE}</pre>
       </div>
 
       {/* Physical Device vs Simulator */}
