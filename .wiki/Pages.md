@@ -24,7 +24,8 @@ Opis routingu App Router, sekcji publicznych oraz endpointów API wykorzystywany
 | `/docs/migration` | `src/app/docs/migration/page.tsx` | Migration from capacitor-community |
 | `/docs/api-reference` | `src/app/docs/api-reference/page.tsx` | API Reference (metody, eventy, interfejsy) |
 | `/pricing` | `src/app/pricing/page.tsx` | Cennik i FAQ |
-| `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności |
+| `/privacy` | `src/app/privacy/page.tsx` | Polityka prywatności (w tym sekcja o Vercel Web Analytics) |
+| `/cookies` | `src/app/cookies/page.tsx` | Polityka cookies — kategorie zgód (necessary / analytics), opis danych, zarządzanie preferencjami |
 | `/terms` | `src/app/terms/page.tsx` | Regulamin licencyjny |
 | `/blog` | `src/app/blog/page.tsx` | Lista artykułów blogowych |
 | `/blog/[slug]` | `src/app/blog/[slug]/page.tsx` | Pojedynczy post blogowy (GFM Markdown) |
@@ -73,7 +74,7 @@ Za tę warstwę odpowiadają `src/components/framework/framework-provider.tsx`, 
 
 ## Layout globalny
 
-- `src/app/layout.tsx` — root layout z `FrameworkProvider`, `AnnouncementBanner`, `Header`, `Footer`, `ChatWidget` i metadata icons ustawionymi na `public/bglocation-icon.svg`
+- `src/app/layout.tsx` — root layout z `FrameworkProvider`, `AnnouncementBanner`, `Header`, `Footer`, `ChatWidget`, `ConditionalAnalytics`, `CookieBanner` i metadata icons ustawionymi na `public/bglocation-icon.svg`
 - `src/components/layout/header.tsx` — nawigacja publiczna (Features, Pricing, Docs, Blog, About), `FrameworkSwitcher`, CTA i menu mobilne
 - `src/components/layout/footer.tsx` — linki produktowe (w tym Blog i RSS), dokumentacyjne i firmowe
 - `src/app/admin/admin-shell.tsx` — layout panelu admina z sidebar navigation i wspólnym logo
