@@ -42,15 +42,15 @@ export function MigrationSection() {
         <ol className="mt-4 list-inside list-decimal space-y-4 text-sm">
           <li>
             <span className="font-medium">Uninstall the old plugin</span>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-3 font-mono text-sm">npm uninstall @capacitor-community/background-geolocation</pre>
+            <pre className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted p-3 font-mono text-sm">npm uninstall @capacitor-community/background-geolocation</pre>
           </li>
           <li>
             <span className="font-medium">Install @bglocation/capacitor</span>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-3 font-mono text-sm">npm install @bglocation/capacitor{"\n"}npx cap sync</pre>
+            <pre className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted p-3 font-mono text-sm">npm install @bglocation/capacitor{"\n"}npx cap sync</pre>
           </li>
           <li>
             <span className="font-medium">Update imports</span>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-3 font-mono text-sm">{`// Before
+            <pre className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted p-3 font-mono text-sm">{`// Before
 import { BackgroundGeolocation } from '@capacitor-community/background-geolocation';
 
 // After
@@ -62,7 +62,7 @@ import { BackgroundLocation } from '@bglocation/capacitor';`}</pre>
           </li>
           <li>
             <span className="font-medium">Replace watchers with event listeners</span>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-3 font-mono text-sm">{`// Before
+            <pre className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted p-3 font-mono text-sm">{`// Before
 const watcherId = await BackgroundGeolocation.addWatcher(options, callback);
 
 // After
@@ -71,7 +71,7 @@ BackgroundLocation.addListener('onHeartbeat', (event) => { ... });`}</pre>
           </li>
           <li>
             <span className="font-medium">Sync native projects</span>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-3 font-mono text-sm">npx cap sync</pre>
+            <pre className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted p-3 font-mono text-sm">npx cap sync</pre>
           </li>
           <li>
             <span className="font-medium">Test on a physical device</span>

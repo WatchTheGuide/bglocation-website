@@ -15,7 +15,7 @@ export function Examples() {
           Continuous tracking with server-side posting. Use auto distance filter
           for consistent updates regardless of vehicle speed.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`import { BackgroundLocation } from '@bglocation/capacitor';
 
 await BackgroundLocation.configure({
@@ -57,7 +57,7 @@ await BackgroundLocation.start();`}
           High-frequency tracking with local processing. Keep locations in
           memory and sync on demand.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`import { BackgroundLocation } from '@bglocation/capacitor';
 import type { Location } from '@bglocation/capacitor';
 
@@ -99,7 +99,7 @@ await BackgroundLocation.start();
           Monitor up to 20 circular regions. Works even when the app is
           terminated.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`import { BackgroundLocation } from '@bglocation/capacitor';
 
 // Configure first (required before geofencing)

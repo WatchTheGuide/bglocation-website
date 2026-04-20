@@ -238,7 +238,7 @@ export function ExamplesSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Continuous tracking with adaptive distance filter, native HTTP posting, and automatic offline buffering. Ideal for logistics and delivery apps.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_FLEET : REACT_NATIVE_FLEET}
         </pre>
       </div>
@@ -249,7 +249,7 @@ export function ExamplesSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           High-frequency tracking with in-memory processing for pace, route, and progress stats. Low distance filter for detailed route polylines.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_FITNESS : REACT_NATIVE_FITNESS}
         </pre>
       </div>
@@ -260,7 +260,7 @@ export function ExamplesSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Register circular regions and react to enter, exit, and dwell transitions. Great for location-based notifications and triggered actions.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_GEOFENCE : REACT_NATIVE_GEOFENCE}
         </pre>
       </div>
@@ -271,7 +271,7 @@ export function ExamplesSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Combine geofencing with HTTP posting for automatic workplace check-in and check-out. Uses geofence extras to attach metadata like building and floor.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_ATTENDANCE : REACT_NATIVE_ATTENDANCE}
         </pre>
       </div>

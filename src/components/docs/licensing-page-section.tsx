@@ -91,7 +91,7 @@ export function LicensingSection() {
           <li><strong>Debug forced on</strong> — verbose logs are enabled so you can inspect behavior.</li>
           <li><strong>Full feature access</strong> — HTTP posting, geofencing, adaptive filter — everything works.</li>
         </ul>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_TRIAL_EXPIRED : REACT_NATIVE_TRIAL_EXPIRED}
         </pre>
       </div>
@@ -104,13 +104,13 @@ export function LicensingSection() {
             ? "Place the license key in your Capacitor config and re-run sync."
             : "Expo users configure via the plugin array. Bare React Native projects set the key in native config files."}
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_LICENSE_SNIPPET : EXPO_LICENSE_SNIPPET}
         </pre>
         {framework === "react-native" && (
           <>
             <p className="mt-4 text-sm font-medium">Bare React Native (no Expo):</p>
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{BARE_RN_LICENSE_SNIPPET}</pre>
+            <pre className="mt-2 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{BARE_RN_LICENSE_SNIPPET}</pre>
           </>
         )}
       </div>
@@ -155,7 +155,7 @@ export function LicensingSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           The <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">configure()</code> result includes license information:
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_RESULT : REACT_NATIVE_RESULT}
         </pre>
       </div>

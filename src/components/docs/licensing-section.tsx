@@ -78,11 +78,11 @@ export function Licensing() {
             ? "Place the key in capacitor.config.ts and rerun sync."
             : "Expo users should configure the package plugin. Bare React Native apps can set the same value directly in native config."}
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_LICENSE_SNIPPET : EXPO_LICENSE_SNIPPET}
         </pre>
         {framework === "react-native" && (
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{BARE_RN_LICENSE_SNIPPET}</pre>
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{BARE_RN_LICENSE_SNIPPET}</pre>
         )}
       </div>
 
@@ -97,7 +97,7 @@ export function Licensing() {
 
       <div className="mt-10">
         <h3 className="text-lg font-semibold">License Status</h3>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_RESULT : REACT_NATIVE_RESULT}
         </pre>
       </div>

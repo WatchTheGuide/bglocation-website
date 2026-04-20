@@ -106,7 +106,7 @@ export function TroubleshootingSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Use the plugin API to detect and prompt users about battery optimization:
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor"
             ? `// Check battery optimization state
 const status = await BackgroundLocation.checkBatteryOptimization();

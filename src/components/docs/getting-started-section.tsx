@@ -76,21 +76,21 @@ export function GettingStarted() {
       <div className="mt-8 space-y-8">
         <div>
           <h3 className="text-lg font-semibold">1. Install</h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
             {framework === "capacitor" ? CAPACITOR_INSTALL : REACT_NATIVE_INSTALL}
           </pre>
         </div>
 
         <div>
           <h3 className="text-lg font-semibold">2. Configure &amp; Start</h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
             {framework === "capacitor" ? CAPACITOR_START : REACT_NATIVE_START}
           </pre>
         </div>
 
         <div>
           <h3 className="text-lg font-semibold">3. Stop Tracking</h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
             {framework === "capacitor" ? CAPACITOR_STOP : REACT_NATIVE_STOP}
           </pre>
         </div>

@@ -168,14 +168,14 @@ export function BackgroundTrackingSection() {
             <p className="mt-2 text-sm text-muted-foreground">
               Set a constant minimum distance (e.g., 15 meters). The native location manager only delivers updates when the device has moved at least this far. Best when your required precision is constant regardless of speed.
             </p>
-            <pre className="mt-3 rounded bg-muted p-3 font-mono text-xs">distanceFilter: 15</pre>
+            <pre className="mt-3 rounded border border-border bg-muted p-3 font-mono text-xs">distanceFilter: 15</pre>
           </div>
           <div className="rounded-lg border p-4">
             <h3 className="font-semibold">Auto Distance Filter</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               The filter adjusts automatically based on the device&apos;s speed. Slower movement means smaller filter (more precision), faster movement means larger filter (less battery drain). Ideal for mixed-mode transport.
             </p>
-            <pre className="mt-3 rounded bg-muted p-3 font-mono text-xs">{`distanceFilter: 'auto',\nautoDistanceFilter: {\n  targetInterval: 10,\n  minDistance: 10,\n  maxDistance: 500,\n}`}</pre>
+            <pre className="mt-3 rounded border border-border bg-muted p-3 font-mono text-xs">{`distanceFilter: 'auto',\nautoDistanceFilter: {\n  targetInterval: 10,\n  minDistance: 10,\n  maxDistance: 500,\n}`}</pre>
           </div>
         </div>
       </div>
@@ -245,7 +245,7 @@ export function BackgroundTrackingSection() {
       {/* Full Example */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Complete Example</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm leading-relaxed">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
           {framework === "capacitor" ? CAPACITOR_EXAMPLE : REACT_NATIVE_EXAMPLE}
         </pre>
       </div>

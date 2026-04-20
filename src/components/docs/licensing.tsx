@@ -54,7 +54,7 @@ export function Licensing() {
           </code>
           :
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`// capacitor.config.ts
 import type { CapacitorConfig } from '@capacitor/cli';
 
@@ -126,7 +126,7 @@ export default config;`}
           </code>{" "}
           method returns the license validation result:
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
 {`const result = await BackgroundLocation.configure({ ... });
 
 // result.licenseMode: 'full' | 'trial'

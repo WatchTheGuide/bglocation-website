@@ -121,7 +121,7 @@ export function HttpPostingSection() {
       {/* Configuration */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Configuration</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_CONFIG_INTERFACE}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_CONFIG_INTERFACE}</pre>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -158,13 +158,13 @@ export function HttpPostingSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Each POST sends a single location object as JSON. The <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">Content-Type</code> header is set to <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">application/json</code> automatically.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_POST_BODY}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_POST_BODY}</pre>
       </div>
 
       {/* onHttp Event */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">HttpEvent</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{HTTP_EVENT_INTERFACE}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{HTTP_EVENT_INTERFACE}</pre>
       </div>
 
       {/* Offline Buffer */}
@@ -184,7 +184,7 @@ export function HttpPostingSection() {
       {/* Bearer Token Example */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Complete Example with Authentication</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm leading-relaxed">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
           {framework === "capacitor" ? CAPACITOR_HTTP : REACT_NATIVE_HTTP}
         </pre>
       </div>

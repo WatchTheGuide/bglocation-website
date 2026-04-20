@@ -48,7 +48,7 @@ export function ErrorCodesSection() {
       {/* Error Handling Example */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Catching Errors</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{`try {
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{`try {
   await start();
 } catch (error: any) {
   switch (error.code) {
@@ -97,7 +97,7 @@ export function ErrorCodesSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           HTTP posting errors are delivered via the <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">onHttp</code> event, not thrown as exceptions. Check <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">event.success</code> and <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">event.statusCode</code>:
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{`addListener('onHttp', (event) => {
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{`addListener('onHttp', (event) => {
   if (!event.success) {
     console.error(\`HTTP \${event.statusCode}: \${event.error}\`);
     console.log(\`Buffered: \${event.bufferedCount}\`);

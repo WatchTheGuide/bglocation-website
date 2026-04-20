@@ -64,8 +64,8 @@ export function AdaptiveFilterSection() {
       {/* Configuration */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Configuration</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{CONFIG_INTERFACE}</pre>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{`await configure({
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{CONFIG_INTERFACE}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{`await configure({
   distanceFilter: 'auto',
   autoDistanceFilter: {
     targetInterval: 10,   // aim for ~10 seconds between updates

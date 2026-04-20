@@ -149,13 +149,13 @@ export function GeofencingSection() {
       {/* Geofence Interface */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Geofence Interface</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{GEOFENCE_INTERFACE}</pre>
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{GEOFENCE_INTERFACE}</pre>
       </div>
 
       {/* Add a Geofence */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Add a Geofence</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_ADD : REACT_NATIVE_ADD}
         </pre>
       </div>
@@ -166,7 +166,7 @@ export function GeofencingSection() {
         <p className="mt-2 text-sm text-muted-foreground">
           Add multiple geofences in one call. This is atomic — if the total count would exceed 20, the entire batch is rejected.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_BATCH : REACT_NATIVE_BATCH}
         </pre>
       </div>
@@ -174,7 +174,7 @@ export function GeofencingSection() {
       {/* Manage Geofences */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Manage Geofences</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_MANAGE : REACT_NATIVE_MANAGE}
         </pre>
       </div>
@@ -182,11 +182,11 @@ export function GeofencingSection() {
       {/* Listen for Transitions */}
       <div className="mt-10">
         <h2 className="text-xl font-semibold">Listen for Transitions</h2>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_LISTEN : REACT_NATIVE_LISTEN}
         </pre>
         <h3 className="mt-6 font-semibold">GeofenceEvent</h3>
-        <pre className="mt-3 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">{GEOFENCE_EVENT_INTERFACE}</pre>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">{GEOFENCE_EVENT_INTERFACE}</pre>
       </div>
 
       {/* Dwell Detection */}

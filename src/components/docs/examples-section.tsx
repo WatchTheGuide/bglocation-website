@@ -162,7 +162,7 @@ export function Examples() {
         <p className="mt-2 text-sm text-muted-foreground">
           Continuous tracking with native HTTP posting and automatic offline buffering.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_FLEET : REACT_NATIVE_FLEET}
         </pre>
       </div>
@@ -172,7 +172,7 @@ export function Examples() {
         <p className="mt-2 text-sm text-muted-foreground">
           High-frequency tracking with in-memory processing for pace, route, and progress stats.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_FITNESS : REACT_NATIVE_FITNESS}
         </pre>
       </div>
@@ -182,7 +182,7 @@ export function Examples() {
         <p className="mt-2 text-sm text-muted-foreground">
           Register circular regions and react to enter, exit, and dwell transitions.
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-lg bg-muted p-4 font-mono text-sm">
+        <pre className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm">
           {framework === "capacitor" ? CAPACITOR_GEOFENCE : REACT_NATIVE_GEOFENCE}
         </pre>
       </div>
