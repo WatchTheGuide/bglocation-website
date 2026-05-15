@@ -6,19 +6,14 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createClient() {
-  if (globalForPrisma.prisma) return globalForPrisma.prisma;
   const connectionString =
     process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
   const adapter = new PrismaPg({ connectionString });
-  const client = new PrismaClient({ adapter });
-  if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = client;
-  }
-  return client;
+  return new PrismaClient({ adapter });
 }
 
-export const prisma = new Proxy({} as PrismaClient, {
-  get(_target, prop: string | symbol) {
-    return Reflect.get(createClient(), prop);
-  },
-});
+export const prisma = globalForPrisma.prisma ?? createClient();
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
+}
