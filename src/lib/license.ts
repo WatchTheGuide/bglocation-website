@@ -11,7 +11,8 @@ function getPrivateKey(): string {
   if (!key) {
     throw new Error('RSA_PRIVATE_KEY environment variable is not set');
   }
-  return key;
+  // .env loaders preserve literal "\n" — convert to real newlines so OpenSSL can parse the PEM.
+  return key.replace(/\\n/g, '\n');
 }
 
 export function generateLicenseKey(bundleId: string): {
