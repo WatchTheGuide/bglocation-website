@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Unsubscribe — bglocation',
   description: 'Unsubscribe from the bglocation newsletter.',
+  robots: { index: false, follow: false },
 };
 
 export default function UnsubscribePage() {
