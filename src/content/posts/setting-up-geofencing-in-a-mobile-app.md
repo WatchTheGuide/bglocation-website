@@ -139,6 +139,8 @@ await BackgroundLocation.addGeofences({
 
 The batch operation is **atomic** — if adding the batch would exceed the 20-geofence limit, all of them are rejected. No partial state.
 
+![Two active geofences (fence-1 and fence-2) visualized on a map in the bglocation test app](/blog/test-app-geofencing.jpeg)
+
 ## Dwell Detection — The Tricky Part
 
 Dwell events fire when a user stays inside a geofence for a specified duration. This is useful for attendance tracking ("employee arrived and stayed for 5+ minutes") or visit confirmation.
