@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Confirm Subscription — bglocation',
   description: 'Confirm your bglocation newsletter subscription.',
+  robots: { index: false, follow: false },
 };
 
 export default function ConfirmPage() {
