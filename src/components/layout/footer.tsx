@@ -160,6 +160,18 @@ export function Footer() {
             </Link>
             .
           </p>
+          <p className="text-center text-xs text-muted-foreground">
+            Also from bglocation:{" "}
+            <a
+              href="https://www.npmjs.com/package/@bglocation/code-search-mcp"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground"
+            >
+              @bglocation/code-search-mcp
+            </a>{" "}
+            — a semantic code search (RAG) + MCP server for AI agents.
+          </p>
           <div className="flex items-center gap-3">
             <a
               href="https://www.npmjs.com/package/@bglocation/capacitor"
