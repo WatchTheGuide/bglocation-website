@@ -1,7 +1,14 @@
 import { appendFile, mkdir } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const LOGS_DIR = join(process.cwd(), 'logs');
+// Serverless filesystems (Vercel) are read-only except the OS temp dir, so
+// writing under process.cwd() ENOENTs on `mkdir`. Use a writable base there.
+// NOTE: on serverless /tmp is per-instance and ephemeral — the durable record
+// is the console.log output captured in the platform's function logs.
+const LOGS_DIR = process.env.VERCEL
+  ? join(tmpdir(), 'bgl-http-test-logs')
+  : join(process.cwd(), 'logs');
 
 function getLogFilePath(): string {
   const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
