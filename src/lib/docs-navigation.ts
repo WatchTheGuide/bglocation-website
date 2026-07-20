@@ -29,6 +29,13 @@ export const DOC_PAGES: readonly DocPage[] = [
     group: "guides",
   },
   {
+    slug: "lifecycle",
+    title: "Lifecycle & Auto-Resume",
+    shortTitle: "Lifecycle",
+    description: "Resume background tracking after the app is killed or the device reboots.",
+    group: "guides",
+  },
+  {
     slug: "geofencing",
     title: "Geofencing Guide",
     shortTitle: "Geofencing",
