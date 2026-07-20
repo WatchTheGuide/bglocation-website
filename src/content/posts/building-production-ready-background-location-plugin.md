@@ -191,6 +191,8 @@ On iOS this uses `CLCircularRegion` (persisted across app restarts by the OS). O
 
 We do not treat "it works on my phone" as a test strategy. The plugin has **890+ automated tests** across iOS, Android, web, and the test app:
 
+![bglocation test app — real-time event log showing location updates, HTTP posts, and geofence actions with color-coded categories](/blog/test-app-debug-window.jpeg)
+
 | Layer | Count | Framework |
 |-------|-------|-----------|
 | iOS native | 267 | XCTest (SPM) |

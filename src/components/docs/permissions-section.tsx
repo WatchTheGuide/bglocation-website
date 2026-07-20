@@ -122,6 +122,51 @@ addListener('onBatteryWarning', (event) => {
   console.warn(event.message);
 });`;
 
+const CAPACITOR_APPDELEGATE_HOOK = `// ios/App/App/AppDelegate.swift
+import UIKit
+import Capacitor
+import CapacitorBackgroundLocation
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        // Resumes tracking after iOS background-launches the app
+        // (Significant Location Change wake-up after force-quit).
+        BGLocationCapacitor.handleApplicationLaunch(launchOptions: launchOptions)
+        return true
+    }
+}`;
+
+const REACT_NATIVE_APPDELEGATE_HOOK_SWIFT = `// ios/AppDelegate.swift  (RN 0.72+, Expo)
+import UIKit
+import bglocation_react_native
+
+@main
+class AppDelegate: RCTAppDelegate {
+
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        BGLocationReactNative.handleApplicationLaunch(launchOptions: launchOptions)
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+}`;
+
+const REACT_NATIVE_APPDELEGATE_HOOK_OBJC = `// ios/AppDelegate.mm  (bare RN < 0.72)
+#import <bglocation_react_native/bglocation_react_native-Swift.h>
+
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+  [BGLocationReactNative handleApplicationLaunchWithLaunchOptions:launchOptions];
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}`;
+
 export function PermissionsSection() {
   const { framework } = useFramework();
 
@@ -174,6 +219,30 @@ export function PermissionsSection() {
             <li><strong>SLC fallback:</strong> Significant Location Change monitoring is registered automatically. If iOS kills the app, SLC relaunches it and standard GPS tracking resumes.</li>
             <li><strong>Approximate location (iOS 14+):</strong> If the user grants only approximate location, the plugin emits <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">onAccuracyWarning</code> on start.</li>
           </ul>
+        </div>
+
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold">Cold-Launch AppDelegate Hook</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Required only when you opt into <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">autoResumeOnKill: true</code>. When iOS background-launches your app after a force-quit (Significant Location Change wake-up), neither the {framework === "capacitor" ? "Capacitor" : "React Native"} bridge nor the JS runtime initializes automatically — so the plugin&apos;s <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">CLLocationManager</code> does not exist to receive the queued location event. This hook initializes the native runtime before the bridge so tracking resumes.
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Without the hook the opt-in flag is silently inert on cold launch — there is no runtime error, the feature simply does not activate.
+          </p>
+          <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">
+            {framework === "capacitor" ? CAPACITOR_APPDELEGATE_HOOK : REACT_NATIVE_APPDELEGATE_HOOK_SWIFT}
+          </pre>
+          {framework === "react-native" && (
+            <>
+              <p className="mt-4 text-sm text-muted-foreground">
+                Bare React Native projects still using an Objective-C++ <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">AppDelegate.mm</code>:
+              </p>
+              <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-muted p-4 font-mono text-sm leading-relaxed">{REACT_NATIVE_APPDELEGATE_HOOK_OBJC}</pre>
+            </>
+          )}
+          <p className="mt-3 text-sm text-muted-foreground">
+            The call is idempotent (multiple invocations are no-ops after the first) and must run on the main thread — <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">AppDelegate</code> satisfies that automatically. To verify the hook fires, enable <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">debug: true</code> and watch for <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">BGLPluginRuntime: resumed tracking</code> in the <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">onDebug</code> event log.
+          </p>
         </div>
       </div>
 

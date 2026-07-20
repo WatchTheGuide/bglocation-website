@@ -193,6 +193,8 @@ async function requestLocationPermissions(): Promise<boolean> {
 }
 ```
 
+![bglocation test app — both foreground and background location permissions granted, plugin ready to start tracking](/blog/test-app-capacitor.jpeg)
+
 ## Edge Case: iOS Approximate Location
 
 Starting with iOS 14, users can grant only **approximate location** (a radius of a few kilometers instead of precise GPS). This is a separate toggle from the "While Using" / "Always" choice — and it can silently degrade your tracking accuracy to the point of being useless for most use cases.
